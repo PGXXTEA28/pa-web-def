@@ -20,7 +20,7 @@
         nav .container { display: flex; height: 4rem; align-items: center; justify-content: space-between; }
         .nav-brand { display: flex; align-items: center; gap: 0.75rem; cursor: pointer; text-decoration: none; color: inherit; }
         
-        /* LOGO SVG */
+        /* ESTILOS PARA EL LOGO SVG */
         .logo-svg {
             width: 3rem;
             height: 3rem;
@@ -213,7 +213,7 @@
                 <span>Proyectos Alex</span>
             </a>
             <div class="nav-buttons">
-                <!-- BOTÓN VOLVER AL INICIO AÑADIDO AQUÍ -->
+                <!-- BOTÓN VOLVER AL INICIO -->
                 <button class="btn-outline hidden" id="backHomeBtn" onclick="showPage('home')">Inicio</button>
                 
                 <button class="btn-primary" id="loginBtnNav" onclick="openAuthModal('login')">Ingresar</button>
@@ -229,8 +229,11 @@
     <div id="home" class="page active">
         <section class="hero">
             <div class="container">
+                <div class="hero-badge">
+                    <span>✨ Plataforma de Proyectos Digitales</span>
+                </div>
                 <h1>Dale Vida a Tus <span class="highlight">Proyectos</span></h1>
-                <p>La plataforma para estudiantes. Comparte tus ideas, vende tus productos y crea tu portafolio.</p>
+                <p>La plataforma para creadores. Comparte tus ideas, vende tus productos y crea tu portafolio.</p>
                 <div class="hero-buttons">
                     <button class="btn-primary" onclick="handleCreateProjectClick()">Comenzar Ahora</button>
                     <button class="btn-outline" onclick="showPage('projects')">Explorar</button>
@@ -245,7 +248,7 @@
                         <circle cx="11" cy="11" r="8"></circle>
                         <path d="m21 21-4.35-4.35"></path>
                     </svg>
-                    <input type="text" placeholder="Buscar proyectos, categorías o estudiantes..." onkeyup="filterProjects(this.value, 'homeProjectsGrid')">
+                    <input type="text" placeholder="Buscar proyectos, categorías o creadores..." onkeyup="filterProjects(this.value, 'homeProjectsGrid')">
                 </div>
             </div>
         </section>
@@ -289,7 +292,6 @@
     <div id="dashboard" class="page">
         <div class="dashboard-header">
             <div class="container">
-                <!-- ELIMINADO EL BOTÓN DE AQUÍ PARA PASARLO AL NAV -->
                 <h2 id="userNameDisplay">Mi Cuenta</h2>
                 <p id="userEmailDisplay" style="color: #64748b;"></p>
             </div>
@@ -552,11 +554,6 @@
             const registerBtn = document.getElementById('registerBtnNav');
             const accountBtn = document.getElementById('myAccountBtn');
             const logoutBtn = document.getElementById('logoutBtn');
-            
-            // Asegurar que el botón de inicio respete su visibilidad correcta
-            // Por defecto oculto si estamos en home (manejado en showPage), pero aquí controlamos auth.
-            // El botón de inicio no depende de estar logueado para ser útil (si estás en detalles), 
-            // pero si queremos que aparezca solo "al lado de Mi Cuenta", lo ideal es dejarlo visible siempre que no sea home.
             
             if (currentUser) {
                 loginBtn.classList.add('hidden');
