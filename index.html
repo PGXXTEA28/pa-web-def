@@ -173,9 +173,12 @@
                 <span>Proyectos Alex</span>
             </a>
             <div class="nav-buttons">
+                <!-- BOTÓN VOLVER AL INICIO -->
                 <button class="btn-outline hidden" id="backHomeBtn" onclick="showPage('home')">Inicio</button>
+                
                 <button class="btn-primary" id="loginBtnNav" onclick="openAuthModal('login')">Ingresar</button>
                 <button class="btn-outline" id="registerBtnNav" onclick="openAuthModal('signup')">Registrarse</button>
+                
                 <button class="btn-outline hidden" id="myAccountBtn" onclick="showPage('dashboard')">Mi Cuenta</button>
                 <button class="btn-danger hidden" id="logoutBtn" onclick="handleLogout()">Salir</button>
             </div>
@@ -405,23 +408,19 @@
     </div>
 
     <script>
-        // *** CONFIGURACIÓN SUPABASE ***
+        // --- CONFIGURACIÓN SUPABASE ---
         const supabaseUrl = 'https://jvshcszolovsnqzkozka.supabase.co';
         const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imp2c2hjc3pvbG92c25xemtvemthIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjQwMDQ5NDgsImV4cCI6MjA3OTU4MDk0OH0.ty4wwxMhQ8gm1SgweSf9JxcDrvt2IGwKzkH4EQP8ZB4';
-        
         const supabase = (supabaseUrl && supabaseUrl.startsWith('http')) ? window.supabase.createClient(supabaseUrl, supabaseKey) : null;
 
+        // Estado Local
         let projects = JSON.parse(localStorage.getItem('alex_projects')) || [];
         let currentUser = JSON.parse(localStorage.getItem('alex_session')) || null;
         let isLoginMode = true;
         let selectedProjectId = null;
 
-        document.addEventListener('DOMContentLoaded', async () => {
-            updateUI();
-            if (supabase) { await fetchProjectsFromSupabase(); }
-            renderProjects();
-        });
-
+        // --- DEFINICIÓN DE FUNCIONES ---
+        
         async function fetchProjectsFromSupabase() {
             try {
                 const { data, error } = await supabase.from('projects').select('*').order('created_at', { ascending: false });
@@ -429,7 +428,6 @@
             } catch (err) { console.log("Modo local activo"); }
         }
 
-        // --- SISTEMA DE USUARIOS / PERFILES ---
         function handleProfileEdit(e) {
             e.preventDefault();
             const newName = document.getElementById('editProfileName').value;
@@ -440,7 +438,6 @@
                 currentUser.avatar = newAvatar;
                 localStorage.setItem('alex_session', JSON.stringify(currentUser));
                 
-                // Actualizar en localstorage usuarios "base de datos"
                 let users = JSON.parse(localStorage.getItem('alex_users')) || [];
                 const uIdx = users.findIndex(u => u.email === currentUser.email);
                 if(uIdx !== -1) {
@@ -448,7 +445,6 @@
                     users[uIdx].avatar = newAvatar;
                     localStorage.setItem('alex_users', JSON.stringify(users));
                 }
-                
                 updateUI();
                 updateDashboard();
                 document.getElementById('profileEditModal').classList.remove('active');
@@ -466,7 +462,6 @@
         function openUserProfile(email) {
             if (currentUser && email === currentUser.email) { showPage('dashboard'); return; }
             const userProjects = projects.filter(p => (p.authorEmail || p.author_email) === email);
-            // Intentar sacar info del autor del primer proyecto
             const authorName = userProjects.length > 0 ? (userProjects[0].authorName || userProjects[0].author_name) : 'Creador';
             const authorAvatar = userProjects.length > 0 ? (userProjects[0].authorAvatar || userProjects[0].author_avatar) : null;
             const initials = authorName.charAt(0).toUpperCase();
@@ -475,7 +470,6 @@
             document.getElementById('publicProfileStats').textContent = `${userProjects.length} proyectos publicados`;
             document.getElementById('publicProfileNameSpan').textContent = authorName;
             
-            // Avatar público
             const pAvatar = document.getElementById('publicProfileAvatar');
             const pImg = document.getElementById('publicProfileImg');
             if (authorAvatar) {
@@ -493,13 +487,30 @@
             showPage('user-profile');
         }
 
-        // --- UI ---
+        function updateUI() {
+            const loginBtn = document.getElementById('loginBtnNav');
+            const registerBtn = document.getElementById('registerBtnNav');
+            const accountBtn = document.getElementById('myAccountBtn');
+            const logoutBtn = document.getElementById('logoutBtn');
+
+            if (currentUser) {
+                loginBtn.classList.add('hidden');
+                registerBtn.classList.add('hidden');
+                accountBtn.classList.remove('hidden');
+                logoutBtn.classList.remove('hidden');
+            } else {
+                loginBtn.classList.remove('hidden');
+                registerBtn.classList.remove('hidden');
+                accountBtn.classList.add('hidden');
+                logoutBtn.classList.add('hidden');
+            }
+        }
+
         function updateDashboard() {
             if (!currentUser) return;
             document.getElementById('userNameDisplay').textContent = currentUser.name;
             document.getElementById('userEmailDisplay').textContent = currentUser.email;
             
-            // Avatar Dashboard
             const dashAvatar = document.getElementById('dashboardAvatar');
             const dashInitials = document.getElementById('dashboardInitials');
             if(currentUser.avatar) {
@@ -529,17 +540,15 @@
                 isPremium: project.isPremium || project.is_premium,
                 authorName: project.authorName || project.author_name,
                 authorEmail: project.authorEmail || project.author_email,
-                authorAvatar: project.authorAvatar || project.author_avatar, // Nuevo campo
+                authorAvatar: project.authorAvatar || project.author_avatar,
                 date: project.date || project.created_at
             };
 
-            // Imagen Proyecto
             let imageHtml = `<div class="project-image-placeholder" onclick="openProjectDetail(${p.id})">📦</div>`;
             if (p.imageUrl) {
                 imageHtml = `<img src="${p.imageUrl}" alt="${p.title}" onclick="openProjectDetail(${p.id})" onerror="this.parentElement.innerHTML='<div class=\'project-image-placeholder\' onclick=\'openProjectDetail(${p.id})\'>📦</div>'">`;
             }
 
-            // Avatar Autor en tarjeta
             let avatarHtml = '';
             if(p.authorAvatar) {
                 avatarHtml = `<img src="${p.authorAvatar}" class="author-avatar-small" alt="${p.authorName}">`;
@@ -548,7 +557,6 @@
                 avatarHtml = `<div class="author-avatar-small">${initials}</div>`;
             }
 
-            // Botones
             let visitBtnHtml = '';
             if (p.businessUrl) {
                 let url = p.businessUrl.startsWith('http') ? p.businessUrl : 'https://' + p.businessUrl;
@@ -582,7 +590,6 @@
                                 <span class="project-author-link">${isMine ? 'Tú' : p.authorName}</span>
                             </div>
                         </div>
-                        
                         ${visitBtnHtml}
                         ${actionsHtml}
                     </div>
@@ -590,7 +597,6 @@
             `;
         }
 
-        // --- AUTH & SIGNUP CON AVATAR ---
         function renderAuthModal() {
             const title = document.getElementById('authTitle');
             const nameGroup = document.getElementById('nameGroup');
@@ -602,7 +608,7 @@
             if (isLoginMode) {
                 title.textContent = "Iniciar Sesión";
                 nameGroup.classList.add('hidden');
-                avatarGroup.classList.add('hidden'); // Ocultar en login
+                avatarGroup.classList.add('hidden');
                 document.getElementById('authName').removeAttribute('required');
                 submitBtn.textContent = "Ingresar";
                 toggleText.textContent = "¿No tienes cuenta?";
@@ -610,7 +616,7 @@
             } else {
                 title.textContent = "Crear Cuenta";
                 nameGroup.classList.remove('hidden');
-                avatarGroup.classList.remove('hidden'); // Mostrar en registro
+                avatarGroup.classList.remove('hidden');
                 document.getElementById('authName').setAttribute('required', 'true');
                 submitBtn.textContent = "Registrarse";
                 toggleText.textContent = "¿Ya tienes cuenta?";
@@ -623,7 +629,7 @@
             const email = document.getElementById('authEmail').value.trim();
             const password = document.getElementById('authPass').value.trim();
             const name = document.getElementById('authName').value.trim();
-            const avatar = document.getElementById('authAvatar').value.trim(); // Capturar avatar
+            const avatar = document.getElementById('authAvatar').value.trim();
             const errorMsg = document.getElementById('authErrorMsg');
             errorMsg.classList.add('hidden');
 
@@ -634,7 +640,6 @@
                 if (user) { loginUser(user); } else { errorMsg.textContent = "Correo o contraseña incorrecta"; errorMsg.classList.remove('hidden'); }
             } else {
                 if (users.find(u => u.email === email)) { errorMsg.textContent = "Este correo ya está registrado"; errorMsg.classList.remove('hidden'); return; }
-                // Guardar usuario con avatar
                 const newUser = { name, email, password, avatar }; 
                 users.push(newUser);
                 localStorage.setItem('alex_users', JSON.stringify(users));
@@ -644,14 +649,13 @@
         }
 
         function loginUser(user) {
-            currentUser = { name: user.name, email: user.email, avatar: user.avatar }; // Guardar avatar en sesión
+            currentUser = { name: user.name, email: user.email, avatar: user.avatar };
             localStorage.setItem('alex_session', JSON.stringify(currentUser));
             closeAuthModal();
             updateUI();
             showPage('dashboard');
         }
 
-        // --- PROYECTO CON AUTOR ---
         async function submitProject(e) {
             e.preventDefault();
             const newProject = {
@@ -664,7 +668,7 @@
                 isPremium: false,
                 authorName: currentUser.name,
                 authorEmail: currentUser.email,
-                authorAvatar: currentUser.avatar, // Guardar avatar en proyecto
+                authorAvatar: currentUser.avatar,
                 date: new Date().toISOString()
             };
 
@@ -678,7 +682,7 @@
                     business_url: newProject.businessUrl,
                     author_name: newProject.authorName,
                     author_email: newProject.authorEmail,
-                    author_avatar: newProject.authorAvatar // SQL column needed
+                    author_avatar: newProject.authorAvatar
                 }]);
                 if (!error) { alert('Proyecto publicado en la nube'); await fetchProjectsFromSupabase(); } else { alert('Error al subir: ' + error.message); }
             } else {
@@ -691,7 +695,6 @@
             const term = query.toLowerCase();
             const grid = document.getElementById(gridId) || document.getElementById('allProjectsGrid');
             if (grid) {
-                // Búsqueda mejorada: incluye nombre de autor
                 const filtered = projects.filter(p => 
                     p.title.toLowerCase().includes(term) || 
                     p.description.toLowerCase().includes(term) ||
@@ -702,7 +705,6 @@
             }
         }
 
-        // Resto de funciones (toggleAuth, closeAuth, showPage, etc) se mantienen igual...
         function openAuthModal(mode) { document.getElementById('authErrorMsg').classList.add('hidden'); document.getElementById('authModal').classList.add('active'); isLoginMode = (mode === 'login'); renderAuthModal(); }
         function closeAuthModal() { document.getElementById('authModal').classList.remove('active'); document.getElementById('authPass').value = ''; }
         function toggleAuthMode() { isLoginMode = !isLoginMode; renderAuthModal(); }
@@ -717,7 +719,6 @@
             window.scrollTo(0, 0);
             if (pageId === 'dashboard') updateDashboard();
         }
-        // ... (Resto de funciones CRUD y Premium ya implementadas anteriormente)
         function openEditProject(id) { const p = projects.find(proj => proj.id === id); if (!p) return; const project = { ...p, imageUrl: p.imageUrl || p.image_url, businessUrl: p.businessUrl || p.business_url }; document.getElementById('editId').value = project.id; document.getElementById('editTitle').value = project.title; document.getElementById('editCat').value = project.category; document.getElementById('editDesc').value = project.description; document.getElementById('editPrice').value = project.price; document.getElementById('editImg').value = project.imageUrl || ''; document.getElementById('editUrl').value = project.businessUrl || ''; showPage('edit-project'); }
         async function submitEditProject(e) { e.preventDefault(); const id = parseInt(document.getElementById('editId').value); const updatedData = { title: document.getElementById('editTitle').value, category: document.getElementById('editCat').value, description: document.getElementById('editDesc').value, price: document.getElementById('editPrice').value, imageUrl: document.getElementById('editImg').value, businessUrl: document.getElementById('editUrl').value }; if (supabase) { const { error } = await supabase.from('projects').update({ title: updatedData.title, category: updatedData.category, description: updatedData.description, price: updatedData.price, image_url: updatedData.imageUrl, business_url: updatedData.businessUrl }).eq('id', id); if (!error) { alert('Proyecto actualizado en la nube'); await fetchProjectsFromSupabase(); } } else { const projectIndex = projects.findIndex(p => p.id === id); if (projectIndex !== -1) { Object.assign(projects[projectIndex], updatedData); localStorage.setItem('alex_projects', JSON.stringify(projects)); alert('Proyecto actualizado localmente'); renderProjects(); } } showPage('dashboard'); }
         async function deleteProject(id) { if (confirm('¿Estás seguro de que quieres eliminar este proyecto de forma permanente?')) { if (supabase) { const { error } = await supabase.from('projects').delete().eq('id', id); if (!error) await fetchProjectsFromSupabase(); } else { projects = projects.filter(p => p.id !== id); localStorage.setItem('alex_projects', JSON.stringify(projects)); renderProjects(); } updateDashboard(); } }
@@ -725,7 +726,14 @@
         function closePremiumModal() { document.getElementById('premiumModal').classList.remove('active'); selectedProjectId = null; }
         async function handlePremiumPurchase() { if (!selectedProjectId) return; const btn = document.querySelector('#premiumModal .btn-premium'); btn.innerHTML = 'Procesando...'; btn.disabled = true; setTimeout(async () => { if (supabase) { await supabase.from('projects').update({ is_premium: true }).eq('id', selectedProjectId); await fetchProjectsFromSupabase(); } else { const idx = projects.findIndex(p => p.id === selectedProjectId); if (idx !== -1) { projects[idx].isPremium = true; localStorage.setItem('alex_projects', JSON.stringify(projects)); } } alert('¡Pago realizado con éxito!'); closePremiumModal(); updateDashboard(); renderProjects(); btn.innerHTML = 'Contratar Video-Análisis'; btn.disabled = false; }, 1500); }
         async function cancelPremium(id) { if (supabase) { await supabase.from('projects').update({ is_premium: false }).eq('id', id); await fetchProjectsFromSupabase(); } else { const idx = projects.findIndex(p => p.id === id); if (idx !== -1) { projects[idx].isPremium = false; localStorage.setItem('alex_projects', JSON.stringify(projects)); } } alert('Solicitud cancelada.'); renderProjects(); updateDashboard(); }
-        function openProjectDetail(id) { const p = projects.find(proj => proj.id === id); if (!p) return; const project = { ...p, imageUrl: p.imageUrl || p.image_url, businessUrl: p.businessUrl || p.business_url, authorName: p.authorName || p.author_name, authorEmail: p.authorEmail || p.author_email, date: p.date || p.created_at }; const detailContent = document.getElementById('detailContent'); let imgHtml = project.imageUrl ? `<img src="${project.imageUrl}" class="project-detail-image" alt="${project.title}">` : `<div class="project-detail-image" style="display: flex; align-items: center; justify-content: center; font-size: 4rem; color: #cbd5e1;">📦</div>`; let visitBtn = ''; if (project.businessUrl) { let url = project.businessUrl.startsWith('http') ? project.businessUrl : 'https://' + project.businessUrl; visitBtn = `<a href="${url}" target="_blank" class="btn-primary" style="display: inline-block; text-align: center; text-decoration: none; padding: 0.75rem 1.5rem;">Visitar Sitio Web</a>`; } detailContent.innerHTML = `${imgHtml}<div class="project-detail-header"><span class="detail-category">${project.category}</span><h1 class="project-detail-title" style="margin-top: 1rem;">${project.title}</h1><div class="project-detail-meta"><span class="detail-price">${project.price}€</span><span class="project-author-link" onclick="openUserProfile('${project.authorEmail}')" style="font-size: 1rem; font-weight: 500;">Publicado por <strong>${project.authorName}</strong></span><span>${new Date(project.date).toLocaleDateString()}</span></div></div><div style="font-size: 1.1rem; line-height: 1.8; color: #334155; margin-bottom: 3rem;"><p>${project.description.replace(/\n/g, '<br>')}</p></div>${visitBtn}`; showPage('project-detail'); }
+        function openProjectDetail(id) { const p = projects.find(proj => proj.id === id); if (!p) return; const project = { ...p, imageUrl: p.imageUrl || p.image_url, businessUrl: p.businessUrl || p.business_url, authorName: p.authorName || p.author_name, authorEmail: p.authorEmail || p.author_email, date: p.date || p.created_at }; const detailContent = document.getElementById('detailContent'); let imgHtml = project.imageUrl ? `<img src="${project.imageUrl}" class="project-detail-image" alt="${project.title}">` : `<div class="project-detail-image" style="display: flex; align-items: center; justify-content: center; font-size: 4rem; color: #cbd5e1;">📦</div>`; let visitBtn = ''; if (project.businessUrl) { let url = project.businessUrl.startsWith('http') ? project.businessUrl : 'https://' + project.businessUrl; visitBtn = `<a href="${url}" target="_blank" class="btn-primary" style="display: inline-block; text-align: center; text-decoration: none; padding: 0.75rem 1.5rem;">Visitar Sitio Web</a>`; } const authorEmail = project.authorEmail || project.author_email; const authorName = project.authorName || project.author_name; detailContent.innerHTML = `${imgHtml}<div class="project-detail-header"><span class="detail-category">${project.category}</span><h1 class="project-detail-title" style="margin-top: 1rem;">${project.title}</h1><div class="project-detail-meta"><span class="detail-price">${project.price}€</span><span class="project-author-link" onclick="openUserProfile('${authorEmail}')" style="font-size: 1rem; font-weight: 500;">Publicado por <strong>${authorName}</strong></span><span>${new Date(project.date).toLocaleDateString()}</span></div></div><div style="font-size: 1.1rem; line-height: 1.8; color: #334155; margin-bottom: 3rem;"><p>${project.description.replace(/\n/g, '<br>')}</p></div>${visitBtn}`; showPage('project-detail'); }
+
+        // --- INICIALIZACIÓN (AL FINAL) ---
+        document.addEventListener('DOMContentLoaded', async () => {
+            updateUI();
+            if (supabase) { await fetchProjectsFromSupabase(); }
+            renderProjects();
+        });
     </script>
 </body>
 </html>
