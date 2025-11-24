@@ -96,6 +96,10 @@
         .project-price { font-weight: 700; color: #2563eb; }
         .project-author-link { font-size: 0.875rem; color: #94a3b8; text-decoration: none; transition: color 0.2s; cursor: pointer; }
         .project-author-link:hover { color: #2563eb; text-decoration: underline; }
+        
+        .author-container { display: flex; align-items: center; gap: 0.5rem; cursor: pointer; transition: opacity 0.2s; }
+        .author-container:hover { opacity: 0.8; }
+        .author-avatar-small { width: 24px; height: 24px; border-radius: 50%; background-color: #dbeafe; color: #2563eb; font-size: 0.75rem; display: flex; align-items: center; justify-content: center; font-weight: 700; object-fit: cover; border: 1px solid #e2e8f0; }
 
         /* --- DASHBOARD & FORM --- */
         .dashboard-header { background: #f8fafc; padding: 3rem 1rem; border-bottom: 1px solid #e2e8f0; }
@@ -105,7 +109,7 @@
         .form-group { margin-bottom: 1.5rem; }
         .form-group label { display: block; margin-bottom: 0.5rem; font-weight: 500; }
         .form-group input, .form-group textarea, .form-group select { width: 100%; padding: 0.75rem; border: 1px solid #cbd5e1; border-radius: 0.5rem; }
-        .profile-avatar-large { width: 80px; height: 80px; background: #dbeafe; color: #2563eb; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 2.5rem; font-weight: 700; margin-bottom: 1rem; border: 4px solid white; box-shadow: 0 4px 6px rgba(0,0,0,0.1); }
+        .profile-avatar-large { width: 80px; height: 80px; background: #dbeafe; color: #2563eb; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 2.5rem; font-weight: 700; margin-bottom: 1rem; border: 4px solid white; box-shadow: 0 4px 6px rgba(0,0,0,0.1); object-fit: cover; }
 
         /* --- DETALLES --- */
         .project-detail-header { padding-bottom: 2rem; border-bottom: 1px solid #e2e8f0; margin-bottom: 2rem; }
@@ -169,12 +173,9 @@
                 <span>Proyectos Alex</span>
             </a>
             <div class="nav-buttons">
-                <!-- BOTÓN VOLVER AL INICIO -->
                 <button class="btn-outline hidden" id="backHomeBtn" onclick="showPage('home')">Inicio</button>
-                
                 <button class="btn-primary" id="loginBtnNav" onclick="openAuthModal('login')">Ingresar</button>
                 <button class="btn-outline" id="registerBtnNav" onclick="openAuthModal('signup')">Registrarse</button>
-                
                 <button class="btn-outline hidden" id="myAccountBtn" onclick="showPage('dashboard')">Mi Cuenta</button>
                 <button class="btn-danger hidden" id="logoutBtn" onclick="handleLogout()">Salir</button>
             </div>
@@ -234,10 +235,16 @@
         <div class="dashboard-header">
             <div class="container">
                 <div style="display: flex; justify-content: space-between; align-items: flex-start;">
-                    <div>
-                        <h2 id="userNameDisplay">Mi Cuenta</h2>
-                        <p id="userEmailDisplay" style="color: #64748b;"></p>
+                    <div style="display: flex; align-items: center; gap: 1rem;">
+                        <img id="dashboardAvatar" class="profile-avatar-large" style="width: 60px; height: 60px; margin-bottom:0;" src="" onerror="this.style.display='none'; document.getElementById('dashboardInitials').style.display='flex'">
+                        <div id="dashboardInitials" class="profile-avatar-large" style="width: 60px; height: 60px; margin-bottom:0; display:none;">A</div>
+                        <div>
+                            <h2 id="userNameDisplay">Mi Cuenta</h2>
+                            <p id="userEmailDisplay" style="color: #64748b;"></p>
+                            <button onclick="openEditProfile()" style="font-size: 0.75rem; color: #2563eb; background: none; padding: 0; border: none; text-decoration: underline;">Editar perfil</button>
+                        </div>
                     </div>
+                    <button class="btn-outline" onclick="showPage('home')">← Volver al Inicio</button>
                 </div>
             </div>
         </div>
@@ -263,7 +270,8 @@
         <div class="dashboard-header">
             <div class="container">
                 <div style="display: flex; align-items: center; gap: 1.5rem; flex-wrap: wrap;">
-                    <div class="profile-avatar-large" id="publicProfileAvatar">A</div>
+                    <img id="publicProfileImg" class="profile-avatar-large" src="" onerror="this.style.display='none'; document.getElementById('publicProfileAvatar').style.display='flex'">
+                    <div id="publicProfileAvatar" class="profile-avatar-large" style="display:none;">A</div>
                     <div>
                         <h2 id="publicProfileName">Nombre del Creador</h2>
                         <p style="color: #64748b;" id="publicProfileStats">0 proyectos publicados</p>
@@ -286,7 +294,7 @@
                     <div class="form-group"><label>Título *</label><input type="text" id="pTitle" required></div>
                     <div class="form-group"><label>Categoría *</label><select id="pCat"><option>Tecnología</option><option>Arte</option><option>Negocios</option><option>Educación</option><option>Moda</option><option>Otros</option></select></div>
                     <div class="form-group"><label>Descripción *</label><textarea id="pDesc" rows="3" required></textarea></div>
-                    <div class="form-group"><label>Precio ($) *</label><input type="number" id="pPrice" min="0" step="0.01" required></div>
+                    <div class="form-group"><label>Precio (€) *</label><input type="number" id="pPrice" min="0" step="0.01" required></div>
                     <div class="form-group"><label>URL de la Imagen (Opcional)</label><input type="url" id="pImg" placeholder="https://ejemplo.com/foto.jpg"><small style="color: #64748b;">Deja vacío para usar una imagen por defecto.</small></div>
                     <div class="form-group"><label>URL del Negocio / Sitio Web (Opcional)</label><input type="url" id="pUrl" placeholder="https://mi-negocio.com"></div>
                     <div style="display: flex; gap: 1rem; margin-top: 2rem;"><button type="submit" class="btn-primary" style="flex: 1;">Publicar</button><button type="button" class="btn-outline" onclick="showPage('dashboard')">Cancelar</button></div>
@@ -305,7 +313,7 @@
                     <div class="form-group"><label>Título *</label><input type="text" id="editTitle" required></div>
                     <div class="form-group"><label>Categoría *</label><select id="editCat"><option>Tecnología</option><option>Arte</option><option>Negocios</option><option>Educación</option><option>Moda</option><option>Otros</option></select></div>
                     <div class="form-group"><label>Descripción *</label><textarea id="editDesc" rows="3" required></textarea></div>
-                    <div class="form-group"><label>Precio ($) *</label><input type="number" id="editPrice" min="0" step="0.01" required></div>
+                    <div class="form-group"><label>Precio (€) *</label><input type="number" id="editPrice" min="0" step="0.01" required></div>
                     <div class="form-group"><label>URL de la Imagen (Opcional)</label><input type="url" id="editImg" placeholder="https://ejemplo.com/foto.jpg"></div>
                     <div class="form-group"><label>URL del Negocio / Sitio Web (Opcional)</label><input type="url" id="editUrl" placeholder="https://mi-negocio.com"></div>
                     <div style="display: flex; gap: 1rem; margin-top: 2rem;"><button type="submit" class="btn-primary" style="flex: 1;">Guardar Cambios</button><button type="button" class="btn-outline" onclick="showPage('dashboard')">Cancelar</button></div>
@@ -347,6 +355,7 @@
     </footer>
 
     <!-- MODALES -->
+    <!-- MODAL LOGIN/SIGNUP -->
     <div id="authModal" class="modal-overlay">
         <div class="modal-card">
             <button class="close-modal" onclick="closeAuthModal()">✕</button>
@@ -354,11 +363,31 @@
             <div id="authErrorMsg" class="error-message hidden">Correo o contraseña incorrecta</div>
             <form onsubmit="handleAuthSubmit(event)">
                 <div class="form-group hidden" id="nameGroup"><label>Nombre Completo</label><input type="text" id="authName" placeholder="Tu nombre"></div>
+                
+                <!-- NUEVO CAMPO DE FOTO DE PERFIL (Solo registro) -->
+                <div class="form-group hidden" id="avatarGroup">
+                    <label>URL Foto de Perfil (Opcional)</label>
+                    <input type="url" id="authAvatar" placeholder="https://...">
+                </div>
+
                 <div class="form-group"><label>Correo Electrónico</label><input type="email" id="authEmail" required placeholder="ejemplo@email.com"></div>
                 <div class="form-group"><label>Contraseña</label><input type="password" id="authPass" required placeholder="******"></div>
                 <button type="submit" class="login-btn" id="authSubmitBtn">Ingresar</button>
             </form>
             <div class="toggle-auth"><span id="authToggleText">¿No tienes cuenta?</span><a onclick="toggleAuthMode()" id="authToggleLink">Regístrate aquí</a></div>
+        </div>
+    </div>
+
+    <!-- MODAL EDITAR PERFIL -->
+    <div id="profileEditModal" class="modal-overlay">
+        <div class="modal-card">
+            <button class="close-modal" onclick="document.getElementById('profileEditModal').classList.remove('active')">✕</button>
+            <h2 style="text-align: center; margin-bottom: 1.5rem;">Editar Perfil</h2>
+            <form onsubmit="handleProfileEdit(event)">
+                <div class="form-group"><label>Nombre</label><input type="text" id="editProfileName" required></div>
+                <div class="form-group"><label>URL Foto de Perfil</label><input type="url" id="editProfileAvatar"></div>
+                <button type="submit" class="login-btn">Guardar Cambios</button>
+            </form>
         </div>
     </div>
 
@@ -368,7 +397,7 @@
             <div style="font-size: 3rem; margin-bottom: 0.5rem;">📹</div>
             <h2 style="margin-bottom: 0.5rem;">Video-Análisis Personalizado</h2>
             <p style="color: #64748b; font-size: 0.95rem;">Potencia tu proyecto con la voz de un experto.</p>
-            <div class="price-tag">$9.99 <span>/ único</span></div>
+            <div class="price-tag">9€ <span>/ único</span></div>
             <ul class="premium-feature-list"><li><span class="check-icon">✓</span><span>Análisis detallado de tu propuesta</span></li><li><span class="check-icon">✓</span><span>Narración profesional por Alex</span></li><li><span class="check-icon">✓</span><span>Destacamos los puntos clave</span></li><li><span class="check-icon">✓</span><span>Distintivo "Destacado" en la web</span></li></ul>
             <button onclick="handlePremiumPurchase()" class="btn-premium" style="justify-content: center; font-size: 1rem; padding: 1rem;">Contratar Video-Análisis</button>
             <p style="font-size: 0.75rem; color: #94a3b8; margin-top: 1rem;">Pago único y seguro. Entrega en 48h.</p>
@@ -376,13 +405,12 @@
     </div>
 
     <script>
-        // --- CONFIGURACIÓN SUPABASE CON TUS CLAVES ---
+        // *** CONFIGURACIÓN SUPABASE ***
         const supabaseUrl = 'https://jvshcszolovsnqzkozka.supabase.co';
         const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imp2c2hjc3pvbG92c25xemtvemthIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjQwMDQ5NDgsImV4cCI6MjA3OTU4MDk0OH0.ty4wwxMhQ8gm1SgweSf9JxcDrvt2IGwKzkH4EQP8ZB4';
         
         const supabase = (supabaseUrl && supabaseUrl.startsWith('http')) ? window.supabase.createClient(supabaseUrl, supabaseKey) : null;
 
-        // Estado Local
         let projects = JSON.parse(localStorage.getItem('alex_projects')) || [];
         let currentUser = JSON.parse(localStorage.getItem('alex_session')) || null;
         let isLoginMode = true;
@@ -401,52 +429,91 @@
             } catch (err) { console.log("Modo local activo"); }
         }
 
-        function showPage(pageId) {
-            if ((pageId === 'dashboard' || pageId === 'create-project' || pageId === 'edit-project') && !currentUser) {
-                openAuthModal('login');
-                return;
-            }
+        // --- SISTEMA DE USUARIOS / PERFILES ---
+        function handleProfileEdit(e) {
+            e.preventDefault();
+            const newName = document.getElementById('editProfileName').value;
+            const newAvatar = document.getElementById('editProfileAvatar').value;
             
-            const backHomeBtn = document.getElementById('backHomeBtn');
-            if (pageId === 'home') {
-                backHomeBtn.classList.add('hidden');
-            } else {
-                backHomeBtn.classList.remove('hidden');
-            }
-
-            document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
-            document.getElementById(pageId).classList.add('active');
-            window.scrollTo(0, 0);
-            if (pageId === 'dashboard') updateDashboard();
-        }
-
-        function updateUI() {
-            const loginBtn = document.getElementById('loginBtnNav');
-            const registerBtn = document.getElementById('registerBtnNav');
-            const accountBtn = document.getElementById('myAccountBtn');
-            const logoutBtn = document.getElementById('logoutBtn');
-
             if (currentUser) {
-                loginBtn.classList.add('hidden');
-                registerBtn.classList.add('hidden');
-                accountBtn.classList.remove('hidden');
-                logoutBtn.classList.remove('hidden');
-            } else {
-                loginBtn.classList.remove('hidden');
-                registerBtn.classList.remove('hidden');
-                accountBtn.classList.add('hidden');
-                logoutBtn.classList.add('hidden');
+                currentUser.name = newName;
+                currentUser.avatar = newAvatar;
+                localStorage.setItem('alex_session', JSON.stringify(currentUser));
+                
+                // Actualizar en localstorage usuarios "base de datos"
+                let users = JSON.parse(localStorage.getItem('alex_users')) || [];
+                const uIdx = users.findIndex(u => u.email === currentUser.email);
+                if(uIdx !== -1) {
+                    users[uIdx].name = newName;
+                    users[uIdx].avatar = newAvatar;
+                    localStorage.setItem('alex_users', JSON.stringify(users));
+                }
+                
+                updateUI();
+                updateDashboard();
+                document.getElementById('profileEditModal').classList.remove('active');
             }
         }
 
+        function openEditProfile() {
+            if(currentUser) {
+                document.getElementById('editProfileName').value = currentUser.name;
+                document.getElementById('editProfileAvatar').value = currentUser.avatar || '';
+                document.getElementById('profileEditModal').classList.add('active');
+            }
+        }
+
+        function openUserProfile(email) {
+            if (currentUser && email === currentUser.email) { showPage('dashboard'); return; }
+            const userProjects = projects.filter(p => (p.authorEmail || p.author_email) === email);
+            // Intentar sacar info del autor del primer proyecto
+            const authorName = userProjects.length > 0 ? (userProjects[0].authorName || userProjects[0].author_name) : 'Creador';
+            const authorAvatar = userProjects.length > 0 ? (userProjects[0].authorAvatar || userProjects[0].author_avatar) : null;
+            const initials = authorName.charAt(0).toUpperCase();
+
+            document.getElementById('publicProfileName').textContent = authorName;
+            document.getElementById('publicProfileStats').textContent = `${userProjects.length} proyectos publicados`;
+            document.getElementById('publicProfileNameSpan').textContent = authorName;
+            
+            // Avatar público
+            const pAvatar = document.getElementById('publicProfileAvatar');
+            const pImg = document.getElementById('publicProfileImg');
+            if (authorAvatar) {
+                pImg.src = authorAvatar;
+                pImg.style.display = 'block';
+                pAvatar.style.display = 'none';
+            } else {
+                pImg.style.display = 'none';
+                pAvatar.textContent = initials;
+                pAvatar.style.display = 'flex';
+            }
+
+            const grid = document.getElementById('publicProfileGrid');
+            grid.innerHTML = userProjects.length > 0 ? userProjects.map(p => createProjectCard(p, false)).join('') : '<p>Este usuario aún no tiene proyectos.</p>';
+            showPage('user-profile');
+        }
+
+        // --- UI ---
         function updateDashboard() {
             if (!currentUser) return;
             document.getElementById('userNameDisplay').textContent = currentUser.name;
             document.getElementById('userEmailDisplay').textContent = currentUser.email;
             
+            // Avatar Dashboard
+            const dashAvatar = document.getElementById('dashboardAvatar');
+            const dashInitials = document.getElementById('dashboardInitials');
+            if(currentUser.avatar) {
+                dashAvatar.src = currentUser.avatar;
+                dashAvatar.style.display = 'block';
+                dashInitials.style.display = 'none';
+            } else {
+                dashAvatar.style.display = 'none';
+                dashInitials.textContent = currentUser.name.charAt(0).toUpperCase();
+                dashInitials.style.display = 'flex';
+            }
+            
             const myProjects = projects.filter(p => (p.authorEmail || p.author_email) === currentUser.email);
             const premiumProjects = myProjects.filter(p => p.isPremium || p.is_premium).length;
-            
             document.getElementById('userProjectCount').textContent = myProjects.length;
             document.getElementById('userPremiumCount').textContent = premiumProjects;
             
@@ -454,34 +521,34 @@
             grid.innerHTML = myProjects.length ? myProjects.map(p => createProjectCard(p, true)).join('') : '<p>No tienes proyectos aún.</p>';
         }
 
-        function renderProjects() {
-            const homeGrid = document.getElementById('homeProjectsGrid');
-            const allGrid = document.getElementById('allProjectsGrid');
-            const html = projects.length ? projects.map(p => createProjectCard(p)).join('') : '<p style="grid-column: 1/-1; text-align: center; color: #64748b;">No hay proyectos publicados. ¡Sé el primero!</p>';
-            if(homeGrid) homeGrid.innerHTML = html;
-            if(allGrid) allGrid.innerHTML = html;
-        }
-
         function createProjectCard(project, isMine = false) {
             const p = {
-                id: project.id,
-                title: project.title,
-                description: project.description,
-                category: project.category,
-                price: project.price,
+                ...project,
                 imageUrl: project.imageUrl || project.image_url,
                 businessUrl: project.businessUrl || project.business_url,
                 isPremium: project.isPremium || project.is_premium,
                 authorName: project.authorName || project.author_name,
                 authorEmail: project.authorEmail || project.author_email,
+                authorAvatar: project.authorAvatar || project.author_avatar, // Nuevo campo
                 date: project.date || project.created_at
             };
 
+            // Imagen Proyecto
             let imageHtml = `<div class="project-image-placeholder" onclick="openProjectDetail(${p.id})">📦</div>`;
             if (p.imageUrl) {
                 imageHtml = `<img src="${p.imageUrl}" alt="${p.title}" onclick="openProjectDetail(${p.id})" onerror="this.parentElement.innerHTML='<div class=\'project-image-placeholder\' onclick=\'openProjectDetail(${p.id})\'>📦</div>'">`;
             }
 
+            // Avatar Autor en tarjeta
+            let avatarHtml = '';
+            if(p.authorAvatar) {
+                avatarHtml = `<img src="${p.authorAvatar}" class="author-avatar-small" alt="${p.authorName}">`;
+            } else {
+                const initials = p.authorName ? p.authorName.charAt(0).toUpperCase() : 'U';
+                avatarHtml = `<div class="author-avatar-small">${initials}</div>`;
+            }
+
+            // Botones
             let visitBtnHtml = '';
             if (p.businessUrl) {
                 let url = p.businessUrl.startsWith('http') ? p.businessUrl : 'https://' + p.businessUrl;
@@ -496,14 +563,7 @@
                 let premiumBtn = !p.isPremium 
                     ? `<button onclick="openPremiumModal(${p.id})" class="btn-premium"><span>Solicitar Video-Análisis</span><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="23 7 16 12 23 17 23 7"></polygon><rect x="1" y="5" width="15" height="14" rx="2" ry="2"></rect></svg></button>`
                     : `<button onclick="cancelPremium(${p.id})" class="btn-cancel-premium"><span>Cancelar Análisis</span></button>`;
-                
-                actionsHtml = `
-                    ${premiumBtn}
-                    <div style="display: flex; gap: 0.5rem; width: 100%;">
-                        <button onclick="openEditProject(${p.id})" class="btn-edit"><span>Editar</span><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"></path></svg></button>
-                        <button onclick="deleteProject(${p.id})" class="btn-delete"><span>Eliminar</span></button>
-                    </div>
-                `;
+                actionsHtml = `${premiumBtn}<div style="display: flex; gap: 0.5rem; width: 100%;"><button onclick="openEditProject(${p.id})" class="btn-edit"><span>Editar</span><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"></path></svg></button><button onclick="deleteProject(${p.id})" class="btn-delete"><span>Eliminar</span></button></div>`;
             }
 
             return `
@@ -516,8 +576,11 @@
                         <p style="color: #64748b; font-size: 0.9rem; margin-bottom: 1rem; display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical; overflow: hidden;">${p.description}</p>
                         
                         <div class="project-meta">
-                            <span class="project-price">$${p.price}</span>
-                            <span class="project-author-link" onclick="openUserProfile('${p.authorEmail}')">${isMine ? 'Tú' : 'Por ' + p.authorName}</span>
+                            <span class="project-price">${p.price}€</span>
+                            <div class="author-container" onclick="openUserProfile('${p.authorEmail}')">
+                                ${avatarHtml}
+                                <span class="project-author-link">${isMine ? 'Tú' : p.authorName}</span>
+                            </div>
                         </div>
                         
                         ${visitBtnHtml}
@@ -527,68 +590,96 @@
             `;
         }
 
-        function openUserProfile(email) {
-            if (currentUser && email === currentUser.email) { showPage('dashboard'); return; }
-            const userProjects = projects.filter(p => (p.authorEmail || p.author_email) === email);
-            const authorName = userProjects.length > 0 ? (userProjects[0].authorName || userProjects[0].author_name) : 'Creador';
-            const initials = authorName.charAt(0).toUpperCase();
-            document.getElementById('publicProfileName').textContent = authorName;
-            document.getElementById('publicProfileStats').textContent = `${userProjects.length} proyectos publicados`;
-            document.getElementById('publicProfileNameSpan').textContent = authorName;
-            document.getElementById('publicProfileAvatar').textContent = initials;
-            const grid = document.getElementById('publicProfileGrid');
-            grid.innerHTML = userProjects.length > 0 ? userProjects.map(p => createProjectCard(p, false)).join('') : '<p>Este usuario aún no tiene proyectos.</p>';
-            showPage('user-profile');
-        }
+        // --- AUTH & SIGNUP CON AVATAR ---
+        function renderAuthModal() {
+            const title = document.getElementById('authTitle');
+            const nameGroup = document.getElementById('nameGroup');
+            const avatarGroup = document.getElementById('avatarGroup');
+            const submitBtn = document.getElementById('authSubmitBtn');
+            const toggleText = document.getElementById('authToggleText');
+            const toggleLink = document.getElementById('authToggleLink');
 
-        function openProjectDetail(id) {
-            const p = projects.find(proj => proj.id === id);
-            if (!p) return;
-            const project = { ...p, imageUrl: p.imageUrl || p.image_url, businessUrl: p.businessUrl || p.business_url, authorName: p.authorName || p.author_name, authorEmail: p.authorEmail || p.author_email, date: p.date || p.created_at };
-            const detailContent = document.getElementById('detailContent');
-            let imgHtml = project.imageUrl ? `<img src="${project.imageUrl}" class="project-detail-image" alt="${project.title}">` : `<div class="project-detail-image" style="display: flex; align-items: center; justify-content: center; font-size: 4rem; color: #cbd5e1;">📦</div>`;
-            let visitBtn = '';
-            if (project.businessUrl) {
-                let url = project.businessUrl.startsWith('http') ? project.businessUrl : 'https://' + project.businessUrl;
-                visitBtn = `<a href="${url}" target="_blank" class="btn-primary" style="display: inline-block; text-align: center; text-decoration: none; padding: 0.75rem 1.5rem;">Visitar Sitio Web</a>`;
-            }
-            detailContent.innerHTML = `${imgHtml}<div class="project-detail-header"><span class="detail-category">${project.category}</span><h1 class="project-detail-title" style="margin-top: 1rem;">${project.title}</h1><div class="project-detail-meta"><span class="detail-price">$${project.price}</span><span class="project-author-link" onclick="openUserProfile('${project.authorEmail}')" style="font-size: 1rem; font-weight: 500;">Publicado por <strong>${project.authorName}</strong></span><span>${new Date(project.date).toLocaleDateString()}</span></div></div><div style="font-size: 1.1rem; line-height: 1.8; color: #334155; margin-bottom: 3rem;"><p>${project.description.replace(/\n/g, '<br>')}</p></div>${visitBtn}`;
-            showPage('project-detail');
-        }
-
-        function openEditProject(id) {
-            const p = projects.find(proj => proj.id === id);
-            if (!p) return;
-            const project = { ...p, imageUrl: p.imageUrl || p.image_url, businessUrl: p.businessUrl || p.business_url };
-            document.getElementById('editId').value = project.id;
-            document.getElementById('editTitle').value = project.title;
-            document.getElementById('editCat').value = project.category;
-            document.getElementById('editDesc').value = project.description;
-            document.getElementById('editPrice').value = project.price;
-            document.getElementById('editImg').value = project.imageUrl || '';
-            document.getElementById('editUrl').value = project.businessUrl || '';
-            showPage('edit-project');
-        }
-
-        async function submitEditProject(e) {
-            e.preventDefault();
-            const id = parseInt(document.getElementById('editId').value);
-            const updatedData = { title: document.getElementById('editTitle').value, category: document.getElementById('editCat').value, description: document.getElementById('editDesc').value, price: document.getElementById('editPrice').value, imageUrl: document.getElementById('editImg').value, businessUrl: document.getElementById('editUrl').value };
-            if (supabase) {
-                const { error } = await supabase.from('projects').update({ title: updatedData.title, category: updatedData.category, description: updatedData.description, price: updatedData.price, image_url: updatedData.imageUrl, business_url: updatedData.businessUrl }).eq('id', id);
-                if (!error) { alert('Proyecto actualizado en la nube'); await fetchProjectsFromSupabase(); }
+            if (isLoginMode) {
+                title.textContent = "Iniciar Sesión";
+                nameGroup.classList.add('hidden');
+                avatarGroup.classList.add('hidden'); // Ocultar en login
+                document.getElementById('authName').removeAttribute('required');
+                submitBtn.textContent = "Ingresar";
+                toggleText.textContent = "¿No tienes cuenta?";
+                toggleLink.textContent = "Regístrate aquí";
             } else {
-                const projectIndex = projects.findIndex(p => p.id === id);
-                if (projectIndex !== -1) { Object.assign(projects[projectIndex], updatedData); localStorage.setItem('alex_projects', JSON.stringify(projects)); alert('Proyecto actualizado localmente'); renderProjects(); }
+                title.textContent = "Crear Cuenta";
+                nameGroup.classList.remove('hidden');
+                avatarGroup.classList.remove('hidden'); // Mostrar en registro
+                document.getElementById('authName').setAttribute('required', 'true');
+                submitBtn.textContent = "Registrarse";
+                toggleText.textContent = "¿Ya tienes cuenta?";
+                toggleLink.textContent = "Inicia sesión";
             }
+        }
+
+        function handleAuthSubmit(e) {
+            e.preventDefault();
+            const email = document.getElementById('authEmail').value.trim();
+            const password = document.getElementById('authPass').value.trim();
+            const name = document.getElementById('authName').value.trim();
+            const avatar = document.getElementById('authAvatar').value.trim(); // Capturar avatar
+            const errorMsg = document.getElementById('authErrorMsg');
+            errorMsg.classList.add('hidden');
+
+            const users = JSON.parse(localStorage.getItem('alex_users')) || [];
+
+            if (isLoginMode) {
+                const user = users.find(u => u.email === email && u.password === password);
+                if (user) { loginUser(user); } else { errorMsg.textContent = "Correo o contraseña incorrecta"; errorMsg.classList.remove('hidden'); }
+            } else {
+                if (users.find(u => u.email === email)) { errorMsg.textContent = "Este correo ya está registrado"; errorMsg.classList.remove('hidden'); return; }
+                // Guardar usuario con avatar
+                const newUser = { name, email, password, avatar }; 
+                users.push(newUser);
+                localStorage.setItem('alex_users', JSON.stringify(users));
+                alert('Cuenta creada. Iniciando sesión...');
+                loginUser(newUser);
+            }
+        }
+
+        function loginUser(user) {
+            currentUser = { name: user.name, email: user.email, avatar: user.avatar }; // Guardar avatar en sesión
+            localStorage.setItem('alex_session', JSON.stringify(currentUser));
+            closeAuthModal();
+            updateUI();
             showPage('dashboard');
         }
 
+        // --- PROYECTO CON AUTOR ---
         async function submitProject(e) {
             e.preventDefault();
-            const newProject = { title: document.getElementById('pTitle').value, description: document.getElementById('pDesc').value, category: document.getElementById('pCat').value, price: document.getElementById('pPrice').value, imageUrl: document.getElementById('pImg').value, businessUrl: document.getElementById('pUrl').value, isPremium: false, authorName: currentUser.name, authorEmail: currentUser.email, date: new Date().toISOString() };
+            const newProject = {
+                title: document.getElementById('pTitle').value,
+                description: document.getElementById('pDesc').value,
+                category: document.getElementById('pCat').value,
+                price: document.getElementById('pPrice').value,
+                imageUrl: document.getElementById('pImg').value,
+                businessUrl: document.getElementById('pUrl').value,
+                isPremium: false,
+                authorName: currentUser.name,
+                authorEmail: currentUser.email,
+                authorAvatar: currentUser.avatar, // Guardar avatar en proyecto
+                date: new Date().toISOString()
+            };
+
             if (supabase) {
-                const { error } = await supabase.from('projects').insert([{ title: newProject.title, description: newProject.description, category: newProject.category, price: newProject.price, image_url: newProject.imageUrl, business_url: newProject.businessUrl, author_name: newProject.authorName, author_email: newProject.authorEmail }]);
+                const { error } = await supabase.from('projects').insert([{
+                    title: newProject.title,
+                    description: newProject.description,
+                    category: newProject.category,
+                    price: newProject.price,
+                    image_url: newProject.imageUrl,
+                    business_url: newProject.businessUrl,
+                    author_name: newProject.authorName,
+                    author_email: newProject.authorEmail,
+                    author_avatar: newProject.authorAvatar // SQL column needed
+                }]);
                 if (!error) { alert('Proyecto publicado en la nube'); await fetchProjectsFromSupabase(); } else { alert('Error al subir: ' + error.message); }
             } else {
                 newProject.id = Date.now(); projects.unshift(newProject); localStorage.setItem('alex_projects', JSON.stringify(projects)); alert('Proyecto publicado localmente'); renderProjects();
@@ -596,53 +687,45 @@
             e.target.reset(); showPage('dashboard');
         }
 
-        async function deleteProject(id) {
-            if (confirm('¿Estás seguro de que quieres eliminar este proyecto de forma permanente?')) {
-                if (supabase) { const { error } = await supabase.from('projects').delete().eq('id', id); if (!error) await fetchProjectsFromSupabase(); } else { projects = projects.filter(p => p.id !== id); localStorage.setItem('alex_projects', JSON.stringify(projects)); renderProjects(); }
-                updateDashboard();
+        function filterProjects(query, gridId) {
+            const term = query.toLowerCase();
+            const grid = document.getElementById(gridId) || document.getElementById('allProjectsGrid');
+            if (grid) {
+                // Búsqueda mejorada: incluye nombre de autor
+                const filtered = projects.filter(p => 
+                    p.title.toLowerCase().includes(term) || 
+                    p.description.toLowerCase().includes(term) ||
+                    p.category.toLowerCase().includes(term) ||
+                    (p.authorName || p.author_name || '').toLowerCase().includes(term)
+                );
+                grid.innerHTML = filtered.length ? filtered.map(p => createProjectCard(p)).join('') : '<p>No se encontraron resultados</p>';
             }
         }
 
-        function openPremiumModal(projectId) { selectedProjectId = projectId; document.getElementById('premiumModal').classList.add('active'); }
-        function closePremiumModal() { document.getElementById('premiumModal').classList.remove('active'); selectedProjectId = null; }
-        async function handlePremiumPurchase() {
-            if (!selectedProjectId) return;
-            const btn = document.querySelector('#premiumModal .btn-premium'); btn.innerHTML = 'Procesando...'; btn.disabled = true;
-            setTimeout(async () => {
-                if (supabase) { await supabase.from('projects').update({ is_premium: true }).eq('id', selectedProjectId); await fetchProjectsFromSupabase(); } else { const idx = projects.findIndex(p => p.id === selectedProjectId); if (idx !== -1) { projects[idx].isPremium = true; localStorage.setItem('alex_projects', JSON.stringify(projects)); } }
-                alert('¡Pago realizado con éxito!'); closePremiumModal(); updateDashboard(); renderProjects(); btn.innerHTML = 'Contratar Video-Análisis'; btn.disabled = false;
-            }, 1500);
-        }
-        async function cancelPremium(id) {
-            if (supabase) { await supabase.from('projects').update({ is_premium: false }).eq('id', id); await fetchProjectsFromSupabase(); } else { const idx = projects.findIndex(p => p.id === id); if (idx !== -1) { projects[idx].isPremium = false; localStorage.setItem('alex_projects', JSON.stringify(projects)); } }
-            alert('Solicitud cancelada.'); renderProjects(); updateDashboard();
-        }
-
+        // Resto de funciones (toggleAuth, closeAuth, showPage, etc) se mantienen igual...
         function openAuthModal(mode) { document.getElementById('authErrorMsg').classList.add('hidden'); document.getElementById('authModal').classList.add('active'); isLoginMode = (mode === 'login'); renderAuthModal(); }
         function closeAuthModal() { document.getElementById('authModal').classList.remove('active'); document.getElementById('authPass').value = ''; }
         function toggleAuthMode() { isLoginMode = !isLoginMode; renderAuthModal(); }
-        function renderAuthModal() {
-            const title = document.getElementById('authTitle'); const nameGroup = document.getElementById('nameGroup'); const submitBtn = document.getElementById('authSubmitBtn'); const toggleText = document.getElementById('authToggleText'); const toggleLink = document.getElementById('authToggleLink');
-            if (isLoginMode) { title.textContent = "Iniciar Sesión"; nameGroup.classList.add('hidden'); document.getElementById('authName').removeAttribute('required'); submitBtn.textContent = "Ingresar"; toggleText.textContent = "¿No tienes cuenta?"; toggleLink.textContent = "Regístrate aquí"; } else { title.textContent = "Crear Cuenta"; nameGroup.classList.remove('hidden'); document.getElementById('authName').setAttribute('required', 'true'); submitBtn.textContent = "Registrarse"; toggleText.textContent = "¿Ya tienes cuenta?"; toggleLink.textContent = "Inicia sesión"; }
-        }
-        function handleAuthSubmit(e) {
-            e.preventDefault(); const email = document.getElementById('authEmail').value.trim(); const password = document.getElementById('authPass').value.trim(); const name = document.getElementById('authName').value.trim(); const errorMsg = document.getElementById('authErrorMsg'); errorMsg.classList.add('hidden');
-            const users = JSON.parse(localStorage.getItem('alex_users')) || [];
-            if (isLoginMode) {
-                const user = users.find(u => u.email === email && u.password === password);
-                if (user) { loginUser(user); } else { errorMsg.textContent = "Correo o contraseña incorrecta"; errorMsg.classList.remove('hidden'); }
-            } else {
-                if (users.find(u => u.email === email)) { errorMsg.textContent = "Este correo ya está registrado"; errorMsg.classList.remove('hidden'); return; }
-                const newUser = { name, email, password }; users.push(newUser); localStorage.setItem('alex_users', JSON.stringify(users)); alert('Cuenta creada. Iniciando sesión...'); loginUser(newUser);
-            }
-        }
-        function loginUser(user) { currentUser = { name: user.name, email: user.email }; localStorage.setItem('alex_session', JSON.stringify(currentUser)); closeAuthModal(); updateUI(); showPage('dashboard'); }
         function handleLogout() { localStorage.removeItem('alex_session'); currentUser = null; updateUI(); showPage('home'); }
         function handleCreateProjectClick() { if (currentUser) { showPage('create-project'); } else { alert('Debes iniciar sesión.'); openAuthModal('signup'); } }
-        function filterProjects(query, gridId) {
-            const term = query.toLowerCase(); const grid = document.getElementById(gridId) || document.getElementById('allProjectsGrid');
-            if (grid) { const filtered = projects.filter(p => p.title.toLowerCase().includes(term) || p.description.toLowerCase().includes(term)); grid.innerHTML = filtered.length ? filtered.map(p => createProjectCard(p)).join('') : '<p>No se encontraron resultados</p>'; }
+        function showPage(pageId) {
+            if ((pageId === 'dashboard' || pageId === 'create-project' || pageId === 'edit-project') && !currentUser) { openAuthModal('login'); return; }
+            const backHomeBtn = document.getElementById('backHomeBtn');
+            if (pageId === 'home') { backHomeBtn.classList.add('hidden'); } else { backHomeBtn.classList.remove('hidden'); }
+            document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+            document.getElementById(pageId).classList.add('active');
+            window.scrollTo(0, 0);
+            if (pageId === 'dashboard') updateDashboard();
         }
+        // ... (Resto de funciones CRUD y Premium ya implementadas anteriormente)
+        function openEditProject(id) { const p = projects.find(proj => proj.id === id); if (!p) return; const project = { ...p, imageUrl: p.imageUrl || p.image_url, businessUrl: p.businessUrl || p.business_url }; document.getElementById('editId').value = project.id; document.getElementById('editTitle').value = project.title; document.getElementById('editCat').value = project.category; document.getElementById('editDesc').value = project.description; document.getElementById('editPrice').value = project.price; document.getElementById('editImg').value = project.imageUrl || ''; document.getElementById('editUrl').value = project.businessUrl || ''; showPage('edit-project'); }
+        async function submitEditProject(e) { e.preventDefault(); const id = parseInt(document.getElementById('editId').value); const updatedData = { title: document.getElementById('editTitle').value, category: document.getElementById('editCat').value, description: document.getElementById('editDesc').value, price: document.getElementById('editPrice').value, imageUrl: document.getElementById('editImg').value, businessUrl: document.getElementById('editUrl').value }; if (supabase) { const { error } = await supabase.from('projects').update({ title: updatedData.title, category: updatedData.category, description: updatedData.description, price: updatedData.price, image_url: updatedData.imageUrl, business_url: updatedData.businessUrl }).eq('id', id); if (!error) { alert('Proyecto actualizado en la nube'); await fetchProjectsFromSupabase(); } } else { const projectIndex = projects.findIndex(p => p.id === id); if (projectIndex !== -1) { Object.assign(projects[projectIndex], updatedData); localStorage.setItem('alex_projects', JSON.stringify(projects)); alert('Proyecto actualizado localmente'); renderProjects(); } } showPage('dashboard'); }
+        async function deleteProject(id) { if (confirm('¿Estás seguro de que quieres eliminar este proyecto de forma permanente?')) { if (supabase) { const { error } = await supabase.from('projects').delete().eq('id', id); if (!error) await fetchProjectsFromSupabase(); } else { projects = projects.filter(p => p.id !== id); localStorage.setItem('alex_projects', JSON.stringify(projects)); renderProjects(); } updateDashboard(); } }
+        function openPremiumModal(projectId) { selectedProjectId = projectId; document.getElementById('premiumModal').classList.add('active'); }
+        function closePremiumModal() { document.getElementById('premiumModal').classList.remove('active'); selectedProjectId = null; }
+        async function handlePremiumPurchase() { if (!selectedProjectId) return; const btn = document.querySelector('#premiumModal .btn-premium'); btn.innerHTML = 'Procesando...'; btn.disabled = true; setTimeout(async () => { if (supabase) { await supabase.from('projects').update({ is_premium: true }).eq('id', selectedProjectId); await fetchProjectsFromSupabase(); } else { const idx = projects.findIndex(p => p.id === selectedProjectId); if (idx !== -1) { projects[idx].isPremium = true; localStorage.setItem('alex_projects', JSON.stringify(projects)); } } alert('¡Pago realizado con éxito!'); closePremiumModal(); updateDashboard(); renderProjects(); btn.innerHTML = 'Contratar Video-Análisis'; btn.disabled = false; }, 1500); }
+        async function cancelPremium(id) { if (supabase) { await supabase.from('projects').update({ is_premium: false }).eq('id', id); await fetchProjectsFromSupabase(); } else { const idx = projects.findIndex(p => p.id === id); if (idx !== -1) { projects[idx].isPremium = false; localStorage.setItem('alex_projects', JSON.stringify(projects)); } } alert('Solicitud cancelada.'); renderProjects(); updateDashboard(); }
+        function openProjectDetail(id) { const p = projects.find(proj => proj.id === id); if (!p) return; const project = { ...p, imageUrl: p.imageUrl || p.image_url, businessUrl: p.businessUrl || p.business_url, authorName: p.authorName || p.author_name, authorEmail: p.authorEmail || p.author_email, date: p.date || p.created_at }; const detailContent = document.getElementById('detailContent'); let imgHtml = project.imageUrl ? `<img src="${project.imageUrl}" class="project-detail-image" alt="${project.title}">` : `<div class="project-detail-image" style="display: flex; align-items: center; justify-content: center; font-size: 4rem; color: #cbd5e1;">📦</div>`; let visitBtn = ''; if (project.businessUrl) { let url = project.businessUrl.startsWith('http') ? project.businessUrl : 'https://' + project.businessUrl; visitBtn = `<a href="${url}" target="_blank" class="btn-primary" style="display: inline-block; text-align: center; text-decoration: none; padding: 0.75rem 1.5rem;">Visitar Sitio Web</a>`; } detailContent.innerHTML = `${imgHtml}<div class="project-detail-header"><span class="detail-category">${project.category}</span><h1 class="project-detail-title" style="margin-top: 1rem;">${project.title}</h1><div class="project-detail-meta"><span class="detail-price">${project.price}€</span><span class="project-author-link" onclick="openUserProfile('${project.authorEmail}')" style="font-size: 1rem; font-weight: 500;">Publicado por <strong>${project.authorName}</strong></span><span>${new Date(project.date).toLocaleDateString()}</span></div></div><div style="font-size: 1.1rem; line-height: 1.8; color: #334155; margin-bottom: 3rem;"><p>${project.description.replace(/\n/g, '<br>')}</p></div>${visitBtn}`; showPage('project-detail'); }
     </script>
 </body>
 </html>
