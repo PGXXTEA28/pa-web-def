@@ -125,7 +125,9 @@
         .modal-card { background: white; width: 100%; max-width: 400px; padding: 2.5rem; border-radius: 1rem; position: relative; transform: translateY(20px); transition: all 0.3s; }
         .modal-overlay.active .modal-card { transform: translateY(0); }
         .close-modal { position: absolute; top: 1rem; right: 1rem; font-size: 1.25rem; color: #94a3b8; background: none; border:none; cursor: pointer; }
-        .login-btn { width: 100%; padding: 0.875rem; background: #2563eb; color: white; font-weight: 600; border-radius: 0.5rem; margin-top: 1rem; }
+        .login-btn { width: 100%; padding: 0.875rem; background: #2563eb; color: white; font-weight: 600; border-radius: 0.5rem; margin-top: 1rem; transition: opacity 0.2s; }
+        .login-btn:disabled { opacity: 0.7; cursor: not-allowed; }
+        
         .toggle-auth { text-align: center; margin-top: 1.5rem; font-size: 0.875rem; color: #64748b; }
         .toggle-auth a { color: #2563eb; cursor: pointer; font-weight: 600; text-decoration: none; }
         .error-message { color: #dc2626; background-color: #fef2f2; padding: 0.75rem; border-radius: 0.375rem; border: 1px solid #fecaca; font-size: 0.875rem; text-align: center; margin-bottom: 1rem; }
@@ -173,12 +175,9 @@
                 <span>Proyectos Alex</span>
             </a>
             <div class="nav-buttons">
-                <!-- BOTÓN VOLVER AL INICIO -->
                 <button class="btn-outline hidden" id="backHomeBtn" onclick="showPage('home')">Inicio</button>
-                
                 <button class="btn-primary" id="loginBtnNav" onclick="openAuthModal('login')">Ingresar</button>
                 <button class="btn-outline" id="registerBtnNav" onclick="openAuthModal('signup')">Registrarse</button>
-                
                 <button class="btn-outline hidden" id="myAccountBtn" onclick="showPage('dashboard')">Mi Cuenta</button>
                 <button class="btn-danger hidden" id="logoutBtn" onclick="handleLogout()">Salir</button>
             </div>
@@ -247,7 +246,11 @@
                             <button onclick="openEditProfile()" style="font-size: 0.75rem; color: #2563eb; background: none; padding: 0; border: none; text-decoration: underline;">Editar perfil</button>
                         </div>
                     </div>
-                    <button class="btn-outline" onclick="showPage('home')">← Volver al Inicio</button>
+                    
+                    <!-- BOTONES DE ACCIÓN -->
+                    <div style="display: flex; gap: 0.5rem;">
+                        <button class="btn-outline" onclick="showPage('home')">Volver al Inicio</button>
+                    </div>
                 </div>
             </div>
         </div>
@@ -408,12 +411,11 @@
     </div>
 
     <script>
-        // --- CONFIGURACIÓN SUPABASE ---
+        // *** CONFIGURACIÓN SUPABASE ***
         const supabaseUrl = 'https://jvshcszolovsnqzkozka.supabase.co';
         const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imp2c2hjc3pvbG92c25xemtvemthIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjQwMDQ5NDgsImV4cCI6MjA3OTU4MDk0OH0.ty4wwxMhQ8gm1SgweSf9JxcDrvt2IGwKzkH4EQP8ZB4';
         const supabase = (supabaseUrl && supabaseUrl.startsWith('http')) ? window.supabase.createClient(supabaseUrl, supabaseKey) : null;
 
-        // Estado Local
         let projects = JSON.parse(localStorage.getItem('alex_projects')) || [];
         let currentUser = JSON.parse(localStorage.getItem('alex_session')) || null;
         let isLoginMode = true;
@@ -492,17 +494,20 @@
             const registerBtn = document.getElementById('registerBtnNav');
             const accountBtn = document.getElementById('myAccountBtn');
             const logoutBtn = document.getElementById('logoutBtn');
+            const backHomeBtn = document.getElementById('backHomeBtn');
 
             if (currentUser) {
                 loginBtn.classList.add('hidden');
                 registerBtn.classList.add('hidden');
                 accountBtn.classList.remove('hidden');
                 logoutBtn.classList.remove('hidden');
+                if (document.getElementById('home').classList.contains('active')) { backHomeBtn.classList.add('hidden'); } else { backHomeBtn.classList.remove('hidden'); }
             } else {
                 loginBtn.classList.remove('hidden');
                 registerBtn.classList.remove('hidden');
                 accountBtn.classList.add('hidden');
                 logoutBtn.classList.add('hidden');
+                if (document.getElementById('home').classList.contains('active')) { backHomeBtn.classList.add('hidden'); } else { backHomeBtn.classList.remove('hidden'); }
             }
         }
 
@@ -626,26 +631,46 @@
 
         function handleAuthSubmit(e) {
             e.preventDefault();
-            const email = document.getElementById('authEmail').value.trim();
-            const password = document.getElementById('authPass').value.trim();
-            const name = document.getElementById('authName').value.trim();
-            const avatar = document.getElementById('authAvatar').value.trim();
-            const errorMsg = document.getElementById('authErrorMsg');
-            errorMsg.classList.add('hidden');
+            const btn = document.getElementById('authSubmitBtn');
+            const originalText = btn.textContent;
+            btn.textContent = 'Procesando...';
+            btn.disabled = true;
 
-            const users = JSON.parse(localStorage.getItem('alex_users')) || [];
+            setTimeout(() => {
+                const email = document.getElementById('authEmail').value.trim().toLowerCase(); // SIEMPRE MINÚSCULAS
+                const password = document.getElementById('authPass').value.trim();
+                const name = document.getElementById('authName').value.trim();
+                const avatar = document.getElementById('authAvatar').value.trim();
+                const errorMsg = document.getElementById('authErrorMsg');
+                errorMsg.classList.add('hidden');
 
-            if (isLoginMode) {
-                const user = users.find(u => u.email === email && u.password === password);
-                if (user) { loginUser(user); } else { errorMsg.textContent = "Correo o contraseña incorrecta"; errorMsg.classList.remove('hidden'); }
-            } else {
-                if (users.find(u => u.email === email)) { errorMsg.textContent = "Este correo ya está registrado"; errorMsg.classList.remove('hidden'); return; }
-                const newUser = { name, email, password, avatar }; 
-                users.push(newUser);
-                localStorage.setItem('alex_users', JSON.stringify(users));
-                alert('Cuenta creada. Iniciando sesión...');
-                loginUser(newUser);
-            }
+                const users = JSON.parse(localStorage.getItem('alex_users')) || [];
+
+                if (isLoginMode) {
+                    const user = users.find(u => u.email.toLowerCase() === email && u.password === password);
+                    if (user) { 
+                        loginUser(user); 
+                    } else { 
+                        errorMsg.textContent = "Correo o contraseña incorrecta"; 
+                        errorMsg.classList.remove('hidden');
+                        btn.textContent = originalText;
+                        btn.disabled = false;
+                    }
+                } else {
+                    if (users.find(u => u.email.toLowerCase() === email)) { 
+                        errorMsg.textContent = "Este correo ya está registrado"; 
+                        errorMsg.classList.remove('hidden'); 
+                        btn.textContent = originalText;
+                        btn.disabled = false;
+                        return; 
+                    }
+                    const newUser = { name, email, password, avatar }; 
+                    users.push(newUser);
+                    localStorage.setItem('alex_users', JSON.stringify(users));
+                    alert('Cuenta creada. Iniciando sesión...');
+                    loginUser(newUser);
+                }
+            }, 600); // Simulación de carga para UX
         }
 
         function loginUser(user) {
@@ -718,6 +743,7 @@
             document.getElementById(pageId).classList.add('active');
             window.scrollTo(0, 0);
             if (pageId === 'dashboard') updateDashboard();
+            updateUI();
         }
         function openEditProject(id) { const p = projects.find(proj => proj.id === id); if (!p) return; const project = { ...p, imageUrl: p.imageUrl || p.image_url, businessUrl: p.businessUrl || p.business_url }; document.getElementById('editId').value = project.id; document.getElementById('editTitle').value = project.title; document.getElementById('editCat').value = project.category; document.getElementById('editDesc').value = project.description; document.getElementById('editPrice').value = project.price; document.getElementById('editImg').value = project.imageUrl || ''; document.getElementById('editUrl').value = project.businessUrl || ''; showPage('edit-project'); }
         async function submitEditProject(e) { e.preventDefault(); const id = parseInt(document.getElementById('editId').value); const updatedData = { title: document.getElementById('editTitle').value, category: document.getElementById('editCat').value, description: document.getElementById('editDesc').value, price: document.getElementById('editPrice').value, imageUrl: document.getElementById('editImg').value, businessUrl: document.getElementById('editUrl').value }; if (supabase) { const { error } = await supabase.from('projects').update({ title: updatedData.title, category: updatedData.category, description: updatedData.description, price: updatedData.price, image_url: updatedData.imageUrl, business_url: updatedData.businessUrl }).eq('id', id); if (!error) { alert('Proyecto actualizado en la nube'); await fetchProjectsFromSupabase(); } } else { const projectIndex = projects.findIndex(p => p.id === id); if (projectIndex !== -1) { Object.assign(projects[projectIndex], updatedData); localStorage.setItem('alex_projects', JSON.stringify(projects)); alert('Proyecto actualizado localmente'); renderProjects(); } } showPage('dashboard'); }
