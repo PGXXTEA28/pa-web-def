@@ -136,6 +136,11 @@
         .check-icon { color: #10b981; flex-shrink: 0; }
         .price-tag { font-size: 2rem; font-weight: 800; color: #1e293b; text-align: center; margin: 1rem 0; }
         .price-tag span { font-size: 1rem; font-weight: 500; color: #64748b; }
+        
+        /* Animación Shake para error */
+        .shake { animation: shake 0.4s cubic-bezier(.36,.07,.19,.97) both; border-color: #dc2626 !important; }
+        @keyframes shake { 10%, 90% { transform: translate3d(-1px, 0, 0); } 20%, 80% { transform: translate3d(2px, 0, 0); } 30%, 50%, 70% { transform: translate3d(-4px, 0, 0); } 40%, 60% { transform: translate3d(4px, 0, 0); } }
+        
         .hidden { display: none !important; }
 
         /* --- FOOTER --- */
@@ -175,9 +180,12 @@
                 <span>Proyectos Alex</span>
             </a>
             <div class="nav-buttons">
+                <!-- BOTÓN VOLVER AL INICIO -->
                 <button class="btn-outline hidden" id="backHomeBtn" onclick="showPage('home')">Inicio</button>
+                
                 <button class="btn-primary" id="loginBtnNav" onclick="openAuthModal('login')">Ingresar</button>
                 <button class="btn-outline" id="registerBtnNav" onclick="openAuthModal('signup')">Registrarse</button>
+                
                 <button class="btn-outline hidden" id="myAccountBtn" onclick="showPage('dashboard')">Mi Cuenta</button>
                 <button class="btn-danger hidden" id="logoutBtn" onclick="handleLogout()">Salir</button>
             </div>
@@ -247,7 +255,6 @@
                         </div>
                     </div>
                     
-                    <!-- BOTONES DE ACCIÓN -->
                     <div style="display: flex; gap: 0.5rem;">
                         <button class="btn-outline" onclick="showPage('home')">Volver al Inicio</button>
                     </div>
@@ -392,7 +399,16 @@
             <form onsubmit="handleProfileEdit(event)">
                 <div class="form-group"><label>Nombre</label><input type="text" id="editProfileName" required></div>
                 <div class="form-group"><label>URL Foto de Perfil</label><input type="url" id="editProfileAvatar"></div>
-                <button type="submit" class="login-btn">Guardar Cambios</button>
+                
+                <!-- BOTÓN BORRAR CUENTA -->
+                <div style="margin-top: 2rem; padding-top: 1.5rem; border-top: 1px solid #e2e8f0;">
+                    <button type="button" onclick="deleteAccount()" class="btn-delete" style="background-color: #fef2f2; color: #dc2626; border: 1px solid #fecaca; width: 100%;">
+                        Borrar Cuenta
+                    </button>
+                    <p style="font-size: 0.75rem; color: #94a3b8; text-align: center; margin-top: 0.5rem;">Esta acción eliminará todos tus proyectos y no se puede deshacer.</p>
+                </div>
+                
+                <button type="submit" class="login-btn" style="margin-top: 1.5rem;">Guardar Cambios</button>
             </form>
         </div>
     </div>
@@ -414,8 +430,10 @@
         // *** CONFIGURACIÓN SUPABASE ***
         const supabaseUrl = 'https://jvshcszolovsnqzkozka.supabase.co';
         const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imp2c2hjc3pvbG92c25xemtvemthIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjQwMDQ5NDgsImV4cCI6MjA3OTU4MDk0OH0.ty4wwxMhQ8gm1SgweSf9JxcDrvt2IGwKzkH4EQP8ZB4';
+        
         const supabase = (supabaseUrl && supabaseUrl.startsWith('http')) ? window.supabase.createClient(supabaseUrl, supabaseKey) : null;
 
+        // Estado Local
         let projects = JSON.parse(localStorage.getItem('alex_projects')) || [];
         let currentUser = JSON.parse(localStorage.getItem('alex_session')) || null;
         let isLoginMode = true;
@@ -428,6 +446,32 @@
                 const { data, error } = await supabase.from('projects').select('*').order('created_at', { ascending: false });
                 if (!error && data) { projects = data; renderProjects(); }
             } catch (err) { console.log("Modo local activo"); }
+        }
+
+        async function deleteAccount() {
+            if (!confirm("¿Estás seguro de que quieres borrar tu cuenta? Esta acción es irreversible y se borrarán todos tus proyectos.")) return;
+
+            const userEmail = currentUser.email;
+
+            // 1. Borrar proyectos de la nube (si hay conexión)
+            if (supabase) {
+                await supabase.from('projects').delete().eq('author_email', userEmail);
+            }
+
+            // 2. Borrar proyectos locales
+            let localProjects = JSON.parse(localStorage.getItem('alex_projects')) || [];
+            localProjects = localProjects.filter(p => p.authorEmail !== userEmail);
+            localStorage.setItem('alex_projects', JSON.stringify(localProjects));
+
+            // 3. Borrar usuario de la base de datos local
+            let users = JSON.parse(localStorage.getItem('alex_users')) || [];
+            users = users.filter(u => u.email !== userEmail);
+            localStorage.setItem('alex_users', JSON.stringify(users));
+
+            // 4. Cerrar sesión
+            alert("Tu cuenta ha sido eliminada correctamente.");
+            handleLogout();
+            document.getElementById('profileEditModal').classList.remove('active');
         }
 
         function handleProfileEdit(e) {
@@ -637,12 +681,13 @@
             btn.disabled = true;
 
             setTimeout(() => {
-                const email = document.getElementById('authEmail').value.trim().toLowerCase(); // SIEMPRE MINÚSCULAS
+                const email = document.getElementById('authEmail').value.trim().toLowerCase(); // MINÚSCULAS SIEMPRE
                 const password = document.getElementById('authPass').value.trim();
                 const name = document.getElementById('authName').value.trim();
                 const avatar = document.getElementById('authAvatar').value.trim();
                 const errorMsg = document.getElementById('authErrorMsg');
                 errorMsg.classList.add('hidden');
+                document.getElementById('authPass').classList.remove('shake');
 
                 const users = JSON.parse(localStorage.getItem('alex_users')) || [];
 
@@ -653,6 +698,8 @@
                     } else { 
                         errorMsg.textContent = "Correo o contraseña incorrecta"; 
                         errorMsg.classList.remove('hidden');
+                        document.getElementById('authPass').classList.add('shake');
+                        setTimeout(() => document.getElementById('authPass').classList.remove('shake'), 500);
                         btn.textContent = originalText;
                         btn.disabled = false;
                     }
@@ -670,7 +717,7 @@
                     alert('Cuenta creada. Iniciando sesión...');
                     loginUser(newUser);
                 }
-            }, 600); // Simulación de carga para UX
+            }, 800); 
         }
 
         function loginUser(user) {
