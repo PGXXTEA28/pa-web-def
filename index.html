@@ -14,48 +14,95 @@
     <style>
         /* --- VARIABLES & RESET --- */
         :root {
-            --bg-body: #FAFAFA; --bg-card: #FFFFFF; --text-main: #18181B; --text-muted: #71717A;
-            --primary: #18181B; --accent: #6366F1; --border: #E4E4E7; --radius: 12px;
-            --shadow-soft: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
+            --bg-body: #FAFAFA; 
+            --bg-card: #FFFFFF; 
+            --text-main: #18181B; 
+            --text-muted: #71717A;
+            --primary: #18181B; 
+            --accent: #6366F1; 
+            --border: #E4E4E7; 
+            --radius: 12px;
+            --shadow-soft: 0 4px 6px -1px rgba(0, 0, 0, 0.05), 0 2px 4px -1px rgba(0, 0, 0, 0.03);
+            --shadow-hover: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
         }
+
         * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Inter', sans-serif; -webkit-font-smoothing: antialiased; }
+        
         body { background-color: var(--bg-body); color: var(--text-main); line-height: 1.6; overflow-x: hidden; }
+
         h1, h2, h3, h4 { font-family: 'Playfair Display', serif; letter-spacing: -0.02em; color: var(--text-main); }
+        
         input, button, textarea, select { font-family: inherit; outline: none; }
+
         .container { max-width: 1100px; margin: 0 auto; padding: 0 1.5rem; }
         .hidden { display: none !important; }
 
         /* --- NAVEGACIÓN --- */
-        nav { position: sticky; top: 0; z-index: 100; background: rgba(255, 255, 255, 0.85); backdrop-filter: blur(12px); border-bottom: 1px solid rgba(0,0,0,0.05); }
+        nav { 
+            position: sticky; top: 0; z-index: 100; 
+            background: rgba(255, 255, 255, 0.9); backdrop-filter: blur(12px); 
+            border-bottom: 1px solid rgba(0,0,0,0.05);
+        }
         nav .container { display: flex; height: 4.5rem; align-items: center; justify-content: space-between; }
+        
         .nav-brand { display: flex; align-items: center; gap: 0.75rem; text-decoration: none; color: inherit; cursor: pointer; }
+        
+        /* LOGO CSS PURO */
         .logo-badge { width: 2.5rem; height: 2.5rem; background-color: #F9F7F2; border: 2px solid #1e293b; border-radius: 50%; display: flex; align-items: center; justify-content: center; position: relative; flex-shrink: 0; }
         .logo-badge::after { content: ''; position: absolute; top: 2px; left: 2px; right: 2px; bottom: 2px; border: 1px solid #1e293b; border-radius: 50%; opacity: 0.3; }
         .logo-text { font-family: 'Playfair Display', serif; font-weight: 800; font-size: 1rem; color: #1e293b; padding-top: 2px; }
         .nav-brand span { font-size: 1.2rem; font-weight: 700; letter-spacing: -0.02em; }
+        
         .nav-buttons { display: flex; align-items: center; gap: 0.75rem; }
 
-        /* --- BOTONES --- */
-        .btn { padding: 0.5rem 1rem; border-radius: 99px; border: 1px solid transparent; cursor: pointer; font-size: 0.85rem; font-weight: 500; transition: all 0.2s; display: inline-flex; align-items: center; gap: 0.4rem; text-decoration: none; }
+        /* --- BOTONES (DISEÑO UNIFICADO) --- */
+        .btn { 
+            padding: 0.6rem 1.2rem; 
+            border-radius: 99px; 
+            border: 1px solid transparent; 
+            cursor: pointer; 
+            font-size: 0.9rem; 
+            font-weight: 500; 
+            transition: all 0.2s ease; 
+            display: inline-flex; 
+            align-items: center; 
+            justify-content: center; 
+            gap: 0.5rem; 
+            text-decoration: none;
+            line-height: 1;
+        }
+        
+        /* Variantes de Botones */
         .btn-primary { background: var(--primary); color: white; box-shadow: var(--shadow-soft); }
-        .btn-primary:hover { transform: translateY(-1px); opacity: 0.9; }
+        .btn-primary:hover { transform: translateY(-1px); background: #27272A; }
+        
         .btn-outline { background: white; border-color: var(--border); color: var(--text-main); }
-        .btn-outline:hover { border-color: var(--text-main); background: #F4F4F5; }
-        .btn-ghost { background: transparent; color: var(--text-muted); }
-        .btn-ghost:hover { color: var(--text-main); background: rgba(0,0,0,0.03); }
-        .btn-premium { background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%) !important; color: white !important; box-shadow: 0 4px 12px rgba(245, 158, 11, 0.3); border: none; }
-        .btn-premium:hover { transform: translateY(-1px); filter: brightness(1.1); }
-        .btn-cancel-premium { background-color: #fffbeb; color: #b45309; border: 1px solid #fcd34d; }
-        .btn-cancel-premium:hover { background-color: #fef3c7; }
-        .btn-delete { background-color: #FEF2F2; color: #DC2626; }
-        .btn-delete:hover { background-color: #FEE2E2; }
-        .btn-edit { background-color: #EFF6FF; color: #2563EB; }
-        .btn-edit:hover { background-color: #DBEAFE; }
+        .btn-outline:hover { border-color: var(--text-main); background: #FAFAFA; }
+
+        .btn-ghost { background: transparent; color: var(--text-muted); padding: 0.5rem; }
+        .btn-ghost:hover { color: var(--text-main); background: rgba(0,0,0,0.05); }
+        
+        .btn-delete { 
+            background-color: #FEF2F2; color: #DC2626; border: 1px solid #FECACA; 
+        }
+        .btn-delete:hover { background-color: #FEE2E2; border-color: #FCA5A5; }
+
+        .btn-premium { 
+            background: linear-gradient(135deg, #F59E0B 0%, #D97706 100%) !important; 
+            color: white !important; border: none; 
+            box-shadow: 0 4px 10px rgba(245, 158, 11, 0.2);
+        }
+        .btn-premium:hover { transform: translateY(-1px); filter: brightness(1.1); box-shadow: 0 6px 15px rgba(245, 158, 11, 0.3); }
+
+        .btn-cancel-premium { 
+            background-color: #FFFBEB; color: #B45309; border: 1px solid #FCD34D; 
+        }
+        .btn-cancel-premium:hover { background-color: #FEF3C7; }
 
         /* --- PAGINAS (SPA) --- */
         .page { display: none; animation: fadeIn 0.3s ease; padding-bottom: 4rem; }
         .page.active { display: block; }
-        @keyframes fadeIn { from { opacity: 0; transform: translateY(5px); } to { opacity: 1; transform: translateY(0); } }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
 
         /* --- HERO --- */
         .hero { padding: 6rem 0 4rem; text-align: center; }
@@ -63,65 +110,95 @@
         .hero p { font-size: 1.15rem; color: var(--text-muted); max-width: 600px; margin: 0 auto 2.5rem; }
         
         /* --- SEARCH --- */
-        .search-wrapper { max-width: 480px; margin: 0 auto 3rem; position: relative; background: white; border-radius: 99px; box-shadow: var(--shadow-soft); border: 1px solid transparent; transition: all 0.3s; }
-        .search-wrapper:focus-within { border-color: var(--border); transform: translateY(-2px); }
-        .search-wrapper i { position: absolute; left: 1.2rem; top: 50%; transform: translateY(-50%); color: var(--text-muted); }
-        .search-wrapper input { width: 100%; padding: 1rem 1rem 1rem 3rem; border: none; background: transparent; font-size: 1rem; border-radius: 99px; }
+        .search-wrapper {
+            max-width: 500px; margin: 0 auto 3rem; position: relative;
+            background: white; border-radius: 99px; box-shadow: var(--shadow-soft);
+            border: 1px solid transparent; transition: all 0.3s;
+        }
+        .search-wrapper:focus-within { border-color: var(--border); box-shadow: var(--shadow-hover); transform: translateY(-2px); }
+        .search-wrapper i { position: absolute; left: 1.5rem; top: 50%; transform: translateY(-50%); color: var(--text-muted); font-size: 1.2rem; }
+        .search-wrapper input { width: 100%; padding: 1rem 1rem 1rem 3.5rem; border: none; background: transparent; font-size: 1rem; border-radius: 99px; }
 
-        /* --- GRID --- */
-        .projects-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 2rem; }
-        .project-card { background: var(--bg-card); border-radius: var(--radius); border: 1px solid var(--border); overflow: hidden; transition: all 0.3s ease; display: flex; flex-direction: column; }
-        .project-card:hover { transform: translateY(-5px); box-shadow: 0 15px 30px -10px rgba(0,0,0,0.1); }
+        /* --- GRID PROYECTOS --- */
+        .projects-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); gap: 2rem; }
+
+        .project-card { 
+            background: var(--bg-card); border-radius: var(--radius); 
+            border: 1px solid var(--border); overflow: hidden; 
+            transition: all 0.3s ease; display: flex; flex-direction: column;
+            box-shadow: var(--shadow-soft);
+        }
+        .project-card:hover { transform: translateY(-5px); box-shadow: var(--shadow-hover); border-color: transparent; }
+        
         .project-card.is-premium { border: 1px solid #FBBF24; position: relative; }
-        .premium-badge { position: absolute; top: 10px; right: 10px; background: rgba(255,255,255,0.9); backdrop-filter: blur(4px); padding: 4px 8px; border-radius: 6px; font-size: 0.7rem; font-weight: 700; color: #B45309; border: 1px solid #FDE68A; z-index: 10; }
-        .project-image-container { height: 200px; overflow: hidden; position: relative; background: #F4F4F5; cursor: pointer; }
+        .project-card.is-premium::after { content: ''; position: absolute; inset: 0; box-shadow: inset 0 0 0 1px rgba(251, 191, 36, 0.3); pointer-events: none; border-radius: var(--radius); }
+        
+        .premium-badge {
+            position: absolute; top: 12px; right: 12px; background: rgba(255,255,255,0.95); 
+            backdrop-filter: blur(4px); padding: 6px 10px; border-radius: 99px; 
+            font-size: 0.75rem; font-weight: 700; color: #B45309; border: 1px solid #FDE68A; 
+            z-index: 10; display: flex; align-items: center; gap: 4px; box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+        }
+        
+        .project-image-container { height: 220px; overflow: hidden; position: relative; background: #F4F4F5; cursor: pointer; }
         .project-image { width: 100%; height: 100%; object-fit: cover; transition: transform 0.5s; }
         .project-card:hover .project-image { transform: scale(1.05); }
-        .project-image-placeholder { width: 100%; height: 100%; display: flex; align-items: center; justify-content: center; color: #A1A1AA; font-size: 2rem; }
-        .card-content { padding: 1.25rem; display: flex; flex-direction: column; flex: 1; gap: 0.5rem; }
+        .project-image-placeholder { width: 100%; height: 100%; display: flex; align-items: center; justify-content: center; color: #A1A1AA; font-size: 2.5rem; }
+
+        .card-content { padding: 1.5rem; display: flex; flex-direction: column; flex: 1; gap: 0.5rem; }
         .card-category { font-size: 0.7rem; text-transform: uppercase; letter-spacing: 0.05em; color: var(--accent); font-weight: 700; }
-        .card-title { font-size: 1.15rem; font-weight: 700; line-height: 1.3; cursor: pointer; transition: color 0.2s; }
-        .card-title:hover { color: var(--accent); }
-        .card-desc { font-size: 0.9rem; color: var(--text-muted); display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; margin-bottom: 1rem; }
+        .card-title { font-size: 1.2rem; font-weight: 700; line-height: 1.3; margin: 0; }
+        .card-desc { font-size: 0.9rem; color: var(--text-muted); display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; margin-bottom: 1rem; font-weight: 300; }
+        
         .card-footer { margin-top: auto; padding-top: 1rem; border-top: 1px solid #F4F4F5; display: flex; justify-content: space-between; align-items: center; }
         .author-row { display: flex; align-items: center; gap: 0.5rem; cursor: pointer; }
-        .author-row img { width: 24px; height: 24px; border-radius: 50%; object-fit: cover; }
-        .author-row span { font-size: 0.8rem; font-weight: 500; color: var(--text-main); }
-        .like-btn { background: none; border: none; cursor: pointer; color: var(--text-muted); font-size: 0.9rem; display: flex; align-items: center; gap: 4px; transition: color 0.2s; }
-        .like-btn:hover, .like-btn.liked { color: #EF4444; }
+        .avatar-small { width: 28px; height: 28px; border-radius: 50%; object-fit: cover; border: 1px solid #E4E4E7; }
+        .avatar-placeholder-small { width: 28px; height: 28px; border-radius: 50%; background: #E0E7FF; color: #4F46E5; display: flex; align-items: center; justify-content: center; font-size: 0.75rem; font-weight: 700; border: 1px solid #E4E4E7; }
+        .author-name { font-size: 0.85rem; font-weight: 500; color: var(--text-main); }
+        
+        .like-btn { background: none; border: none; cursor: pointer; color: var(--text-muted); font-size: 0.9rem; display: flex; align-items: center; gap: 4px; transition: color 0.2s; padding: 4px 8px; border-radius: 8px; }
+        .like-btn:hover { background: #FEF2F2; color: #EF4444; }
+        .like-btn.liked { color: #EF4444; }
         .like-btn.liked i { font-weight: fill; }
 
         /* --- DASHBOARD --- */
         .dashboard-header { background: white; border-bottom: 1px solid var(--border); padding: 3rem 0; margin-bottom: 2rem; }
         .profile-stats { display: flex; gap: 2rem; margin-top: 1rem; }
         .stat-item strong { font-size: 1.5rem; display: block; color: var(--text-main); }
-        .stat-item span { font-size: 0.85rem; color: var(--text-muted); }
+        .stat-item span { font-size: 0.85rem; color: var(--text-muted); font-weight: 500; }
         
-        .profile-avatar-large { width: 90px; height: 90px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 2.5rem; font-weight: 700; color: white; border: 4px solid white; box-shadow: 0 10px 20px -5px rgba(0,0,0,0.1); flex-shrink: 0; object-fit: cover; }
-
         /* --- FORMULARIOS --- */
-        .form-container { max-width: 600px; margin: 3rem auto; background: white; padding: 2rem; border-radius: var(--radius); border: 1px solid var(--border); }
-        .form-group { margin-bottom: 1.2rem; }
-        .form-group label { display: block; margin-bottom: 0.4rem; font-size: 0.9rem; font-weight: 600; }
-        .form-group input, .form-group textarea, .form-group select { width: 100%; padding: 0.75rem; border: 1px solid var(--border); border-radius: 0.5rem; background: #FAFAFA; }
-        /* Input de archivo personalizado básico */
-        input[type="file"] { padding: 0.5rem; background: #f8fafc; }
-        .upload-separator { display: flex; align-items: center; margin: 1rem 0; color: #94a3b8; font-size: 0.8rem; }
+        .form-container { max-width: 600px; margin: 3rem auto; background: white; padding: 2.5rem; border-radius: var(--radius); border: 1px solid var(--border); box-shadow: var(--shadow-soft); }
+        .form-group { margin-bottom: 1.5rem; }
+        .form-group label { display: block; margin-bottom: 0.5rem; font-size: 0.9rem; font-weight: 600; }
+        .form-group input, .form-group textarea, .form-group select { width: 100%; padding: 0.8rem; border: 1px solid var(--border); border-radius: 0.5rem; background: #FAFAFA; transition: all 0.2s; }
+        .form-group input:focus { background: white; border-color: var(--primary); box-shadow: 0 0 0 2px rgba(24, 24, 27, 0.05); }
+        
+        .upload-separator { display: flex; align-items: center; margin: 1rem 0; color: var(--text-muted); font-size: 0.8rem; }
         .upload-separator::before, .upload-separator::after { content: ""; flex: 1; height: 1px; background: #e2e8f0; }
-        .upload-separator span { padding: 0 0.5rem; }
+        .upload-separator span { padding: 0 0.8rem; }
 
         /* --- TOAST & ADS --- */
-        #toast-container { position: fixed; bottom: 20px; right: 20px; z-index: 9999; display: flex; flex-direction: column; gap: 10px; }
-        .toast { background: #18181B; color: white; padding: 0.8rem 1.2rem; border-radius: 8px; font-size: 0.9rem; box-shadow: 0 10px 15px -3px rgba(0,0,0,0.1); animation: slideUp 0.3s ease-out; }
+        #toast-container { position: fixed; bottom: 24px; right: 24px; z-index: 9999; display: flex; flex-direction: column; gap: 10px; }
+        .toast { background: #18181B; color: white; padding: 1rem 1.5rem; border-radius: 8px; font-size: 0.9rem; box-shadow: 0 10px 25px -5px rgba(0,0,0,0.1); animation: slideUp 0.3s ease-out; display: flex; align-items: center; gap: 0.5rem; }
+        .toast.error { border-left: 4px solid #EF4444; }
+        .toast.success { border-left: 4px solid #10B981; }
         @keyframes slideUp { from { transform: translateY(20px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
-        .ad-placeholder { width: 100%; max-width: 728px; height: 90px; background: #F4F4F5; margin: 2rem auto; display: flex; align-items: center; justify-content: center; color: #A1A1AA; font-size: 0.8rem; letter-spacing: 1px; border-radius: 8px; border: 1px dashed #E4E4E7; }
+        
+        .ad-placeholder { width: 100%; max-width: 728px; height: 90px; background: #F4F4F5; margin: 3rem auto; display: flex; align-items: center; justify-content: center; color: #A1A1AA; font-size: 0.8rem; letter-spacing: 1px; border-radius: 8px; border: 1px dashed #D4D4D8; text-transform: uppercase; }
 
         /* --- MODAL --- */
-        .modal-overlay { position: fixed; inset: 0; background: rgba(255,255,255,0.9); backdrop-filter: blur(5px); z-index: 2000; display: flex; align-items: center; justify-content: center; opacity: 0; visibility: hidden; transition: all 0.3s; }
+        .modal-overlay { position: fixed; inset: 0; background: rgba(255,255,255,0.85); backdrop-filter: blur(8px); z-index: 2000; display: flex; align-items: center; justify-content: center; opacity: 0; visibility: hidden; transition: all 0.3s; }
         .modal-overlay.active { opacity: 1; visibility: visible; }
-        .modal-card { background: white; width: 100%; max-width: 400px; padding: 2rem; border-radius: 1.5rem; box-shadow: 0 25px 50px -12px rgba(0,0,0,0.15); border: 1px solid var(--border); transform: translateY(20px); transition: all 0.3s; position: relative; }
+        .modal-card { background: white; width: 100%; max-width: 420px; padding: 2.5rem; border-radius: 1.5rem; box-shadow: 0 25px 50px -12px rgba(0,0,0,0.15); border: 1px solid rgba(0,0,0,0.05); transform: translateY(20px); transition: all 0.3s; position: relative; }
         .modal-overlay.active .modal-card { transform: translateY(0); }
-        .close-modal { position: absolute; top: 1rem; right: 1rem; background: none; border: none; font-size: 1.2rem; cursor: pointer; color: var(--text-muted); }
+        .close-modal { position: absolute; top: 1.5rem; right: 1.5rem; background: none; border: none; font-size: 1.2rem; cursor: pointer; color: var(--text-muted); transition: color 0.2s; }
+        .close-modal:hover { color: var(--text-main); }
+        
+        /* Auth Styles */
+        .login-btn { width: 100%; padding: 0.9rem; background: var(--primary); color: white; font-weight: 600; border-radius: 0.6rem; margin-top: 1rem; transition: opacity 0.2s; }
+        .login-btn:disabled { opacity: 0.7; cursor: not-allowed; }
+        .error-message { color: #DC2626; background-color: #FEF2F2; padding: 0.8rem; border-radius: 0.5rem; border: 1px solid #FECACA; font-size: 0.9rem; text-align: center; margin-bottom: 1.5rem; }
 
         /* --- DETALLE --- */
         .detail-header { padding: 2rem 0; border-bottom: 1px solid var(--border); margin-bottom: 2rem; }
@@ -129,15 +206,22 @@
 
         /* --- REVIEWS --- */
         .reviews-section { margin-top: 4rem; padding-top: 2rem; border-top: 1px solid var(--border); }
-        .review-card { background: #F9FAFB; padding: 1.5rem; border-radius: 12px; margin-bottom: 1rem; }
+        .review-card { background: #F9FAFB; padding: 1.5rem; border-radius: 12px; margin-bottom: 1rem; border: 1px solid #F3F4F6; }
         .star-input { display: flex; gap: 0.5rem; font-size: 1.5rem; color: #D4D4D8; cursor: pointer; margin-bottom: 1rem; }
         .star-input span.active { color: #FCD34D; }
 
-        @media (max-width: 768px) { .hero h1 { font-size: 2.5rem; } .projects-grid { grid-template-columns: 1fr; } .nav-brand span { display: none; } .detail-img { height: 250px; } }
+        @media (max-width: 768px) { 
+            .hero h1 { font-size: 2.5rem; } 
+            .projects-grid { grid-template-columns: 1fr; } 
+            .nav-brand span { display: none; }
+            .detail-img { height: 250px; }
+            .dashboard-header .container > div { flex-direction: column; align-items: flex-start; gap: 1rem; }
+            .dashboard-header button.btn-primary { width: 100%; }
+        }
     </style>
 </head>
 <body>
-    <!-- TOASTS -->
+
     <div id="toast-container"></div>
 
     <!-- NAVEGACIÓN -->
@@ -147,12 +231,15 @@
                 <div class="logo-badge"><span class="logo-text">PA</span></div>
                 <span>Proyectos Alex</span>
             </div>
+            
             <div class="nav-buttons">
                 <button class="btn btn-ghost hidden" id="navHomeBtn" onclick="goToPage('home')"><i class="ph ph-house"></i> Inicio</button>
+                
                 <div id="authBtns">
                     <button class="btn btn-outline" onclick="openModal('auth', 'login')">Ingresar</button>
                     <button class="btn btn-primary" onclick="openModal('auth', 'signup')">Registrarse</button>
                 </div>
+
                 <div id="userBtns" class="hidden" style="display: flex; align-items: center; gap: 0.5rem;">
                      <button class="btn btn-outline" onclick="goToPage('dashboard')"><i class="ph ph-user"></i> Mi Cuenta</button>
                      <button class="btn btn-ghost" onclick="handleLogout()" title="Salir"><i class="ph ph-sign-out" style="font-size: 1.2rem;"></i></button>
@@ -168,16 +255,18 @@
                 <div style="display: inline-block; padding: 6px 16px; background: #F4F4F5; color: #18181B; border-radius: 99px; font-size: 0.85rem; font-weight: 600; margin-bottom: 1.5rem; border: 1px solid #E4E4E7;">✨ Plataforma de Proyectos Digitales</div>
                 <h1>Dale Vida a Tus <br> <span style="background: linear-gradient(90deg, #6366F1, #8B5CF6); -webkit-background-clip: text; -webkit-text-fill-color: transparent;">Grandes Ideas</span></h1>
                 <p>La plataforma premium para creadores. Comparte, inspira y crece.</p>
+                
                 <div class="search-wrapper">
                     <i class="ph ph-magnifying-glass"></i>
                     <input type="text" placeholder="Buscar..." onkeyup="filterProjects(this.value, 'homeProjectsGrid')">
                 </div>
+                
                 <button class="btn btn-primary" style="padding: 0.8rem 2rem; font-size: 1rem;" onclick="checkAuthAndAct('create')">Publicar Proyecto <i class="ph ph-arrow-right"></i></button>
             </div>
         </header>
         <div class="ad-placeholder">PUBLICIDAD GOOGLE ADSENSE</div>
         <div class="container">
-            <h3 style="margin-bottom: 2rem;">Destacados</h3>
+            <h3 style="margin-bottom: 2rem; font-size: 1.8rem;">Explorar Proyectos</h3>
             <div id="homeProjectsGrid" class="projects-grid"></div>
         </div>
         <div class="ad-placeholder">PUBLICIDAD</div>
@@ -196,7 +285,7 @@
                             <button onclick="openEditProfile()" class="btn btn-ghost" style="padding: 0; margin-top: 0.5rem; font-size: 0.85rem; color: var(--accent);">Editar perfil</button>
                         </div>
                     </div>
-                    <button class="btn btn-primary" onclick="prepareForm()"><i class="ph ph-plus"></i> Nuevo Proyecto</button>
+                    <button class="btn btn-primary" onclick="prepareForm()"><i class="ph ph-plus"></i> Crear Proyecto</button>
                 </div>
                 <div class="profile-stats">
                     <div class="stat-item"><strong id="userProjectCount">0</strong><span>Proyectos</span></div>
@@ -318,59 +407,50 @@
     <!-- MODALES -->
     <div id="modal-auth" class="modal-overlay">
         <div class="modal-card">
-            <button class="close-modal" onclick="closeModal('auth')">✕</button>
+            <button class="close-modal" onclick="closeModal('auth')"><i class="ph ph-x"></i></button>
             <h2 id="auth-title" style="text-align: center; margin-bottom: 1.5rem;">Iniciar Sesión</h2>
-            <div id="authErrorMsg" class="error-message hidden">Correo o contraseña incorrecta</div>
-            <form onsubmit="handleAuthSubmit(event)">
-                <div class="form-group hidden" id="nameGroup"><label>Nombre Completo</label><input type="text" id="authName" placeholder="Tu nombre"></div>
-                
-                <!-- NUEVO CAMPO DE FOTO DE PERFIL (Solo registro) -->
-                <div class="form-group hidden" id="avatarGroup">
-                    <label>Foto de Perfil</label>
-                    <div class="upload-separator"><span>Subir o URL</span></div>
-                    <input type="file" id="authAvatarFile" accept="image/*" onchange="handleImagePreview(this, null, 'authAvatarUrl')">
-                    <input type="url" id="authAvatarUrl" placeholder="https://..." style="margin-top:0.5rem;">
+            <div id="authErrorMsg" class="error-message hidden">Error</div>
+            <form id="authForm">
+                <div id="signup-fields" class="hidden">
+                    <div class="form-group"><label>Nombre</label><input type="text" id="reg-name"></div>
+                    <div class="form-group"><label>Foto (URL opcional)</label><input type="url" id="reg-avatar-url" placeholder="https://..."></div>
                 </div>
-
-                <div class="form-group"><label>Correo Electrónico</label><input type="email" id="authEmail" required placeholder="ejemplo@email.com"></div>
-                <div class="form-group"><label>Contraseña</label><input type="password" id="authPass" required placeholder="******"></div>
-                <button type="submit" class="login-btn" id="authSubmitBtn">Ingresar</button>
+                <div class="form-group"><label>Email</label><input type="email" id="login-email" required></div>
+                <div class="form-group"><label>Contraseña</label><input type="password" id="login-pass" required></div>
+                <button type="submit" class="btn btn-primary" style="width: 100%; margin-top: 1rem;" id="authSubmitBtn">Continuar</button>
             </form>
-            <div class="toggle-auth"><span id="authToggleText">¿No tienes cuenta?</span><a onclick="toggleAuthMode()" id="authToggleLink">Regístrate aquí</a></div>
+            <p style="text-align: center; margin-top: 1.5rem; font-size: 0.9rem; cursor: pointer; color: var(--text-muted);" onclick="toggleAuth()">
+                <span id="auth-switch-text">¿No tienes cuenta? Regístrate</span>
+            </p>
         </div>
     </div>
 
     <div id="modal-profile" class="modal-overlay">
         <div class="modal-card">
-            <button class="close-modal" onclick="closeModal('profile')">✕</button>
+            <button class="close-modal" onclick="closeModal('profile')"><i class="ph ph-x"></i></button>
             <h2 style="text-align: center; margin-bottom: 1.5rem;">Editar Perfil</h2>
             <form id="profileForm">
                 <div class="form-group"><label>Nombre</label><input type="text" id="edit-name" required></div>
                 <div class="form-group">
                     <label>Foto de Perfil</label>
+                    <div class="upload-separator"><span>Subir o URL</span></div>
                     <input type="file" id="editProfileAvatarFile" accept="image/*" onchange="handleImagePreview(this, null, 'edit-avatar')">
-                    <input type="url" id="edit-avatar" style="margin-top:0.5rem;">
+                    <input type="url" id="edit-avatar" placeholder="https://..." style="margin-top:0.5rem;">
                 </div>
-                
-                <!-- BOTÓN BORRAR CUENTA -->
-                <div style="margin-top: 2rem; padding-top: 1.5rem; border-top: 1px solid #e2e8f0;">
-                    <button type="button" onclick="deleteAccount()" class="btn-delete" style="background-color: #fef2f2; color: #dc2626; border: 1px solid #fecaca; width: 100%;">Borrar Cuenta</button>
-                    <p style="font-size: 0.75rem; color: #94a3b8; text-align: center; margin-top: 0.5rem;">Esta acción eliminará todos tus proyectos.</p>
-                </div>
-                
-                <button type="submit" class="login-btn" style="margin-top: 1.5rem;">Guardar Cambios</button>
+                <button type="submit" class="btn btn-primary" style="width: 100%; margin-top: 1rem;">Guardar Cambios</button>
             </form>
+            <button onclick="deleteAccount()" class="btn btn-delete" style="width: 100%; margin-top: 1rem;">Borrar Cuenta</button>
         </div>
     </div>
 
     <div id="modal-premium" class="modal-overlay">
         <div class="modal-card" style="text-align: center;">
-            <button class="close-modal" onclick="closePremiumModal()">✕</button>
-            <div style="font-size: 3.5rem; margin-bottom: 0.5rem;">📹</div>
+            <button class="close-modal" onclick="closePremiumModal()"><i class="ph ph-x"></i></button>
+            <div style="font-size: 3rem; margin-bottom: 0.5rem;">📹</div>
             <h2 style="margin-bottom: 0.5rem;">Video-Análisis</h2>
             <p style="color: var(--text-muted); font-size: 0.95rem; margin-bottom: 1.5rem;">Recibe feedback profesional de un experto.</p>
             <div class="price-tag" style="font-size: 2.5rem; font-weight: 800; margin-bottom: 1.5rem; color: var(--text-main);">9€ <span style="font-size: 1rem; font-weight: 500; color: var(--text-muted);">/ único</span></div>
-            <ul style="text-align: left; list-style: none; padding: 0; margin-bottom: 2rem;">
+            <ul class="premium-feature-list" style="text-align: left; list-style: none; padding: 0; margin-bottom: 2rem;">
                 <li style="margin-bottom: 0.8rem; display:flex; gap:0.5rem;"><i class="ph-fill ph-check-circle" style="color:#10b981;"></i> Análisis detallado</li>
                 <li style="margin-bottom: 0.8rem; display:flex; gap:0.5rem;"><i class="ph-fill ph-check-circle" style="color:#10b981;"></i> Narración profesional</li>
                 <li style="display:flex; gap:0.5rem;"><i class="ph-fill ph-check-circle" style="color:#10b981;"></i> Insignia Destacado</li>
@@ -388,7 +468,6 @@
         let currentUser = JSON.parse(localStorage.getItem('alex_session')) || null;
         let isLoginMode = true;
         let selectedProjectId = null;
-        let currentProjectReviews = [];
         let currentRating = 0;
         let currentDetailEmail = null;
 
@@ -398,19 +477,22 @@
             if (currentUser) goToPage('dashboard'); else goToPage('home');
         });
 
-        // --- AVATAR GENERATOR ---
+        // --- HELPERS VISUALES ---
         function getAvatarHTML(name, url, size = 'medium') {
-            const sizePx = size === 'large' ? '90px' : (size === 'small' ? '24px' : '32px');
-            const fontSize = size === 'large' ? '2.5rem' : (size === 'small' ? '0.7rem' : '0.85rem');
+            const sizePx = size === 'large' ? '90px' : (size === 'small' ? '28px' : '32px');
+            const fontSize = size === 'large' ? '2.5rem' : (size === 'small' ? '0.75rem' : '0.9rem');
             const border = size === 'large' ? '4px solid white' : '1px solid #E4E4E7';
+            
+            if (url && url.trim() !== '') {
+                return `<img src="${url}" style="width:${sizePx}; height:${sizePx}; border-radius:50%; object-fit:cover; border:${border}; box-shadow:0 2px 5px rgba(0,0,0,0.1);">`;
+            }
+            
+            // Avatar por defecto con inicial
             const colors = ['#FCA5A5', '#FCD34D', '#86EFAC', '#93C5FD', '#C4B5FD', '#FDBA74'];
             const charCode = name ? name.charCodeAt(0) : 0;
             const bgColor = colors[charCode % colors.length];
             const initial = name ? name.charAt(0).toUpperCase() : '?';
-
-            if (url && url.trim() !== '') {
-                return `<img src="${url}" style="width:${sizePx}; height:${sizePx}; border-radius:50%; object-fit:cover; border:${border}; box-shadow:0 2px 5px rgba(0,0,0,0.1);">`;
-            }
+            
             return `<div style="width:${sizePx}; height:${sizePx}; border-radius:50%; background:${bgColor}; color:#18181B; display:flex; align-items:center; justify-content:center; font-weight:700; font-size:${fontSize}; border:${border}; text-transform:uppercase;">${initial}</div>`;
         }
 
@@ -429,10 +511,12 @@
                 const img = p.image_url || null;
                 const authorName = p.author_name || 'Anónimo';
                 const authorAvatar = p.author_avatar;
-                
+                const likes = p.likes_count || 0;
+                const isPrem = p.is_premium || p.isPremium; // Compatibilidad
+
                 return `
-                <article class="project-card ${p.is_premium ? 'is-premium' : ''}">
-                    ${p.is_premium ? '<div class="premium-badge">✨ Destacado</div>' : ''}
+                <article class="project-card ${isPrem ? 'is-premium' : ''}">
+                    ${isPrem ? '<div class="premium-badge">✨ Destacado</div>' : ''}
                     <div class="project-image-container" onclick="openProject(${p.id})">
                         ${img ? `<img src="${img}" class="project-image">` : `<div class="project-image-placeholder"><i class="ph ph-image"></i></div>`}
                     </div>
@@ -445,9 +529,9 @@
                             <div class="card-footer">
                                 <div class="author-row" onclick="openPublicProfile('${p.author_email}')">
                                     ${getAvatarHTML(authorName, authorAvatar, 'small')}
-                                    <span>${authorName}</span>
+                                    <span class="author-name">${authorName}</span>
                                 </div>
-                                <button class="like-btn" onclick="toggleLike(this, ${p.id})"><i class="ph ph-heart"></i> <span>${p.likes_count || 0}</span></button>
+                                <button class="like-btn" onclick="toggleLike(this, ${p.id})"><i class="ph ph-heart"></i> <span>${likes}</span></button>
                             </div>
                         </div>
                     </div>
@@ -455,68 +539,50 @@
             }).join('');
         }
 
-        // --- REVIEWS ---
-        function setRating(n) {
-            currentRating = n;
-            const stars = document.querySelectorAll('#star-input span');
-            stars.forEach((s, i) => {
-                s.classList.toggle('active', i < n);
-            });
-        }
-
-        async function loadReviews(projectId) {
-            const { data } = await supabase.from('reviews').select('*').eq('project_id', projectId).order('created_at', {ascending:false});
-            currentProjectReviews = data || [];
+        // --- DASHBOARD ---
+        function loadDashboard() {
+            if (!currentUser) return;
+            document.getElementById('dash-name').textContent = currentUser.name;
+            document.getElementById('dash-email').textContent = currentUser.email;
+            document.getElementById('dash-avatar-container').innerHTML = getAvatarHTML(currentUser.name, currentUser.avatar, 'large');
             
-            let avg = 0;
-            if (currentProjectReviews.length > 0) {
-                const sum = currentProjectReviews.reduce((a, b) => a + b.rating, 0);
-                avg = (sum / currentProjectReviews.length).toFixed(1);
-            }
-            document.getElementById('detail-rating').textContent = avg > 0 ? `★ ${avg} (${currentProjectReviews.length})` : 'Sin valoraciones';
-
-            const list = document.getElementById('reviews-list');
-            list.innerHTML = currentProjectReviews.map(r => `
-                <div class="review-card">
-                    <div class="review-header">
-                        <strong>${r.user_name}</strong>
-                        <span style="color:#FCD34D;">${'★'.repeat(r.rating)}</span>
+            // FILTRO CORREGIDO: Comparación insensible a mayúsculas
+            const myProjects = projects.filter(p => 
+                (p.author_email || '').toLowerCase() === currentUser.email.toLowerCase()
+            );
+            
+            document.getElementById('stat-projects').textContent = myProjects.length;
+            document.getElementById('stat-premium').textContent = myProjects.filter(p => p.is_premium).length;
+            
+            const grid = document.getElementById('dashboard-grid');
+            grid.innerHTML = myProjects.length > 0 ? myProjects.map(p => `
+                <div class="project-card ${p.is_premium ? 'is-premium' : ''}">
+                    <div class="project-image-container">${p.image_url ? `<img src="${p.image_url}" class="project-image">` : '<div class="project-image-placeholder"><i class="ph ph-image"></i></div>'}</div>
+                    <div class="card-content">
+                        <h3>${p.title}</h3>
+                        <div style="margin-top:auto; display:flex; gap:0.5rem; flex-wrap:wrap;">
+                            <button class="btn btn-outline" onclick="editProject(${p.id})" style="flex:1;">Editar</button>
+                            <button class="btn btn-delete" onclick="deleteProject(${p.id})"><i class="ph ph-trash"></i></button>
+                            ${!p.is_premium 
+                                ? `<button class="btn btn-premium" onclick="openPremiumModal(${p.id})" style="width:100%;">Destacar (9€)</button>` 
+                                : `<button class="btn btn-cancel-premium" onclick="cancelPremium(${p.id})" style="width:100%;">Cancelar Destacado</button>`
+                            }
+                        </div>
                     </div>
-                    <p style="font-size:0.9rem; color:#4b5563;">${r.comment}</p>
                 </div>
-            `).join('');
-        }
-
-        async function submitReview() {
-            if(!currentUser) { openModal('auth', 'login'); return; }
-            if(currentRating === 0) { showToast('Selecciona una valoración', 'error'); return; }
-            
-            const comment = document.getElementById('review-comment').value;
-            
-            await supabase.from('reviews').insert([{
-                project_id: selectedProjectId,
-                user_email: currentUser.email,
-                user_name: currentUser.name,
-                user_avatar: currentUser.avatar,
-                rating: currentRating,
-                comment: comment
-            }]);
-            
-            document.getElementById('review-comment').value = '';
-            setRating(0);
-            showToast('¡Gracias por tu opinión!');
-            loadReviews(selectedProjectId);
+            `).join('') : '<p style="color:var(--text-muted);">Aún no has publicado nada.</p>';
         }
 
         // --- DETALLE ---
         function openProject(id) {
-            selectedProjectId = id;
             const p = projects.find(x => x.id === id);
-            
+            if (!p) return;
+            selectedProjectId = id; // Guardar ID para reseñas
+
+            document.getElementById('detail-category').textContent = p.category;
             document.getElementById('detail-title').textContent = p.title;
             document.getElementById('detail-desc').textContent = p.description;
             document.getElementById('detail-price').textContent = p.price + '€';
-            document.getElementById('detail-category').textContent = p.category;
             document.getElementById('detail-date').textContent = new Date(p.created_at).toLocaleDateString();
             document.getElementById('detail-author-name').textContent = p.author_name;
             currentDetailEmail = p.author_email;
@@ -533,82 +599,102 @@
             loadReviews(id);
             goToPage('detail');
         }
-        
+
         function goToUserProfileFromDetail() {
             if (currentDetailEmail) openPublicProfile(currentDetailEmail);
         }
 
-        // --- DASHBOARD & PERFIL ---
-        function loadDashboard() {
-            if (!currentUser) return;
-            document.getElementById('dash-name').textContent = currentUser.name;
-            document.getElementById('dash-email').textContent = currentUser.email;
-            document.getElementById('dash-avatar-container').innerHTML = getAvatarHTML(currentUser.name, currentUser.avatar, 'large');
-            
-            // FIX: Usar filtro insensible a mayúsculas y a ambos formatos de email
-            const myProjects = projects.filter(p => {
-                const pEmail = p.author_email || p.authorEmail;
-                return pEmail && pEmail.toLowerCase() === currentUser.email.toLowerCase();
-            });
-            
-            document.getElementById('stat-projects').textContent = myProjects.length;
-            document.getElementById('stat-premium').textContent = myProjects.filter(p => p.is_premium).length;
-            
-            const grid = document.getElementById('dashboard-grid');
-            grid.innerHTML = myProjects.map(p => `
-                <div class="project-card ${p.is_premium ? 'is-premium' : ''}">
-                    <div class="project-image-container">${p.image_url ? `<img src="${p.image_url}" class="project-image">` : ''}</div>
-                    <div class="card-content">
-                        <h3>${p.title}</h3>
-                        <div style="margin-top:auto; display:flex; gap:0.5rem; flex-wrap:wrap;">
-                            <button class="btn btn-outline" onclick="editProject(${p.id})" style="flex:1;">Editar</button>
-                            <button class="btn btn-delete" onclick="deleteProject(${p.id})"><i class="ph ph-trash"></i></button>
-                            ${!p.is_premium 
-                                ? `<button class="btn btn-premium" onclick="openPremiumModal(${p.id})" style="width:100%;">Destacar (9€)</button>` 
-                                : `<button class="btn btn-cancel-premium" onclick="cancelPremium(${p.id})" style="width:100%;">Cancelar Destacado</button>`
-                            }
-                        </div>
-                    </div>
-                </div>
-            `).join('');
-        }
-        
         function openPublicProfile(email) {
-            // Comparación insensible a mayúsculas
             if (currentUser && currentUser.email.toLowerCase() === email.toLowerCase()) { goToPage('dashboard'); return; }
             
             const userProjects = projects.filter(p => (p.author_email || '').toLowerCase() === email.toLowerCase());
             if(userProjects.length === 0) return;
             
-            const authorName = userProjects[0].author_name;
-            const authorAvatar = userProjects[0].author_avatar;
-            
-            document.getElementById('pub-name').textContent = authorName;
-            document.getElementById('pub-stats').textContent = userProjects.length + ' Proyectos';
-            document.getElementById('pub-avatar-container').innerHTML = getAvatarHTML(authorName, authorAvatar, 'large');
+            const author = userProjects[0];
+            document.getElementById('pub-name').textContent = author.author_name;
+            document.getElementById('pub-avatar-container').innerHTML = getAvatarHTML(author.author_name, author.author_avatar, 'large');
+            document.getElementById('pub-stats').textContent = userProjects.length + ' Proyectos publicados';
             
             renderProjects(userProjects, 'pub-grid');
             goToPage('profile');
         }
 
-        // --- AUTH & HELPERS ---
-        function goToPage(id) {
-            document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
-            document.getElementById('page-'+id).classList.add('active');
-            window.scrollTo(0,0);
-            if (id === 'home') { document.getElementById('navHomeBtn').classList.add('hidden'); renderProjects(projects, 'homeProjectsGrid'); }
-            else document.getElementById('navHomeBtn').classList.remove('hidden');
-            if (id === 'dashboard') loadDashboard();
-            updateNav();
+        // --- REVIEWS ---
+        function setRating(n) {
+            currentRating = n;
+            const stars = document.querySelectorAll('#star-input span');
+            stars.forEach((s, i) => { s.classList.toggle('active', i < n); });
         }
 
-        function updateNav() {
-            if (currentUser) {
-                document.getElementById('authBtns').classList.add('hidden');
-                document.getElementById('userBtns').classList.remove('hidden');
+        async function loadReviews(projectId) {
+            const { data } = await supabase.from('reviews').select('*').eq('project_id', projectId).order('created_at', {ascending:false});
+            const reviews = data || [];
+            
+            let avg = 0;
+            if (reviews.length > 0) {
+                const sum = reviews.reduce((a, b) => a + b.rating, 0);
+                avg = (sum / reviews.length).toFixed(1);
+            }
+            document.getElementById('detail-rating').textContent = avg > 0 ? `★ ${avg} (${reviews.length})` : 'Sin valoraciones';
+
+            const list = document.getElementById('reviews-list');
+            list.innerHTML = reviews.map(r => `
+                <div class="review-card">
+                    <div class="review-header">
+                        <strong>${r.user_name}</strong>
+                        <span style="color:#FCD34D;">${'★'.repeat(r.rating)}</span>
+                    </div>
+                    <p style="font-size:0.9rem; color:#4b5563;">${r.comment}</p>
+                </div>
+            `).join('');
+        }
+
+        async function submitReview() {
+            if(!currentUser) { openModal('auth', 'login'); return; }
+            if(currentRating === 0) { showToast('Selecciona una valoración', 'error'); return; }
+            
+            const comment = document.getElementById('review-comment').value;
+            await supabase.from('reviews').insert([{
+                project_id: selectedProjectId,
+                user_email: currentUser.email,
+                user_name: currentUser.name,
+                rating: currentRating,
+                comment: comment
+            }]);
+            
+            document.getElementById('review-comment').value = '';
+            setRating(0);
+            showToast('¡Gracias por tu opinión!');
+            loadReviews(selectedProjectId);
+        }
+
+        // --- AUTH ---
+        function openModal(type, mode) {
+            document.getElementById(`modal-${type}`).classList.add('active');
+            if (type === 'auth') {
+                isLoginMode = (mode === 'login');
+                toggleAuthUI();
+            }
+        }
+        function closeModal(type) { document.getElementById(`modal-${type}`).classList.remove('active'); }
+        function toggleAuth() { isLoginMode = !isLoginMode; toggleAuthUI(); }
+        
+        function toggleAuthUI() {
+            const title = document.getElementById('auth-title');
+            const switchText = document.getElementById('auth-switch-text');
+            const signupFields = document.getElementById('signup-fields');
+            document.getElementById('authErrorMsg').style.display = 'none';
+            
+            if (isLoginMode) {
+                title.textContent = 'Bienvenido de nuevo';
+                switchText.textContent = '¿No tienes cuenta? Regístrate';
+                signupFields.classList.add('hidden');
+                document.getElementById('authSubmitBtn').textContent = "Ingresar";
             } else {
-                document.getElementById('authBtns').classList.remove('hidden');
-                document.getElementById('userBtns').classList.add('hidden');
+                title.textContent = 'Crear cuenta';
+                switchText.textContent = '¿Ya tienes cuenta? Ingresa';
+                signupFields.classList.remove('hidden');
+                document.getElementById('authSubmitBtn').textContent = "Registrarse";
             }
         }
 
@@ -657,18 +743,35 @@
             showToast('Sesión cerrada');
         }
 
-        // --- PROYECTOS CRUD ---
+        // --- ACCOUNT DELETION (FIXED) ---
+        async function deleteAccount() {
+            if(!confirm('¿Estás seguro? Se borrarán TODOS tus proyectos.')) return;
+            const email = currentUser.email;
+            
+            // 1. Borrar proyectos (las reviews se borran en cascada si BD está configurada, sino manual)
+            await supabase.from('projects').delete().eq('author_email', email);
+            // 2. Borrar reviews hechas por el usuario
+            await supabase.from('reviews').delete().eq('user_email', email);
+            // 3. Borrar usuario
+            await supabase.from('app_users').delete().eq('email', email);
+            
+            handleLogout();
+            closeModal('profile');
+            showToast('Cuenta eliminada');
+        }
+
+        // --- CRUD PROYECTOS ---
         function prepareForm() {
             document.getElementById('projectForm').reset();
             document.getElementById('pId').value = '';
+            document.getElementById('form-title').textContent = 'Publicar Proyecto';
             document.getElementById('pImgPreview').innerHTML = '';
-            document.getElementById('form-title').textContent = 'Nuevo Proyecto';
             goToPage('form');
         }
-        
+
         function checkAuthAndAct(action) {
-            if(currentUser) prepareForm();
-            else openModal('auth', 'signup');
+            if (currentUser) { if (action === 'create') prepareForm(); }
+            else { showToast('Debes iniciar sesión', 'error'); openModal('auth', 'signup'); }
         }
 
         document.getElementById('projectForm').addEventListener('submit', async (e) => {
@@ -709,15 +812,113 @@
         }
 
         async function deleteProject(id) {
-            if(confirm('¿Eliminar proyecto para siempre?')) {
+            if(confirm('¿Eliminar proyecto?')) {
                 await supabase.from('projects').delete().eq('id', id);
                 await fetchProjects();
                 loadDashboard();
-                showToast('Eliminado correctamente');
+                showToast('Eliminado');
             }
         }
+
+        // --- HELPERS & PERFIL ---
+        function openEditProfile() {
+            document.getElementById('edit-name').value = currentUser.name;
+            document.getElementById('edit-avatar').value = currentUser.avatar || '';
+            openModal('profile');
+        }
+
+        document.getElementById('profileForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const newName = document.getElementById('edit-name').value;
+            const newAvatar = document.getElementById('edit-avatar').value;
+            
+            await supabase.from('app_users').update({ name: newName, avatar: newAvatar }).eq('email', currentUser.email);
+            
+            // Actualizar todos los proyectos antiguos con el nuevo nombre/avatar
+            await supabase.from('projects').update({ author_name: newName, author_avatar: newAvatar }).eq('author_email', currentUser.email);
+
+            currentUser.name = newName;
+            currentUser.avatar = newAvatar;
+            localStorage.setItem('alex_session', JSON.stringify(currentUser));
+            
+            closeModal('profile');
+            loadDashboard();
+            showToast('Perfil actualizado');
+            await fetchProjects(); // Refrescar para ver cambios en tarjetas
+        });
+
+        function goToPage(pageId) {
+            document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+            document.getElementById('page-' + pageId).classList.add('active');
+            window.scrollTo(0, 0);
+            if (pageId === 'home') { document.getElementById('navHomeBtn').classList.add('hidden'); renderProjects(projects, 'homeProjectsGrid'); }
+            else document.getElementById('navHomeBtn').classList.remove('hidden');
+            if (pageId === 'dashboard') loadDashboard();
+            updateNav();
+        }
+
+        function updateNav() {
+            if (currentUser) {
+                document.getElementById('authBtns').classList.add('hidden');
+                document.getElementById('userBtns').classList.remove('hidden');
+            } else {
+                document.getElementById('authBtns').classList.remove('hidden');
+                document.getElementById('userBtns').classList.add('hidden');
+            }
+        }
+
+        function handleImagePreview(input, previewId, urlInputId) {
+            const file = input.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = (e) => {
+                    if(previewId) document.getElementById(previewId).innerHTML = `<img src="${e.target.result}" style="width:100%; border-radius:0.5rem;">`;
+                    if(urlInputId) document.getElementById(urlInputId).value = e.target.result;
+                };
+                reader.readAsDataURL(file);
+            }
+        }
+
+        function showToast(msg, type='success') {
+            const t = document.createElement('div'); t.className = 'toast';
+            if(type === 'error') t.style.borderLeft = '4px solid #ef4444';
+            else t.style.borderLeft = '4px solid #10b981';
+            t.textContent = msg;
+            document.getElementById('toast-container').appendChild(t);
+            setTimeout(() => t.remove(), 3000);
+        }
         
-        // --- PREMIUM ---
+        function filterProjects(val, gridId) {
+            const term = val.toLowerCase();
+            const filtered = projects.filter(p => 
+                p.title.toLowerCase().includes(term) || 
+                (p.author_name || '').toLowerCase().includes(term) ||
+                (p.category || '').toLowerCase().includes(term)
+            );
+            renderProjects(filtered, gridId);
+        }
+        
+        async function toggleLike(btn, id) {
+            if (!currentUser) { showToast("Inicia sesión para dar like", "error"); openModal('auth', 'login'); return; }
+            const span = btn.querySelector('span');
+            const icon = btn.querySelector('i');
+            let count = parseInt(span.textContent);
+            const isLiked = btn.classList.contains('liked');
+
+            btn.classList.toggle('liked');
+            icon.className = isLiked ? 'ph ph-heart' : 'ph-fill ph-heart';
+            span.textContent = isLiked ? count - 1 : count + 1;
+
+            if (!isLiked) {
+                await supabase.from('project_likes').insert([{ project_id: id, user_email: currentUser.email }]);
+                await supabase.rpc('increment_likes', { row_id: id });
+            } else {
+                await supabase.from('project_likes').delete().match({ project_id: id, user_email: currentUser.email });
+                await supabase.rpc('decrement_likes', { row_id: id });
+            }
+        }
+
+        // PREMIUM (Misma lógica anterior)
         function openPremiumModal(id) { selectedProjectId = id; openModal('premium'); document.getElementById('modal-premium').classList.add('active'); }
         function closePremiumModal() { document.getElementById('modal-premium').classList.remove('active'); }
         async function handlePremiumPurchase() {
@@ -732,89 +933,6 @@
             await fetchProjects();
             loadDashboard();
             showToast('Destacado cancelado');
-        }
-
-        // --- UTILS ---
-        function openModal(type, mode) {
-            document.getElementById(`modal-${type}`).classList.add('active');
-            if(type === 'auth') {
-                isLoginMode = (mode === 'login');
-                document.getElementById('auth-title').textContent = isLoginMode ? 'Bienvenido' : 'Crear cuenta';
-                document.getElementById('signup-fields').className = isLoginMode ? 'hidden' : '';
-                document.getElementById('authSubmitBtn').textContent = isLoginMode ? 'Ingresar' : 'Registrarse';
-            }
-        }
-        function closeModal(type) { document.getElementById(`modal-${type}`).classList.remove('active'); }
-        function toggleAuth() { isLoginMode = !isLoginMode; openModal('auth', isLoginMode ? 'login' : 'signup'); }
-        
-        function handleImagePreview(input, previewId, urlId) {
-            const file = input.files[0];
-            if(file) {
-                const reader = new FileReader();
-                reader.onload = (e) => {
-                    if(previewId) document.getElementById(previewId).innerHTML = `<img src="${e.target.result}" style="width:100%">`;
-                    if(urlId) document.getElementById(urlId).value = e.target.result;
-                };
-                reader.readAsDataURL(file);
-            }
-        }
-        function showToast(msg, type) {
-            const t = document.createElement('div'); t.className = 'toast'; t.textContent = msg;
-            if(type === 'error') t.style.background = '#ef4444';
-            document.getElementById('toast-container').appendChild(t);
-            setTimeout(() => t.remove(), 3000);
-        }
-        function filterProjects(val, gridId) {
-            const term = val.toLowerCase();
-            const filtered = projects.filter(p => p.title.toLowerCase().includes(term) || p.author_name.toLowerCase().includes(term) || p.category.toLowerCase().includes(term));
-            renderProjects(filtered, gridId);
-        }
-        async function toggleLike(btn, id) {
-            if(!currentUser) { openModal('auth','login'); return; }
-            const span = btn.querySelector('span');
-            const isLiked = btn.classList.contains('liked');
-            let count = parseInt(span.textContent);
-            btn.classList.toggle('liked');
-            span.textContent = isLiked ? count - 1 : count + 1;
-            
-            if(!isLiked) {
-                await supabase.from('project_likes').insert([{ project_id: id, user_email: currentUser.email }]);
-                await supabase.rpc('increment_likes', { row_id: id });
-            } else {
-                await supabase.from('project_likes').delete().match({ project_id: id, user_email: currentUser.email });
-                await supabase.rpc('decrement_likes', { row_id: id });
-            }
-        }
-        
-        // --- PERFIL EDIT ---
-        function openEditProfile() {
-            document.getElementById('edit-name').value = currentUser.name;
-            document.getElementById('edit-avatar').value = currentUser.avatar || '';
-            openModal('profile');
-        }
-
-        document.getElementById('profileForm').addEventListener('submit', async (e) => {
-            e.preventDefault();
-            const newName = document.getElementById('edit-name').value;
-            const newAvatar = document.getElementById('edit-avatar').value;
-
-            await supabase.from('app_users').update({ name: newName, avatar: newAvatar }).eq('email', currentUser.email);
-            
-            currentUser.name = newName;
-            currentUser.avatar = newAvatar;
-            localStorage.setItem('alex_session', JSON.stringify(currentUser));
-            
-            closeModal('profile');
-            loadDashboard();
-            showToast('Perfil actualizado');
-        });
-        
-        async function deleteAccount() {
-            if(!confirm('¿Seguro?')) return;
-            await supabase.from('projects').delete().eq('author_email', currentUser.email);
-            await supabase.from('app_users').delete().eq('email', currentUser.email);
-            handleLogout();
-            closeModal('profile');
         }
     </script>
 </body>
