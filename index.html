@@ -3,27 +3,34 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Proyectos Alex</title>
+    <title>Proyectos Alex | Plataforma para Creadores</title>
+    <!-- SEO Básico -->
+    <meta name="description" content="Comparte tus proyectos, conecta con creadores y recibe análisis profesionales.">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Playfair+Display:wght@700;800&display=swap" rel="stylesheet">
     
-    <!-- IMPORTANTE: Librería de Supabase -->
     <script src="https://unpkg.com/@supabase/supabase-js@2"></script>
 
     <style>
         /* --- ESTILOS GENERALES --- */
         * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Inter', sans-serif; }
-        body { background-color: #ffffff; color: #1e293b; line-height: 1.5; }
+        body { background-color: #ffffff; color: #1e293b; line-height: 1.5; overflow-x: hidden; }
         input, button, textarea, select { font-family: inherit; }
         .container { max-width: 1280px; margin: 0 auto; padding: 0 1rem; }
+
+        /* --- TOAST NOTIFICATIONS (NUEVO) --- */
+        #toast-container { position: fixed; bottom: 20px; right: 20px; z-index: 9999; display: flex; flex-direction: column; gap: 10px; }
+        .toast { background: white; padding: 1rem 1.5rem; border-radius: 0.5rem; box-shadow: 0 10px 15px -3px rgba(0,0,0,0.1); border-left: 4px solid #2563eb; display: flex; align-items: center; gap: 10px; animation: slideIn 0.3s ease-out forwards; min-width: 300px; }
+        .toast.success { border-left-color: #10b981; }
+        .toast.error { border-left-color: #ef4444; }
+        @keyframes slideIn { from { transform: translateX(100%); opacity: 0; } to { transform: translateX(0); opacity: 1; } }
+        @keyframes fadeOut { from { opacity: 1; } to { opacity: 0; } }
 
         /* --- NAVEGACIÓN --- */
         nav { position: sticky; top: 0; z-index: 50; border-bottom: 1px solid #e2e8f0; background-color: rgba(255, 255, 255, 0.95); backdrop-filter: blur(10px); }
         nav .container { display: flex; height: 4rem; align-items: center; justify-content: space-between; }
         .nav-brand { display: flex; align-items: center; gap: 0.75rem; cursor: pointer; text-decoration: none; color: inherit; }
-        
-        /* LOGO SVG */
         .logo-svg { width: 3rem; height: 3rem; filter: drop-shadow(0px 2px 2px rgba(0,0,0,0.1)); transition: transform 0.2s ease; }
         .nav-brand:hover .logo-svg { transform: scale(1.05); }
         .nav-brand span { font-size: 1.125rem; font-weight: 700; }
@@ -53,11 +60,24 @@
         .btn-cancel-premium { background-color: #fffbeb; color: #b45309; border: 1px solid #fcd34d; width: 100%; margin-top: 0.5rem; padding: 0.625rem; border-radius: 0.5rem; font-weight: 600; font-size: 0.875rem; display: flex; align-items: center; justify-content: center; gap: 0.5rem; transition: all 0.2s; cursor: pointer; }
         .btn-cancel-premium:hover { background-color: #fef3c7; border-color: #f59e0b; }
 
+        /* --- LIKES (NUEVO) --- */
+        .like-button { background: none; border: none; cursor: pointer; display: flex; align-items: center; gap: 0.25rem; color: #64748b; font-size: 0.875rem; padding: 0; transition: all 0.2s; }
+        .like-button svg { width: 20px; height: 20px; fill: none; stroke: currentColor; stroke-width: 2; transition: all 0.2s; }
+        .like-button:hover { color: #ef4444; }
+        .like-button.liked { color: #ef4444; }
+        .like-button.liked svg { fill: #ef4444; stroke: #ef4444; transform: scale(1.1); }
+
         /* --- PUBLICIDAD --- */
         .ad-container { width: 100%; margin: 2rem 0; display: flex; justify-content: center; }
         .ad-placeholder { width: 100%; max-width: 728px; height: 90px; background-color: #f1f5f9; border: 1px solid #cbd5e1; border-radius: 0.5rem; display: flex; flex-direction: column; align-items: center; justify-content: center; position: relative; overflow: hidden; }
         .ad-label { font-size: 0.65rem; text-transform: uppercase; color: #94a3b8; letter-spacing: 0.05em; margin-bottom: 0.25rem; }
         .ad-content { font-size: 1.25rem; color: #cbd5e1; font-weight: 700; }
+
+        /* --- BANNER COOKIES (NUEVO) --- */
+        #cookie-banner { position: fixed; bottom: 0; left: 0; width: 100%; background: #1e293b; color: white; padding: 1rem; z-index: 10000; display: none; justify-content: center; align-items: center; gap: 1rem; flex-wrap: wrap; text-align: center; box-shadow: 0 -4px 6px rgba(0,0,0,0.1); }
+        #cookie-banner p { font-size: 0.9rem; margin: 0; }
+        #cookie-banner button { background: white; color: #1e293b; padding: 0.5rem 1.5rem; border-radius: 99px; font-weight: 600; font-size: 0.85rem; }
+        #cookie-banner button:hover { background: #f1f5f9; }
 
         /* --- SPA --- */
         .page { display: none; animation: fadeIn 0.3s ease; }
@@ -80,7 +100,7 @@
         .projects-section { padding: 6rem 1rem; background-color: #ffffff; }
         .projects-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 2rem; margin-top: 2rem; }
         
-        .project-card { background: white; border-radius: 0.75rem; overflow: hidden; border: 1px solid #e2e8f0; box-shadow: 0 1px 3px rgba(0,0,0,0.1); transition: all 0.2s; display: flex; flex-direction: column; }
+        .project-card { background: white; border-radius: 0.75rem; overflow: hidden; border: 1px solid #e2e8f0; box-shadow: 0 1px 3px rgba(0,0,0,0.1); transition: all 0.2s; display: flex; flex-direction: column; position: relative; }
         .project-card:hover { transform: translateY(-4px); box-shadow: 0 10px 15px rgba(0,0,0,0.1); }
         .project-card.is-premium { border: 2px solid #f59e0b; box-shadow: 0 4px 12px rgba(245, 158, 11, 0.15); }
         .premium-badge { background: #fffbeb; color: #b45309; font-size: 0.75rem; padding: 0.25rem 0.5rem; border-radius: 99px; font-weight: 700; display: inline-flex; align-items: center; gap: 0.25rem; border: 1px solid #fcd34d; margin-bottom: 0.5rem; width: fit-content; }
@@ -109,7 +129,12 @@
         .form-group { margin-bottom: 1.5rem; }
         .form-group label { display: block; margin-bottom: 0.5rem; font-weight: 500; }
         .form-group input, .form-group textarea, .form-group select { width: 100%; padding: 0.75rem; border: 1px solid #cbd5e1; border-radius: 0.5rem; }
+        /* Input de archivo personalizado básico */
+        input[type="file"] { padding: 0.5rem; background: #f8fafc; }
         .profile-avatar-large { width: 80px; height: 80px; background: #dbeafe; color: #2563eb; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 2.5rem; font-weight: 700; margin-bottom: 1rem; border: 4px solid white; box-shadow: 0 4px 6px rgba(0,0,0,0.1); object-fit: cover; }
+        .upload-separator { display: flex; align-items: center; margin: 1rem 0; color: #94a3b8; font-size: 0.8rem; }
+        .upload-separator::before, .upload-separator::after { content: ""; flex: 1; height: 1px; background: #e2e8f0; }
+        .upload-separator span { padding: 0 0.5rem; }
 
         /* --- DETALLES --- */
         .project-detail-header { padding-bottom: 2rem; border-bottom: 1px solid #e2e8f0; margin-bottom: 2rem; }
@@ -130,11 +155,8 @@
         .toggle-auth { text-align: center; margin-top: 1.5rem; font-size: 0.875rem; color: #64748b; }
         .toggle-auth a { color: #2563eb; cursor: pointer; font-weight: 600; text-decoration: none; }
         .error-message { color: #dc2626; background-color: #fef2f2; padding: 0.75rem; border-radius: 0.375rem; border: 1px solid #fecaca; font-size: 0.875rem; text-align: center; margin-bottom: 1rem; }
-        
-        /* Animación Shake para error */
         .shake { animation: shake 0.4s cubic-bezier(.36,.07,.19,.97) both; border-color: #dc2626 !important; }
         @keyframes shake { 10%, 90% { transform: translate3d(-1px, 0, 0); } 20%, 80% { transform: translate3d(2px, 0, 0); } 30%, 50%, 70% { transform: translate3d(-4px, 0, 0); } 40%, 60% { transform: translate3d(4px, 0, 0); } }
-
         .premium-feature-list { list-style: none; margin: 1.5rem 0; text-align: left; }
         .premium-feature-list li { margin-bottom: 0.75rem; display: flex; align-items: flex-start; gap: 0.75rem; font-size: 0.95rem; color: #475569; }
         .check-icon { color: #10b981; flex-shrink: 0; }
@@ -156,6 +178,15 @@
     </style>
 </head>
 <body>
+    <!-- TOAST CONTAINER (Notificaciones) -->
+    <div id="toast-container"></div>
+    
+    <!-- BANNER COOKIES -->
+    <div id="cookie-banner">
+        <p>Usamos cookies para mejorar tu experiencia y mostrar anuncios relevantes. Al continuar, aceptas nuestro uso de cookies.</p>
+        <button onclick="acceptCookies()">Aceptar</button>
+    </div>
+
     <!-- NAVEGACIÓN -->
     <nav>
         <div class="container">
@@ -179,12 +210,9 @@
                 <span>Proyectos Alex</span>
             </a>
             <div class="nav-buttons">
-                <!-- BOTÓN VOLVER AL INICIO -->
                 <button class="btn-outline hidden" id="backHomeBtn" onclick="showPage('home')">Inicio</button>
-                
                 <button class="btn-primary" id="loginBtnNav" onclick="openAuthModal('login')">Ingresar</button>
                 <button class="btn-outline" id="registerBtnNav" onclick="openAuthModal('signup')">Registrarse</button>
-                
                 <button class="btn-outline hidden" id="myAccountBtn" onclick="showPage('dashboard')">Mi Cuenta</button>
                 <button class="btn-danger hidden" id="logoutBtn" onclick="handleLogout()">Salir</button>
             </div>
@@ -308,7 +336,6 @@
                     <div class="form-group"><label>Descripción *</label><textarea id="pDesc" rows="3" required></textarea></div>
                     <div class="form-group"><label>Precio (€) *</label><input type="number" id="pPrice" min="0" step="0.01" required></div>
                     
-                    <!-- NUEVO: Opción de archivo o URL -->
                     <div class="form-group">
                         <label>Imagen de portada</label>
                         <div class="upload-separator"><span>Elige una opción</span></div>
@@ -451,7 +478,6 @@
         // *** CONFIGURACIÓN SUPABASE ***
         const supabaseUrl = 'https://jvshcszolovsnqzkozka.supabase.co';
         const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imp2c2hjc3pvbG92c25xemtvemthIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjQwMDQ5NDgsImV4cCI6MjA3OTU4MDk0OH0.ty4wwxMhQ8gm1SgweSf9JxcDrvt2IGwKzkH4EQP8ZB4';
-        
         const supabase = (supabaseUrl && supabaseUrl.startsWith('http')) ? window.supabase.createClient(supabaseUrl, supabaseKey) : null;
 
         // Estado Local
@@ -460,8 +486,60 @@
         let isLoginMode = true;
         let selectedProjectId = null;
 
+        // --- FUNCIONES AUXILIARES (Toast y Cookies) ---
+        function showToast(message, type = 'success') {
+            const container = document.getElementById('toast-container');
+            const toast = document.createElement('div');
+            toast.className = `toast ${type}`;
+            toast.innerHTML = `<span>${type === 'success' ? '✅' : '⚠️'}</span><span>${message}</span>`;
+            container.appendChild(toast);
+            setTimeout(() => {
+                toast.style.animation = 'fadeOut 0.3s ease-out forwards';
+                setTimeout(() => toast.remove(), 300);
+            }, 3000);
+        }
+
+        function acceptCookies() {
+            localStorage.setItem('cookiesAccepted', 'true');
+            document.getElementById('cookie-banner').style.display = 'none';
+        }
+
+        // --- LIKES ---
+        async function toggleLike(projectId, btn) {
+            if (!currentUser) {
+                showToast('Inicia sesión para dar Like', 'error');
+                openAuthModal('login');
+                return;
+            }
+            
+            if (supabase) {
+                // Lógica para Supabase (Check si ya dio like)
+                const { data: existingLike } = await supabase.from('project_likes').select('*').eq('project_id', projectId).eq('user_email', currentUser.email).single();
+                
+                if (existingLike) {
+                    // Quitar like
+                    await supabase.from('project_likes').delete().eq('id', existingLike.id);
+                    // Decrementar contador (trigger o manual) - simplificado manual
+                    await supabase.rpc('decrement_likes', { row_id: projectId }); 
+                    // Nota: Para producción real se usan triggers, aquí simulamos UI
+                } else {
+                    // Dar like
+                    await supabase.from('project_likes').insert([{ project_id: projectId, user_email: currentUser.email }]);
+                }
+                await fetchProjectsFromSupabase(); // Recargar
+            } else {
+                // Modo Local (Simulado)
+                const project = projects.find(p => p.id === projectId);
+                if (project) {
+                    project.likes = (project.likes || 0) + 1;
+                    localStorage.setItem('alex_projects', JSON.stringify(projects));
+                    renderProjects();
+                }
+            }
+            btn.classList.toggle('liked');
+        }
+
         // --- DEFINICIÓN DE FUNCIONES ---
-        
         async function fetchProjectsFromSupabase() {
             try {
                 const { data, error } = await supabase.from('projects').select('*').order('created_at', { ascending: false });
@@ -469,19 +547,16 @@
             } catch (err) { console.log("Modo local activo"); }
         }
 
-        // Función para convertir imagen a Base64
         function handleImagePreview(input, previewId, urlInputId) {
             const file = input.files[0];
             if (file) {
                 const reader = new FileReader();
                 reader.onload = function(e) {
-                    // Si hay un ID de vista previa, mostrarla
                     if (previewId) {
                         const preview = document.getElementById(previewId);
                         preview.innerHTML = `<img src="${e.target.result}" style="width:100%; border-radius:0.5rem;">`;
                         preview.style.display = 'block';
                     }
-                    // Poner el Base64 en el input de URL (campo oculto o visible)
                     if (urlInputId) {
                         document.getElementById(urlInputId).value = e.target.result;
                     }
@@ -491,26 +566,19 @@
         }
 
         async function deleteAccount() {
-            if (!confirm("¿Estás seguro de que quieres borrar tu cuenta? Esta acción es irreversible y se borrarán todos tus proyectos.")) return;
-
+            if (!confirm("¿Estás seguro de que quieres borrar tu cuenta? Esta acción es irreversible.")) return;
             const userEmail = currentUser.email;
-
-            // 1. Borrar proyectos de la nube
-            if (supabase) {
-                await supabase.from('projects').delete().eq('author_email', userEmail);
-            }
-
-            // 2. Borrar proyectos locales
+            if (supabase) { await supabase.from('projects').delete().eq('author_email', userEmail); }
+            
             let localProjects = JSON.parse(localStorage.getItem('alex_projects')) || [];
             localProjects = localProjects.filter(p => p.authorEmail !== userEmail);
             localStorage.setItem('alex_projects', JSON.stringify(localProjects));
-
-            // 3. Borrar usuario local
+            
             let users = JSON.parse(localStorage.getItem('alex_users')) || [];
             users = users.filter(u => u.email !== userEmail);
             localStorage.setItem('alex_users', JSON.stringify(users));
 
-            alert("Tu cuenta ha sido eliminada correctamente.");
+            showToast("Tu cuenta ha sido eliminada.");
             handleLogout();
             document.getElementById('profileEditModal').classList.remove('active');
         }
@@ -518,7 +586,7 @@
         function handleProfileEdit(e) {
             e.preventDefault();
             const newName = document.getElementById('editProfileName').value;
-            const newAvatar = document.getElementById('editProfileAvatarUrl').value; // Usamos el valor (sea URL o Base64)
+            const newAvatar = document.getElementById('editProfileAvatarUrl').value;
             
             if (currentUser) {
                 currentUser.name = newName;
@@ -535,6 +603,7 @@
                 updateUI();
                 updateDashboard();
                 document.getElementById('profileEditModal').classList.remove('active');
+                showToast("Perfil actualizado correctamente");
             }
         }
 
@@ -550,7 +619,6 @@
             if (currentUser && email === currentUser.email) { showPage('dashboard'); return; }
             const userProjects = projects.filter(p => (p.authorEmail || p.author_email) === email);
             const authorName = userProjects.length > 0 ? (userProjects[0].authorName || userProjects[0].author_name) : 'Creador';
-            const authorAvatar = userProjects.length > 0 ? (userProjects[0].authorAvatar || userProjects[0].author_avatar) : null;
             const initials = authorName.charAt(0).toUpperCase();
 
             document.getElementById('publicProfileName').textContent = authorName;
@@ -559,8 +627,8 @@
             
             const pAvatar = document.getElementById('publicProfileAvatar');
             const pImg = document.getElementById('publicProfileImg');
-            if (authorAvatar) {
-                pImg.src = authorAvatar;
+            if (userProjects.length > 0 && (userProjects[0].authorAvatar || userProjects[0].author_avatar)) {
+                pImg.src = userProjects[0].authorAvatar || userProjects[0].author_avatar;
                 pImg.style.display = 'block';
                 pAvatar.style.display = 'none';
             } else {
@@ -631,7 +699,8 @@
                 authorName: project.authorName || project.author_name,
                 authorEmail: project.authorEmail || project.author_email,
                 authorAvatar: project.authorAvatar || project.author_avatar,
-                date: project.date || project.created_at
+                date: project.date || project.created_at,
+                likes: project.likes || 0 // Nuevo campo
             };
 
             let imageHtml = `<div class="project-image-placeholder" onclick="openProjectDetail(${p.id})">📦</div>`;
@@ -662,6 +731,16 @@
                     ? `<button onclick="openPremiumModal(${p.id})" class="btn-premium"><span>Solicitar Video-Análisis</span><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="23 7 16 12 23 17 23 7"></polygon><rect x="1" y="5" width="15" height="14" rx="2" ry="2"></rect></svg></button>`
                     : `<button onclick="cancelPremium(${p.id})" class="btn-cancel-premium"><span>Cancelar Análisis</span></button>`;
                 actionsHtml = `${premiumBtn}<div style="display: flex; gap: 0.5rem; width: 100%;"><button onclick="openEditProject(${p.id})" class="btn-edit"><span>Editar</span><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"></path></svg></button><button onclick="deleteProject(${p.id})" class="btn-delete"><span>Eliminar</span></button></div>`;
+            } else {
+                // Botón de Like para usuarios normales
+                 actionsHtml = `
+                    <div style="display:flex; justify-content:flex-end; padding-top:0.5rem;">
+                        <button class="like-button" onclick="toggleLike(${p.id}, this)">
+                            <svg viewBox="0 0 24 24"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path></svg>
+                            <span>${p.likes || 0}</span>
+                        </button>
+                    </div>
+                `;
             }
 
             return `
@@ -722,13 +801,15 @@
             btn.disabled = true;
 
             setTimeout(() => {
-                const email = document.getElementById('authEmail').value.trim().toLowerCase(); // MINÚSCULAS SIEMPRE
+                const email = document.getElementById('authEmail').value.trim().toLowerCase(); // SIEMPRE MINÚSCULAS
                 const password = document.getElementById('authPass').value.trim();
                 const name = document.getElementById('authName').value.trim();
-                const avatar = document.getElementById('authAvatarUrl').value.trim(); // Usar el valor del input oculto/visible
+                const avatar = document.getElementById('authAvatarUrl').value.trim();
                 const errorMsg = document.getElementById('authErrorMsg');
+                const passInput = document.getElementById('authPass');
+                
                 errorMsg.classList.add('hidden');
-                document.getElementById('authPass').classList.remove('shake');
+                passInput.classList.remove('shake');
 
                 const users = JSON.parse(localStorage.getItem('alex_users')) || [];
 
@@ -736,11 +817,12 @@
                     const user = users.find(u => u.email.toLowerCase() === email && u.password === password);
                     if (user) { 
                         loginUser(user); 
+                        showToast('Sesión iniciada correctamente');
                     } else { 
                         errorMsg.textContent = "Correo o contraseña incorrecta"; 
                         errorMsg.classList.remove('hidden');
-                        document.getElementById('authPass').classList.add('shake');
-                        setTimeout(() => document.getElementById('authPass').classList.remove('shake'), 500);
+                        passInput.classList.add('shake');
+                        setTimeout(() => passInput.classList.remove('shake'), 500);
                         btn.textContent = originalText;
                         btn.disabled = false;
                     }
@@ -755,10 +837,10 @@
                     const newUser = { name, email, password, avatar }; 
                     users.push(newUser);
                     localStorage.setItem('alex_users', JSON.stringify(users));
-                    alert('Cuenta creada. Iniciando sesión...');
+                    showToast('Cuenta creada. Iniciando sesión...');
                     loginUser(newUser);
                 }
-            }, 800); 
+            }, 600); 
         }
 
         function loginUser(user) {
@@ -776,7 +858,7 @@
                 description: document.getElementById('pDesc').value,
                 category: document.getElementById('pCat').value,
                 price: document.getElementById('pPrice').value,
-                imageUrl: document.getElementById('pImgUrl').value, // Usar URL o Base64
+                imageUrl: document.getElementById('pImgUrl').value,
                 businessUrl: document.getElementById('pUrl').value,
                 isPremium: false,
                 authorName: currentUser.name,
@@ -798,27 +880,31 @@
                     author_avatar: newProject.authorAvatar
                 }]);
                 if (!error) { 
-                    alert('Proyecto publicado en la nube'); 
+                    showToast('Proyecto publicado en la nube'); 
                     await fetchProjectsFromSupabase(); 
                 } else { 
-                    alert('Error al subir: ' + error.message); 
+                    showToast('Error al subir: ' + error.message, 'error'); 
                 }
             } else {
                 newProject.id = Date.now(); 
                 projects.unshift(newProject); 
                 localStorage.setItem('alex_projects', JSON.stringify(projects)); 
-                alert('Proyecto publicado localmente'); 
+                showToast('Proyecto publicado localmente'); 
                 renderProjects();
             }
             e.target.reset(); 
-            document.getElementById('pImgPreview').style.display = 'none'; // Limpiar preview
+            document.getElementById('pImgPreview').style.display = 'none';
             showPage('dashboard');
+            
+            // REFRESCAR LISTA DE PROYECTOS AL PUBLICAR
+            filterProjects('', 'allProjectsGrid');
         }
 
         function filterProjects(query, gridId) {
             const term = query.toLowerCase();
             const grid = document.getElementById(gridId) || document.getElementById('allProjectsGrid');
             if (grid) {
+                // SIEMPRE MOSTRAR TODO SI NO HAY BÚSQUEDA
                 const filtered = projects.filter(p => 
                     p.title.toLowerCase().includes(term) || 
                     p.description.toLowerCase().includes(term) ||
@@ -832,8 +918,8 @@
         function openAuthModal(mode) { document.getElementById('authErrorMsg').classList.add('hidden'); document.getElementById('authModal').classList.add('active'); isLoginMode = (mode === 'login'); renderAuthModal(); }
         function closeAuthModal() { document.getElementById('authModal').classList.remove('active'); document.getElementById('authPass').value = ''; }
         function toggleAuthMode() { isLoginMode = !isLoginMode; renderAuthModal(); }
-        function handleLogout() { localStorage.removeItem('alex_session'); currentUser = null; updateUI(); showPage('home'); }
-        function handleCreateProjectClick() { if (currentUser) { showPage('create-project'); } else { alert('Debes iniciar sesión.'); openAuthModal('signup'); } }
+        function handleLogout() { localStorage.removeItem('alex_session'); currentUser = null; updateUI(); showPage('home'); showToast('Sesión cerrada'); }
+        function handleCreateProjectClick() { if (currentUser) { showPage('create-project'); } else { showToast('Debes iniciar sesión', 'error'); openAuthModal('signup'); } }
         function showPage(pageId) {
             if ((pageId === 'dashboard' || pageId === 'create-project' || pageId === 'edit-project') && !currentUser) { openAuthModal('login'); return; }
             const backHomeBtn = document.getElementById('backHomeBtn');
@@ -842,22 +928,36 @@
             document.getElementById(pageId).classList.add('active');
             window.scrollTo(0, 0);
             if (pageId === 'dashboard') updateDashboard();
-            updateUI(); // Re-verificar UI al cambiar página
+            
+            // REFRESCAR LISTAS AL CAMBIAR DE PÁGINA
+            if(pageId === 'home') filterProjects('', 'homeProjectsGrid');
+            if(pageId === 'projects') filterProjects('', 'allProjectsGrid');
+            
+            updateUI();
         }
         function openEditProject(id) { const p = projects.find(proj => proj.id === id); if (!p) return; const project = { ...p, imageUrl: p.imageUrl || p.image_url, businessUrl: p.businessUrl || p.business_url }; document.getElementById('editId').value = project.id; document.getElementById('editTitle').value = project.title; document.getElementById('editCat').value = project.category; document.getElementById('editDesc').value = project.description; document.getElementById('editPrice').value = project.price; document.getElementById('editImgUrl').value = project.imageUrl || ''; document.getElementById('editUrl').value = project.businessUrl || ''; showPage('edit-project'); }
-        async function submitEditProject(e) { e.preventDefault(); const id = parseInt(document.getElementById('editId').value); const updatedData = { title: document.getElementById('editTitle').value, category: document.getElementById('editCat').value, description: document.getElementById('editDesc').value, price: document.getElementById('editPrice').value, imageUrl: document.getElementById('editImgUrl').value, businessUrl: document.getElementById('editUrl').value }; if (supabase) { const { error } = await supabase.from('projects').update({ title: updatedData.title, category: updatedData.category, description: updatedData.description, price: updatedData.price, image_url: updatedData.imageUrl, business_url: updatedData.businessUrl }).eq('id', id); if (!error) { alert('Proyecto actualizado en la nube'); await fetchProjectsFromSupabase(); } } else { const projectIndex = projects.findIndex(p => p.id === id); if (projectIndex !== -1) { Object.assign(projects[projectIndex], updatedData); localStorage.setItem('alex_projects', JSON.stringify(projects)); alert('Proyecto actualizado localmente'); renderProjects(); } } showPage('dashboard'); }
-        async function deleteProject(id) { if (confirm('¿Estás seguro de que quieres eliminar este proyecto de forma permanente?')) { if (supabase) { const { error } = await supabase.from('projects').delete().eq('id', id); if (!error) await fetchProjectsFromSupabase(); } else { projects = projects.filter(p => p.id !== id); localStorage.setItem('alex_projects', JSON.stringify(projects)); renderProjects(); } updateDashboard(); } }
+        async function submitEditProject(e) { e.preventDefault(); const id = parseInt(document.getElementById('editId').value); const updatedData = { title: document.getElementById('editTitle').value, category: document.getElementById('editCat').value, description: document.getElementById('editDesc').value, price: document.getElementById('editPrice').value, imageUrl: document.getElementById('editImgUrl').value, businessUrl: document.getElementById('editUrl').value }; if (supabase) { const { error } = await supabase.from('projects').update({ title: updatedData.title, category: updatedData.category, description: updatedData.description, price: updatedData.price, image_url: updatedData.imageUrl, business_url: updatedData.businessUrl }).eq('id', id); if (!error) { showToast('Proyecto actualizado'); await fetchProjectsFromSupabase(); } } else { const projectIndex = projects.findIndex(p => p.id === id); if (projectIndex !== -1) { Object.assign(projects[projectIndex], updatedData); localStorage.setItem('alex_projects', JSON.stringify(projects)); showToast('Proyecto actualizado'); renderProjects(); } } showPage('dashboard'); }
+        async function deleteProject(id) { if (confirm('¿Estás seguro de que quieres eliminar este proyecto de forma permanente?')) { if (supabase) { const { error } = await supabase.from('projects').delete().eq('id', id); if (!error) await fetchProjectsFromSupabase(); } else { projects = projects.filter(p => p.id !== id); localStorage.setItem('alex_projects', JSON.stringify(projects)); renderProjects(); } showToast('Proyecto eliminado'); updateDashboard(); } }
         function openPremiumModal(projectId) { selectedProjectId = projectId; document.getElementById('premiumModal').classList.add('active'); }
         function closePremiumModal() { document.getElementById('premiumModal').classList.remove('active'); selectedProjectId = null; }
-        async function handlePremiumPurchase() { if (!selectedProjectId) return; const btn = document.querySelector('#premiumModal .btn-premium'); btn.innerHTML = 'Procesando...'; btn.disabled = true; setTimeout(async () => { if (supabase) { await supabase.from('projects').update({ is_premium: true }).eq('id', selectedProjectId); await fetchProjectsFromSupabase(); } else { const idx = projects.findIndex(p => p.id === selectedProjectId); if (idx !== -1) { projects[idx].isPremium = true; localStorage.setItem('alex_projects', JSON.stringify(projects)); } } alert('¡Pago realizado con éxito!'); closePremiumModal(); updateDashboard(); renderProjects(); btn.innerHTML = 'Contratar Video-Análisis'; btn.disabled = false; }, 1500); }
-        async function cancelPremium(id) { if (supabase) { await supabase.from('projects').update({ is_premium: false }).eq('id', id); await fetchProjectsFromSupabase(); } else { const idx = projects.findIndex(p => p.id === id); if (idx !== -1) { projects[idx].isPremium = false; localStorage.setItem('alex_projects', JSON.stringify(projects)); } } alert('Solicitud cancelada.'); renderProjects(); updateDashboard(); }
+        async function handlePremiumPurchase() { if (!selectedProjectId) return; const btn = document.querySelector('#premiumModal .btn-premium'); btn.innerHTML = 'Procesando...'; btn.disabled = true; setTimeout(async () => { if (supabase) { await supabase.from('projects').update({ is_premium: true }).eq('id', selectedProjectId); await fetchProjectsFromSupabase(); } else { const idx = projects.findIndex(p => p.id === selectedProjectId); if (idx !== -1) { projects[idx].isPremium = true; localStorage.setItem('alex_projects', JSON.stringify(projects)); } } showToast('¡Pago realizado con éxito!'); closePremiumModal(); updateDashboard(); renderProjects(); btn.innerHTML = 'Contratar Video-Análisis'; btn.disabled = false; }, 1500); }
+        async function cancelPremium(id) { if (supabase) { await supabase.from('projects').update({ is_premium: false }).eq('id', id); await fetchProjectsFromSupabase(); } else { const idx = projects.findIndex(p => p.id === id); if (idx !== -1) { projects[idx].isPremium = false; localStorage.setItem('alex_projects', JSON.stringify(projects)); } } showToast('Solicitud cancelada'); renderProjects(); updateDashboard(); }
         function openProjectDetail(id) { const p = projects.find(proj => proj.id === id); if (!p) return; const project = { ...p, imageUrl: p.imageUrl || p.image_url, businessUrl: p.businessUrl || p.business_url, authorName: p.authorName || p.author_name, authorEmail: p.authorEmail || p.author_email, date: p.date || p.created_at }; const detailContent = document.getElementById('detailContent'); let imgHtml = project.imageUrl ? `<img src="${project.imageUrl}" class="project-detail-image" alt="${project.title}">` : `<div class="project-detail-image" style="display: flex; align-items: center; justify-content: center; font-size: 4rem; color: #cbd5e1;">📦</div>`; let visitBtn = ''; if (project.businessUrl) { let url = project.businessUrl.startsWith('http') ? project.businessUrl : 'https://' + project.businessUrl; visitBtn = `<a href="${url}" target="_blank" class="btn-primary" style="display: inline-block; text-align: center; text-decoration: none; padding: 0.75rem 1.5rem;">Visitar Sitio Web</a>`; } const authorEmail = project.authorEmail || project.author_email; const authorName = project.authorName || project.author_name; detailContent.innerHTML = `${imgHtml}<div class="project-detail-header"><span class="detail-category">${project.category}</span><h1 class="project-detail-title" style="margin-top: 1rem;">${project.title}</h1><div class="project-detail-meta"><span class="detail-price">${project.price}€</span><span class="project-author-link" onclick="openUserProfile('${authorEmail}')" style="font-size: 1rem; font-weight: 500;">Publicado por <strong>${authorName}</strong></span><span>${new Date(project.date).toLocaleDateString()}</span></div></div><div style="font-size: 1.1rem; line-height: 1.8; color: #334155; margin-bottom: 3rem;"><p>${project.description.replace(/\n/g, '<br>')}</p></div>${visitBtn}`; showPage('project-detail'); }
 
         // --- INICIALIZACIÓN (AL FINAL) ---
         document.addEventListener('DOMContentLoaded', async () => {
             updateUI();
             if (supabase) { await fetchProjectsFromSupabase(); }
+            
+            // CARGAR PROYECTOS DIRECTAMENTE AL INICIO
             renderProjects();
+            filterProjects('', 'homeProjectsGrid');
+            
+            if(localStorage.getItem('cookiesAccepted')) {
+                document.getElementById('cookie-banner').style.display = 'none';
+            } else {
+                document.getElementById('cookie-banner').style.display = 'flex';
+            }
         });
     </script>
 </body>
