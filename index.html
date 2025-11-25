@@ -29,13 +29,10 @@
         nav { position: sticky; top: 0; z-index: 100; background: rgba(255, 255, 255, 0.85); backdrop-filter: blur(12px); border-bottom: 1px solid rgba(0,0,0,0.05); }
         nav .container { display: flex; height: 4.5rem; align-items: center; justify-content: space-between; }
         .nav-brand { display: flex; align-items: center; gap: 0.75rem; text-decoration: none; color: inherit; cursor: pointer; }
-        
-        /* LOGO CSS PURO (INDESTRUCTIBLE) */
         .logo-badge { width: 2.5rem; height: 2.5rem; background-color: #F9F7F2; border: 2px solid #1e293b; border-radius: 50%; display: flex; align-items: center; justify-content: center; position: relative; flex-shrink: 0; }
         .logo-badge::after { content: ''; position: absolute; top: 2px; left: 2px; right: 2px; bottom: 2px; border: 1px solid #1e293b; border-radius: 50%; opacity: 0.3; }
         .logo-text { font-family: 'Playfair Display', serif; font-weight: 800; font-size: 1rem; color: #1e293b; padding-top: 2px; }
         .nav-brand span { font-size: 1.2rem; font-weight: 700; letter-spacing: -0.02em; }
-        
         .nav-buttons { display: flex; align-items: center; gap: 0.75rem; }
 
         /* --- BOTONES --- */
@@ -46,14 +43,14 @@
         .btn-outline:hover { border-color: var(--text-main); background: #F4F4F5; }
         .btn-ghost { background: transparent; color: var(--text-muted); }
         .btn-ghost:hover { color: var(--text-main); background: rgba(0,0,0,0.03); }
-        .btn-premium { background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%); color: white; box-shadow: 0 4px 12px rgba(245, 158, 11, 0.3); border: none; }
+        .btn-premium { background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%) !important; color: white !important; box-shadow: 0 4px 12px rgba(245, 158, 11, 0.3); border: none; }
         .btn-premium:hover { transform: translateY(-1px); filter: brightness(1.1); }
         .btn-cancel-premium { background-color: #fffbeb; color: #b45309; border: 1px solid #fcd34d; }
         .btn-cancel-premium:hover { background-color: #fef3c7; }
-        .btn-delete { background-color: #fff1f2; color: #e11d48; border: 1px solid transparent; width: 100%; margin-top: 0.5rem; padding: 0.625rem; border-radius: 0.5rem; font-weight: 600; font-size: 0.875rem; display: flex; align-items: center; justify-content: center; gap: 0.5rem; transition: all 0.2s; cursor: pointer; }
-        .btn-delete:hover { background-color: #ffe4e6; color: #be123c; }
-        .btn-edit { background-color: #eff6ff; color: #2563eb; border: 1px solid transparent; width: 100%; margin-top: 0.5rem; padding: 0.625rem; border-radius: 0.5rem; font-weight: 600; font-size: 0.875rem; display: flex; align-items: center; justify-content: center; gap: 0.5rem; transition: all 0.2s; cursor: pointer; }
-        .btn-edit:hover { background-color: #dbeafe; color: #1e40af; }
+        .btn-delete { background-color: #FEF2F2; color: #DC2626; }
+        .btn-delete:hover { background-color: #FEE2E2; }
+        .btn-edit { background-color: #EFF6FF; color: #2563EB; }
+        .btn-edit:hover { background-color: #DBEAFE; }
 
         /* --- PAGINAS (SPA) --- */
         .page { display: none; animation: fadeIn 0.3s ease; padding-bottom: 4rem; }
@@ -87,12 +84,9 @@
         .card-title:hover { color: var(--accent); }
         .card-desc { font-size: 0.9rem; color: var(--text-muted); display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; margin-bottom: 1rem; }
         .card-footer { margin-top: auto; padding-top: 1rem; border-top: 1px solid #F4F4F5; display: flex; justify-content: space-between; align-items: center; }
-        
         .author-row { display: flex; align-items: center; gap: 0.5rem; cursor: pointer; }
         .author-row img { width: 24px; height: 24px; border-radius: 50%; object-fit: cover; }
         .author-row span { font-size: 0.8rem; font-weight: 500; color: var(--text-main); }
-        .author-row:hover span { text-decoration: underline; }
-        
         .like-btn { background: none; border: none; cursor: pointer; color: var(--text-muted); font-size: 0.9rem; display: flex; align-items: center; gap: 4px; transition: color 0.2s; }
         .like-btn:hover, .like-btn.liked { color: #EF4444; }
         .like-btn.liked i { font-weight: fill; }
@@ -296,8 +290,8 @@
                 </div>
                 <form id="projectForm">
                     <input type="hidden" id="pId">
-                    <div class="form-group"><label>Título</label><input type="text" id="pTitle" required></div>
-                    <div class="form-group"><label>Categoría</label>
+                    <div class="form-group"><label>Título *</label><input type="text" id="pTitle" required></div>
+                    <div class="form-group"><label>Categoría *</label>
                         <select id="pCat">
                             <option>Tecnología</option><option>Diseño</option><option>Arte</option><option>Negocios</option>
                             <option>Educación</option><option>Marketing</option><option>Música</option>
@@ -305,8 +299,8 @@
                             <option>Deportes</option><option>Finanzas</option><option>Otros</option>
                         </select>
                     </div>
-                    <div class="form-group"><label>Descripción</label><textarea id="pDesc" rows="6" required></textarea></div>
-                    <div class="form-group"><label>Precio (€)</label><input type="number" id="pPrice" min="0" step="0.01" required></div>
+                    <div class="form-group"><label>Descripción *</label><textarea id="pDesc" rows="6" required></textarea></div>
+                    <div class="form-group"><label>Precio (€) *</label><input type="number" id="pPrice" min="0" step="0.01" required></div>
                     <div class="form-group">
                         <label>Imagen de Portada</label>
                         <div class="upload-separator"><span>Seleccionar archivo</span></div>
@@ -326,30 +320,46 @@
         <div class="modal-card">
             <button class="close-modal" onclick="closeModal('auth')">✕</button>
             <h2 id="auth-title" style="text-align: center; margin-bottom: 1.5rem;">Iniciar Sesión</h2>
-            <div id="authErrorMsg" class="error-message hidden">Error</div>
-            <form id="authForm">
-                <div id="signup-fields" class="hidden">
-                    <div class="form-group"><label>Nombre</label><input type="text" id="reg-name"></div>
-                    <div class="form-group"><label>Foto (URL opcional)</label><input type="url" id="reg-avatar-url" placeholder="https://..."></div>
+            <div id="authErrorMsg" class="error-message hidden">Correo o contraseña incorrecta</div>
+            <form onsubmit="handleAuthSubmit(event)">
+                <div class="form-group hidden" id="nameGroup"><label>Nombre Completo</label><input type="text" id="authName" placeholder="Tu nombre"></div>
+                
+                <!-- NUEVO CAMPO DE FOTO DE PERFIL (Solo registro) -->
+                <div class="form-group hidden" id="avatarGroup">
+                    <label>Foto de Perfil</label>
+                    <div class="upload-separator"><span>Subir o URL</span></div>
+                    <input type="file" id="authAvatarFile" accept="image/*" onchange="handleImagePreview(this, null, 'authAvatarUrl')">
+                    <input type="url" id="authAvatarUrl" placeholder="https://..." style="margin-top:0.5rem;">
                 </div>
-                <div class="form-group"><label>Email</label><input type="email" id="login-email" required></div>
-                <div class="form-group"><label>Contraseña</label><input type="password" id="login-pass" required></div>
-                <button type="submit" class="btn btn-primary" style="width: 100%; margin-top: 1rem;" id="authSubmitBtn">Continuar</button>
+
+                <div class="form-group"><label>Correo Electrónico</label><input type="email" id="authEmail" required placeholder="ejemplo@email.com"></div>
+                <div class="form-group"><label>Contraseña</label><input type="password" id="authPass" required placeholder="******"></div>
+                <button type="submit" class="login-btn" id="authSubmitBtn">Ingresar</button>
             </form>
-            <p style="text-align: center; margin-top: 1.5rem; font-size: 0.9rem; cursor: pointer; color: var(--text-muted);" onclick="toggleAuth()"><span id="auth-switch-text">¿No tienes cuenta? Regístrate</span></p>
+            <div class="toggle-auth"><span id="authToggleText">¿No tienes cuenta?</span><a onclick="toggleAuthMode()" id="authToggleLink">Regístrate aquí</a></div>
         </div>
     </div>
 
     <div id="modal-profile" class="modal-overlay">
         <div class="modal-card">
             <button class="close-modal" onclick="closeModal('profile')">✕</button>
-            <h2 style="text-align: center;">Editar Perfil</h2>
+            <h2 style="text-align: center; margin-bottom: 1.5rem;">Editar Perfil</h2>
             <form id="profileForm">
                 <div class="form-group"><label>Nombre</label><input type="text" id="edit-name" required></div>
-                <div class="form-group"><label>Avatar (URL)</label><input type="text" id="edit-avatar"></div>
-                <button type="submit" class="btn btn-primary" style="width: 100%; margin-top: 1rem;">Guardar Cambios</button>
+                <div class="form-group">
+                    <label>Foto de Perfil</label>
+                    <input type="file" id="editProfileAvatarFile" accept="image/*" onchange="handleImagePreview(this, null, 'edit-avatar')">
+                    <input type="url" id="edit-avatar" style="margin-top:0.5rem;">
+                </div>
+                
+                <!-- BOTÓN BORRAR CUENTA -->
+                <div style="margin-top: 2rem; padding-top: 1.5rem; border-top: 1px solid #e2e8f0;">
+                    <button type="button" onclick="deleteAccount()" class="btn-delete" style="background-color: #fef2f2; color: #dc2626; border: 1px solid #fecaca; width: 100%;">Borrar Cuenta</button>
+                    <p style="font-size: 0.75rem; color: #94a3b8; text-align: center; margin-top: 0.5rem;">Esta acción eliminará todos tus proyectos.</p>
+                </div>
+                
+                <button type="submit" class="login-btn" style="margin-top: 1.5rem;">Guardar Cambios</button>
             </form>
-            <button onclick="deleteAccount()" class="btn btn-delete" style="width: 100%; margin-top: 1rem;">Borrar Cuenta</button>
         </div>
     </div>
 
@@ -535,10 +545,11 @@
             document.getElementById('dash-email').textContent = currentUser.email;
             document.getElementById('dash-avatar-container').innerHTML = getAvatarHTML(currentUser.name, currentUser.avatar, 'large');
             
-            // FIX: Usar filtro insensible a mayúsculas
-            const myProjects = projects.filter(p => 
-                (p.author_email || '').toLowerCase() === currentUser.email.toLowerCase()
-            );
+            // FIX: Usar filtro insensible a mayúsculas y a ambos formatos de email
+            const myProjects = projects.filter(p => {
+                const pEmail = p.author_email || p.authorEmail;
+                return pEmail && pEmail.toLowerCase() === currentUser.email.toLowerCase();
+            });
             
             document.getElementById('stat-projects').textContent = myProjects.length;
             document.getElementById('stat-premium').textContent = myProjects.filter(p => p.is_premium).length;
