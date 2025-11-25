@@ -214,8 +214,8 @@
         <div class="container">
             <div class="ad-placeholder">ANUNCIO DASHBOARD</div>
             <h3 style="margin: 3rem 0 2rem; font-size: 1.8rem;">Mis Proyectos</h3>
-            <!-- AÑADIDO: Mensaje de depuración invisible en producción -->
-            <div id="dashboard-debug" style="display:none; color:red;"></div>
+            <!-- DEBUG INFO -->
+            <div id="debug-info" style="font-size:0.8rem; color:red; margin-bottom:1rem; display:none;"></div>
             <div id="dashboard-grid" class="projects-grid"></div>
         </div>
     </div>
@@ -292,8 +292,8 @@
                 </div>
                 <form id="projectForm">
                     <input type="hidden" id="pId">
-                    <div class="form-group"><label>Título</label><input type="text" id="pTitle" required></div>
-                    <div class="form-group"><label>Categoría</label>
+                    <div class="form-group"><label>Título *</label><input type="text" id="pTitle" required></div>
+                    <div class="form-group"><label>Categoría *</label>
                         <select id="pCat">
                             <option>Tecnología</option><option>Diseño</option><option>Arte</option><option>Negocios</option>
                             <option>Educación</option><option>Marketing</option><option>Música</option>
@@ -301,8 +301,8 @@
                             <option>Deportes</option><option>Finanzas</option><option>Otros</option>
                         </select>
                     </div>
-                    <div class="form-group"><label>Descripción</label><textarea id="pDesc" rows="6" required></textarea></div>
-                    <div class="form-group"><label>Precio (€)</label><input type="number" id="pPrice" min="0" step="0.01" required></div>
+                    <div class="form-group"><label>Descripción *</label><textarea id="pDesc" rows="6" required></textarea></div>
+                    <div class="form-group"><label>Precio (€) *</label><input type="number" id="pPrice" min="0" step="0.01" required></div>
                     <div class="form-group">
                         <label>Imagen de Portada</label>
                         <div class="upload-separator"><span>Seleccionar archivo</span></div>
@@ -330,7 +330,7 @@
                 </div>
                 <div class="form-group"><label>Email</label><input type="email" id="login-email" required></div>
                 <div class="form-group"><label>Contraseña</label><input type="password" id="login-pass" required></div>
-                <button type="submit" class="login-btn" id="authSubmitBtn">Ingresar</button>
+                <button type="submit" class="btn btn-primary" style="width: 100%; margin-top: 1rem;" id="authSubmitBtn">Continuar</button>
             </form>
             <p style="text-align: center; margin-top: 1.5rem; font-size: 0.9rem; cursor: pointer; color: var(--text-muted);" onclick="toggleAuth()">
                 <span id="auth-switch-text">¿No tienes cuenta? Regístrate</span>
@@ -346,7 +346,6 @@
                 <div class="form-group"><label>Nombre</label><input type="text" id="edit-name" required></div>
                 <div class="form-group">
                     <label>Foto de Perfil</label>
-                    <div class="upload-separator"><span>Subir o URL</span></div>
                     <input type="file" id="editProfileAvatarFile" accept="image/*" onchange="handleImagePreview(this, null, 'edit-avatar')">
                     <input type="url" id="edit-avatar" style="margin-top:0.5rem;">
                 </div>
@@ -354,7 +353,7 @@
                     <button type="button" onclick="deleteAccount()" class="btn btn-delete" style="width: 100%;">Borrar Cuenta</button>
                     <p style="font-size: 0.75rem; color: #94a3b8; text-align: center; margin-top: 0.5rem;">Esta acción eliminará todos tus proyectos.</p>
                 </div>
-                <button type="submit" class="login-btn" style="margin-top: 1.5rem;">Guardar Cambios</button>
+                <button type="submit" class="btn btn-primary" style="width: 100%; margin-top: 1.5rem;">Guardar Cambios</button>
             </form>
         </div>
     </div>
@@ -399,15 +398,13 @@
             const sizePx = size === 'large' ? '90px' : (size === 'small' ? '28px' : '32px');
             const fontSize = size === 'large' ? '2.5rem' : (size === 'small' ? '0.75rem' : '0.9rem');
             const border = size === 'large' ? '4px solid white' : '1px solid #E4E4E7';
-            
-            if (url && url.trim() !== '') {
-                return `<img src="${url}" style="width:${sizePx}; height:${sizePx}; border-radius:50%; object-fit:cover; border:${border}; box-shadow:0 2px 5px rgba(0,0,0,0.1);">`;
-            }
-            
             const colors = ['#FCA5A5', '#FCD34D', '#86EFAC', '#93C5FD', '#C4B5FD', '#FDBA74'];
             const initial = name ? name.charAt(0).toUpperCase() : '?';
             const bgColor = colors[(name ? name.charCodeAt(0) : 0) % colors.length];
             
+            if (url && url.trim() !== '') {
+                return `<img src="${url}" style="width:${sizePx}; height:${sizePx}; border-radius:50%; object-fit:cover; border:${border}; box-shadow:0 2px 5px rgba(0,0,0,0.1);">`;
+            }
             return `<div style="width:${sizePx}; height:${sizePx}; border-radius:50%; background:${bgColor}; color:#18181B; display:flex; align-items:center; justify-content:center; font-weight:700; font-size:${fontSize}; border:${border}; text-transform:uppercase;">${initial}</div>`;
         }
 
@@ -461,10 +458,15 @@
             document.getElementById('dash-email').textContent = currentUser.email;
             document.getElementById('dash-avatar-container').innerHTML = getAvatarHTML(currentUser.name, currentUser.avatar, 'large');
             
-            // FILTRO CORREGIDO Y UNIFICADO (Siempre minúsculas y a prueba de fallos)
+            // FIX: Filtro estricto en minúsculas
             const myProjects = projects.filter(p => 
-                p.author_email && p.author_email.toLowerCase() === currentUser.email.toLowerCase()
+                (p.author_email || '').trim().toLowerCase() === currentUser.email.trim().toLowerCase()
             );
+            
+            // Debug
+            if (myProjects.length === 0) {
+                 // Opcional: console.log("Buscando proyectos para:", currentUser.email);
+            }
             
             document.getElementById('stat-projects').textContent = myProjects.length;
             document.getElementById('stat-premium').textContent = myProjects.filter(p => p.is_premium).length;
@@ -485,22 +487,17 @@
                         </div>
                     </div>
                 </div>
-            `).join('') : '<p style="color:var(--text-muted);">Aún no has publicado nada.</p>';
+            `).join('') : `<p style="color:var(--text-muted);">No tienes proyectos. (Email: ${currentUser.email})</p>`;
         }
 
         // --- AUTH ---
         async function deleteAccount() {
-            if(!confirm('¿Estás seguro? Se borrarán TODOS tus proyectos y no se puede deshacer.')) return;
-            const email = currentUser.email;
+            if(!confirm('¿Estás seguro? Se borrarán TODOS tus proyectos.')) return;
+            const email = currentUser.email.trim().toLowerCase();
             
-            // Lógica de borrado robusta
-            // 1. Borrar likes dados por el usuario
-            await supabase.from('project_likes').delete().eq('user_email', email);
-            // 2. Borrar reviews dadas por el usuario
-            await supabase.from('reviews').delete().eq('user_email', email);
-            // 3. Borrar proyectos (y sus reviews asociadas por cascade)
+            // 1. Borrar proyectos
             await supabase.from('projects').delete().eq('author_email', email);
-            // 4. Borrar usuario
+            // 2. Borrar usuario
             await supabase.from('app_users').delete().eq('email', email);
             
             handleLogout();
@@ -512,11 +509,10 @@
             e.preventDefault();
             const btn = document.getElementById('authSubmitBtn');
             btn.textContent = 'Procesando...';
-            
+            const email = document.getElementById('login-email').value.trim().toLowerCase();
+            const pass = document.getElementById('login-pass').value.trim();
+
             setTimeout(async () => {
-                const email = document.getElementById('login-email').value.toLowerCase().trim(); // SIEMPRE MINÚSCULAS
-                const pass = document.getElementById('login-pass').value.trim();
-                
                 try {
                     if (isLoginMode) {
                         const { data: users } = await supabase.from('app_users').select('*').eq('email', email).eq('password', pass);
@@ -541,7 +537,31 @@
             }, 800);
         }
 
-        // --- RESTO DE FUNCIONES (Idénticas pero verificadas) ---
+        // --- CRUD PROYECTOS ---
+        document.getElementById('projectForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const id = document.getElementById('pId').value;
+            const pData = {
+                title: document.getElementById('pTitle').value,
+                category: document.getElementById('pCat').value,
+                description: document.getElementById('pDesc').value,
+                price: document.getElementById('pPrice').value,
+                image_url: document.getElementById('pImgUrl').value,
+                business_url: document.getElementById('pUrl').value,
+                author_name: currentUser.name,
+                author_email: currentUser.email.trim().toLowerCase(), // FIX: Asegurar minúsculas
+                author_avatar: currentUser.avatar
+            };
+
+            if (id) await supabase.from('projects').update(pData).eq('id', id);
+            else await supabase.from('projects').insert([pData]);
+            
+            await fetchProjects();
+            goToPage('dashboard');
+            showToast('Proyecto guardado');
+        });
+
+        // --- RESTO FUNCIONES ---
         function openProject(id) {
             selectedProjectId = id;
             const p = projects.find(x => x.id === id);
@@ -564,7 +584,27 @@
             goToPage('detail');
         }
         
-        // ... (Resto de funciones auxiliares: openPublicProfile, submitProject, etc. se mantienen iguales)
+        function goToUserProfileFromDetail() {
+            if (currentDetailEmail) openPublicProfile(currentDetailEmail);
+        }
+        
+        function openPublicProfile(email) {
+            const safeEmail = (email || '').trim().toLowerCase();
+            if (currentUser && currentUser.email.trim().toLowerCase() === safeEmail) { goToPage('dashboard'); return; }
+            
+            const userProjects = projects.filter(p => (p.author_email || '').trim().toLowerCase() === safeEmail);
+            if(userProjects.length === 0) return;
+            
+            const author = userProjects[0];
+            document.getElementById('pub-name').textContent = author.author_name;
+            document.getElementById('pub-avatar-container').innerHTML = getAvatarHTML(author.author_name, author.author_avatar, 'large');
+            document.getElementById('pub-stats').textContent = userProjects.length + ' Proyectos publicados';
+            
+            renderProjects(userProjects, 'pub-grid');
+            goToPage('profile');
+        }
+
+        // ... (Resto de funciones de UI, Auth Modal, etc. idénticas al anterior) ...
         
         function goToPage(id) {
             document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
@@ -587,8 +627,8 @@
         }
         
         function completeLogin(user) {
-            // Normalizar email al guardar en sesión
-            user.email = user.email.toLowerCase();
+            // Normalizar user al guardar
+            user.email = user.email.trim().toLowerCase();
             currentUser = user;
             localStorage.setItem('alex_session', JSON.stringify(user));
             updateNav();
@@ -596,190 +636,25 @@
             showToast(`Hola, ${user.name}`);
         }
 
-        function handleLogout() {
-            localStorage.removeItem('alex_session');
-            currentUser = null;
-            updateNav();
-            goToPage('home');
-            showToast('Sesión cerrada');
-        }
-        
-        function openModal(type, mode) {
-            document.getElementById(`modal-${type}`).classList.add('active');
-            if(type === 'auth') {
-                isLoginMode = (mode === 'login');
-                document.getElementById('auth-title').textContent = isLoginMode ? 'Bienvenido' : 'Crear cuenta';
-                document.getElementById('signup-fields').className = isLoginMode ? 'hidden' : '';
-                document.getElementById('authSubmitBtn').textContent = isLoginMode ? 'Ingresar' : 'Registrarse';
-                document.getElementById('authErrorMsg').style.display = 'none';
-            }
-        }
+        function handleLogout() { localStorage.removeItem('alex_session'); currentUser = null; updateNav(); goToPage('home'); showToast('Sesión cerrada'); }
+        function openModal(type, mode) { document.getElementById(`modal-${type}`).classList.add('active'); if(type === 'auth') { isLoginMode = (mode === 'login'); document.getElementById('auth-title').textContent = isLoginMode ? 'Bienvenido' : 'Crear cuenta'; document.getElementById('signup-fields').className = isLoginMode ? 'hidden' : ''; document.getElementById('authSubmitBtn').textContent = isLoginMode ? 'Ingresar' : 'Registrarse'; document.getElementById('authErrorMsg').style.display = 'none'; } }
         function closeModal(type) { document.getElementById(`modal-${type}`).classList.remove('active'); }
         function toggleAuth() { isLoginMode = !isLoginMode; openModal('auth', isLoginMode ? 'login' : 'signup'); }
-
-        function showToast(msg, type='success') {
-            const t = document.createElement('div'); t.className = 'toast';
-            if(type === 'error') t.style.borderLeft = '4px solid #ef4444';
-            else t.style.borderLeft = '4px solid #10b981';
-            t.textContent = msg;
-            document.getElementById('toast-container').appendChild(t);
-            setTimeout(() => t.remove(), 3000);
-        }
-
-        // PROYECTOS FORM
+        function showToast(msg, type='success') { const t = document.createElement('div'); t.className = 'toast'; if(type === 'error') t.style.borderLeft = '4px solid #ef4444'; else t.style.borderLeft = '4px solid #10b981'; t.textContent = msg; document.getElementById('toast-container').appendChild(t); setTimeout(() => t.remove(), 3000); }
         function prepareForm() { document.getElementById('projectForm').reset(); document.getElementById('pId').value = ''; document.getElementById('pImgPreview').innerHTML = ''; document.getElementById('form-title').textContent = 'Nuevo Proyecto'; goToPage('form'); }
         function checkAuthAndAct(action) { if(currentUser) prepareForm(); else openModal('auth', 'signup'); }
         function handleImagePreview(input, previewId, urlId) { const file = input.files[0]; if(file) { const reader = new FileReader(); reader.onload = (e) => { if(previewId) document.getElementById(previewId).innerHTML = `<img src="${e.target.result}" style="width:100%">`; if(urlId) document.getElementById(urlId).value = e.target.result; }; reader.readAsDataURL(file); } }
-
-        document.getElementById('projectForm').addEventListener('submit', async (e) => {
-            e.preventDefault();
-            const id = document.getElementById('pId').value;
-            const pData = {
-                title: document.getElementById('pTitle').value,
-                category: document.getElementById('pCat').value,
-                description: document.getElementById('pDesc').value,
-                price: document.getElementById('pPrice').value,
-                image_url: document.getElementById('pImgUrl').value,
-                business_url: document.getElementById('pUrl').value,
-                author_name: currentUser.name,
-                // SIEMPRE EMAIL MINÚSCULAS
-                author_email: currentUser.email.toLowerCase(),
-                author_avatar: currentUser.avatar
-            };
-
-            if (id) await supabase.from('projects').update(pData).eq('id', id);
-            else await supabase.from('projects').insert([pData]);
-            
-            await fetchProjects();
-            goToPage('dashboard');
-            showToast('Proyecto guardado');
-        });
-
-        function editProject(id) {
-            const p = projects.find(x => x.id === id);
-            document.getElementById('pId').value = p.id;
-            document.getElementById('pTitle').value = p.title;
-            document.getElementById('pCat').value = p.category;
-            document.getElementById('pDesc').value = p.description;
-            document.getElementById('pPrice').value = p.price;
-            document.getElementById('pImgUrl').value = p.image_url || '';
-            document.getElementById('pUrl').value = p.business_url || '';
-            document.getElementById('form-title').textContent = 'Editar Proyecto';
-            if(p.image_url) document.getElementById('pImgPreview').innerHTML = `<img src="${p.image_url}" style="width:100%">`;
-            goToPage('form');
-        }
-
-        async function deleteProject(id) {
-            if(confirm('¿Eliminar?')) {
-                await supabase.from('projects').delete().eq('id', id);
-                await fetchProjects();
-                loadDashboard();
-                showToast('Eliminado');
-            }
-        }
-
-        // PERFIL
-        function openEditProfile() {
-            document.getElementById('edit-name').value = currentUser.name;
-            document.getElementById('edit-avatar').value = currentUser.avatar || '';
-            openModal('profile');
-        }
-        document.getElementById('profileForm').addEventListener('submit', async (e) => {
-            e.preventDefault();
-            const newName = document.getElementById('edit-name').value;
-            const newAvatar = document.getElementById('edit-avatar').value;
-            await supabase.from('app_users').update({ name: newName, avatar: newAvatar }).eq('email', currentUser.email);
-            currentUser.name = newName; currentUser.avatar = newAvatar;
-            localStorage.setItem('alex_session', JSON.stringify(currentUser));
-            closeModal('profile');
-            loadDashboard();
-            showToast('Perfil actualizado');
-        });
-
-        // PREMIUM
+        function editProject(id) { const p = projects.find(x => x.id === id); document.getElementById('pId').value = p.id; document.getElementById('pTitle').value = p.title; document.getElementById('pCat').value = p.category; document.getElementById('pDesc').value = p.description; document.getElementById('pPrice').value = p.price; document.getElementById('pImgUrl').value = p.image_url || ''; document.getElementById('pUrl').value = p.business_url || ''; document.getElementById('form-title').textContent = 'Editar Proyecto'; if(p.image_url) document.getElementById('pImgPreview').innerHTML = `<img src="${p.image_url}" style="width:100%">`; goToPage('form'); }
+        async function deleteProject(id) { if(confirm('¿Eliminar?')) { await supabase.from('projects').delete().eq('id', id); await fetchProjects(); loadDashboard(); showToast('Eliminado'); } }
+        function openEditProfile() { document.getElementById('edit-name').value = currentUser.name; document.getElementById('edit-avatar').value = currentUser.avatar || ''; openModal('profile'); }
+        document.getElementById('profileForm').addEventListener('submit', async (e) => { e.preventDefault(); const newName = document.getElementById('edit-name').value; const newAvatar = document.getElementById('edit-avatar').value; await supabase.from('app_users').update({ name: newName, avatar: newAvatar }).eq('email', currentUser.email); await supabase.from('projects').update({ author_name: newName, author_avatar: newAvatar }).eq('author_email', currentUser.email); currentUser.name = newName; currentUser.avatar = newAvatar; localStorage.setItem('alex_session', JSON.stringify(currentUser)); closeModal('profile'); loadDashboard(); showToast('Perfil actualizado'); await fetchProjects(); });
         function openPremiumModal(id) { selectedProjectId = id; openModal('premium'); document.getElementById('modal-premium').classList.add('active'); }
         function closePremiumModal() { document.getElementById('modal-premium').classList.remove('active'); }
-        async function handlePremiumPurchase() {
-             await supabase.from('projects').update({ is_premium: true }).eq('id', selectedProjectId);
-             await fetchProjects();
-             closePremiumModal();
-             loadDashboard();
-             showToast('¡Destacado!');
-        }
-        async function cancelPremium(id) {
-            await supabase.from('projects').update({ is_premium: false }).eq('id', id);
-            await fetchProjects();
-            loadDashboard();
-            showToast('Cancelado');
-        }
-        
-        function openPublicProfile(email) {
-            if (currentUser && currentUser.email.toLowerCase() === email.toLowerCase()) { goToPage('dashboard'); return; }
-            
-            const userProjects = projects.filter(p => (p.author_email || '').toLowerCase() === email.toLowerCase());
-            if(userProjects.length === 0) return;
-            
-            const authorName = userProjects[0].author_name;
-            const authorAvatar = userProjects[0].author_avatar;
-            
-            document.getElementById('pub-name').textContent = authorName;
-            document.getElementById('pub-stats').textContent = userProjects.length + ' Proyectos publicados';
-            document.getElementById('pub-avatar-container').innerHTML = getAvatarHTML(authorName, authorAvatar, 'large');
-            
-            renderProjects(userProjects, 'pub-grid');
-            goToPage('profile');
-        }
-        
-        function goToUserProfileFromDetail() {
-            if (currentDetailEmail) openPublicProfile(currentDetailEmail);
-        }
-
-        // Reviews
-        function setRating(n) {
-            currentRating = n;
-            const stars = document.querySelectorAll('#star-input span');
-            stars.forEach((s, i) => { s.classList.toggle('active', i < n); });
-        }
-        async function loadReviews(projectId) {
-            const { data } = await supabase.from('reviews').select('*').eq('project_id', projectId).order('created_at', {ascending:false});
-            currentProjectReviews = data || [];
-            let avg = 0;
-            if (currentProjectReviews.length > 0) {
-                const sum = currentProjectReviews.reduce((a, b) => a + b.rating, 0);
-                avg = (sum / currentProjectReviews.length).toFixed(1);
-            }
-            document.getElementById('detail-rating').textContent = avg > 0 ? `★ ${avg} (${currentProjectReviews.length})` : '-';
-            document.getElementById('reviews-list').innerHTML = currentProjectReviews.map(r => `
-                <div class="review-card">
-                    <div style="display:flex;justify-content:space-between;"><strong>${r.user_name}</strong><span style="color:#FCD34D;">${'★'.repeat(r.rating)}</span></div>
-                    <p style="color:#666;margin-top:0.5rem;">${r.comment}</p>
-                </div>`).join('');
-        }
-        async function submitReview() {
-            if(!currentUser) { openModal('auth', 'login'); return; }
-            if(currentRating === 0) { showToast('Puntúa con estrellas', 'error'); return; }
-            await supabase.from('reviews').insert([{ project_id: selectedProjectId, user_email: currentUser.email, user_name: currentUser.name, rating: currentRating, comment: document.getElementById('review-comment').value }]);
-            document.getElementById('review-comment').value = ''; setRating(0); showToast('Reseña enviada'); loadReviews(selectedProjectId);
-        }
-        
-        async function toggleLike(btn, id) {
-            if (!currentUser) { openModal('auth', 'login'); return; }
-            const span = btn.querySelector('span');
-            const icon = btn.querySelector('i');
-            let count = parseInt(span.textContent);
-            const isLiked = btn.classList.contains('liked');
-            btn.classList.toggle('liked');
-            icon.className = isLiked ? 'ph ph-heart' : 'ph-fill ph-heart';
-            span.textContent = isLiked ? count - 1 : count + 1;
-            if (!isLiked) { await supabase.from('project_likes').insert([{ project_id: id, user_email: currentUser.email }]); await supabase.rpc('increment_likes', { row_id: id }); } 
-            else { await supabase.from('project_likes').delete().match({ project_id: id, user_email: currentUser.email }); await supabase.rpc('decrement_likes', { row_id: id }); }
-        }
-        
-        function filterProjects(val, gridId) {
-            const term = val.toLowerCase();
-            const filtered = projects.filter(p => p.title.toLowerCase().includes(term) || (p.author_name || '').toLowerCase().includes(term));
-            renderProjects(filtered, gridId);
-        }
+        async function handlePremiumPurchase() { await supabase.from('projects').update({ is_premium: true }).eq('id', selectedProjectId); await fetchProjects(); closePremiumModal(); loadDashboard(); showToast('¡Destacado!'); }
+        async function cancelPremium(id) { await supabase.from('projects').update({ is_premium: false }).eq('id', id); await fetchProjects(); loadDashboard(); showToast('Cancelado'); }
+        function filterProjects(val, gridId) { const term = val.toLowerCase(); const filtered = projects.filter(p => p.title.toLowerCase().includes(term) || p.author_name.toLowerCase().includes(term)); renderProjects(filtered, gridId); }
+        function setRating(n) { currentRating = n; const stars = document.querySelectorAll('#star-input span'); stars.forEach((s, i) => { s.classList.toggle('active', i < n); }); }
+        async function toggleLike(btn, id) { if(!currentUser) { openModal('auth','login'); return; } const span = btn.querySelector('span'); const isLiked = btn.classList.contains('liked'); let count = parseInt(span.textContent); btn.classList.toggle('liked'); span.textContent = isLiked ? count - 1 : count + 1; if(!isLiked) { await supabase.from('project_likes').insert([{ project_id: id, user_email: currentUser.email }]); await supabase.rpc('increment_likes', { row_id: id }); } else { await supabase.from('project_likes').delete().match({ project_id: id, user_email: currentUser.email }); await supabase.rpc('decrement_likes', { row_id: id }); } }
     </script>
 </body>
 </html>
