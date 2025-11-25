@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Proyectos Alex | Plataforma Premium</title>
+    
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Playfair+Display:ital,wght@0,600;0,700;1,600&display=swap" rel="stylesheet">
@@ -90,7 +91,7 @@
         .author-name { font-size: 0.85rem; font-weight: 500; color: var(--text-main); }
         .like-btn { background: none; border: none; cursor: pointer; color: var(--text-muted); font-size: 0.9rem; display: flex; align-items: center; gap: 4px; transition: color 0.2s; padding: 4px 8px; border-radius: 8px; }
         .like-btn:hover, .like-btn.liked { color: #EF4444; }
-        .like-btn.liked i { font-weight: fill; }
+        .like-btn.liked i { font-weight: fill; } /* Estilo extra de seguridad */
 
         /* --- DASHBOARD --- */
         .dashboard-header { background: white; border-bottom: 1px solid var(--border); padding: 3rem 0; margin-bottom: 2rem; }
@@ -180,7 +181,7 @@
                 <button class="btn btn-primary" style="padding: 0.8rem 2rem; font-size: 1rem;" onclick="checkAuthAndAct('create')">Publicar Proyecto <i class="ph ph-arrow-right"></i></button>
             </div>
         </header>
-        <div class="ad-placeholder">ESPACIO PUBLICITARIO</div>
+        <div class="ad-placeholder">PUBLICIDAD GOOGLE ADSENSE</div>
         <div class="container">
             <h3 style="margin-bottom: 2rem;">Destacados</h3>
             <div id="homeProjectsGrid" class="projects-grid"></div>
@@ -246,7 +247,7 @@
                 
                 <div class="reviews-section">
                     <h3 style="margin-bottom: 1.5rem;">Reseñas</h3>
-                    <div id="review-form-container" style="background: white; padding: 2rem; border-radius: 12px; border: 1px solid var(--border); margin-bottom: 2rem;">
+                    <div id="review-form" style="background: white; padding: 2rem; border-radius: 12px; border: 1px solid var(--border); margin-bottom: 2rem;">
                         <h4 style="margin-bottom: 1rem;">Deja tu valoración</h4>
                         <div class="star-input" id="star-input"><span onclick="setRating(1)">★</span><span onclick="setRating(2)">★</span><span onclick="setRating(3)">★</span><span onclick="setRating(4)">★</span><span onclick="setRating(5)">★</span></div>
                         <textarea id="review-comment" class="form-group" style="width:100%; border:1px solid var(--border); border-radius:8px; padding:10px;" rows="3" placeholder="Escribe tu opinión..."></textarea>
@@ -362,10 +363,12 @@
     </div>
 
     <script>
+        // CONFIGURACIÓN SUPABASE
         const supabaseUrl = 'https://jvshcszolovsnqzkozka.supabase.co';
         const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imp2c2hjc3pvbG92c25xemtvemthIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjQwMDQ5NDgsImV4cCI6MjA3OTU4MDk0OH0.ty4wwxMhQ8gm1SgweSf9JxcDrvt2IGwKzkH4EQP8ZB4';
         const supabase = window.supabase.createClient(supabaseUrl, supabaseKey);
 
+        // ESTADO GLOBAL
         let projects = [];
         let currentUser = JSON.parse(localStorage.getItem('alex_session')) || null;
         let isLoginMode = true;
@@ -373,33 +376,20 @@
         let currentRating = 0;
         let currentDetailEmail = null;
 
+        // INICIALIZACIÓN
         document.addEventListener('DOMContentLoaded', async () => {
             updateNav();
             await fetchProjects();
             if (currentUser) goToPage('dashboard'); else goToPage('home');
         });
 
-        // --- AVATAR GENERATOR ---
-        function getAvatarHTML(name, url, size = 'medium') {
-            const sizePx = size === 'large' ? '90px' : (size === 'small' ? '28px' : '32px');
-            const fontSize = size === 'large' ? '2.5rem' : (size === 'small' ? '0.75rem' : '0.9rem');
-            const border = size === 'large' ? '4px solid white' : '1px solid #E4E4E7';
-            const colors = ['#FCA5A5', '#FCD34D', '#86EFAC', '#93C5FD', '#C4B5FD', '#FDBA74'];
-            const initial = name ? name.charAt(0).toUpperCase() : '?';
-            const bgColor = colors[(name ? name.charCodeAt(0) : 0) % colors.length];
-            
-            if (url && url.trim() !== '') {
-                return `<img src="${url}" style="width:${sizePx}; height:${sizePx}; border-radius:50%; object-fit:cover; border:${border}; box-shadow:0 2px 5px rgba(0,0,0,0.1);">`;
-            }
-            return `<div style="width:${sizePx}; height:${sizePx}; border-radius:50%; background:${bgColor}; color:#18181B; display:flex; align-items:center; justify-content:center; font-weight:700; font-size:${fontSize}; border:${border}; text-transform:uppercase;">${initial}</div>`;
-        }
-
-        // --- CORE ---
+        // --- CORE: OBTENER PROYECTOS ---
         async function fetchProjects() {
             const { data, error } = await supabase.from('projects').select('*').order('created_at', { ascending: false });
             if (!error) { projects = data; renderProjects(projects, 'homeProjectsGrid'); }
         }
 
+        // --- RENDERIZADO CON LÓGICA DE CORAZÓN ---
         function renderProjects(list, containerId) {
             const container = document.getElementById(containerId);
             if (!container) return;
@@ -429,7 +419,9 @@
                                     ${getAvatarHTML(authorName, authorAvatar, 'small')}
                                     <span class="author-name">${authorName}</span>
                                 </div>
-                                <button class="like-btn" onclick="toggleLike(this, ${p.id})"><i class="ph ph-heart"></i> <span>${likes}</span></button>
+                                <button class="like-btn" onclick="toggleLike(this, ${p.id})">
+                                    <i class="ph ph-heart"></i> <span>${likes}</span>
+                                </button>
                             </div>
                         </div>
                     </div>
@@ -437,148 +429,60 @@
             }).join('');
         }
 
-        // --- DASHBOARD ---
-        function loadDashboard() {
-            if (!currentUser) return;
-            document.getElementById('dash-name').textContent = currentUser.name;
-            document.getElementById('dash-email').textContent = currentUser.email;
-            document.getElementById('dash-avatar-container').innerHTML = getAvatarHTML(currentUser.name, currentUser.avatar, 'large');
+        // --- LÓGICA DE LIKES (VISUAL + BASE DE DATOS) ---
+        async function toggleLike(btn, id) { 
+            if(!currentUser) { openModal('auth','login'); return; } 
             
-            const myProjects = projects.filter(p => 
-                (p.author_email || '').trim().toLowerCase() === currentUser.email.trim().toLowerCase()
-            );
+            const icon = btn.querySelector('i');
+            const span = btn.querySelector('span'); 
+            const isLiked = btn.classList.contains('liked'); 
+            let count = parseInt(span.textContent); 
             
-            document.getElementById('stat-projects').textContent = myProjects.length;
-            document.getElementById('stat-premium').textContent = myProjects.filter(p => p.is_premium).length;
+            // 1. CAMBIO VISUAL INSTANTÁNEO
+            btn.classList.toggle('liked'); 
             
-            const grid = document.getElementById('dashboard-grid');
-            grid.innerHTML = myProjects.length > 0 ? myProjects.map(p => `
-                <div class="project-card ${p.is_premium ? 'is-premium' : ''}">
-                    <div class="project-image-container">${p.image_url ? `<img src="${p.image_url}" class="project-image">` : '<div class="project-image-placeholder"><i class="ph ph-image"></i></div>'}</div>
-                    <div class="card-content">
-                        <h3>${p.title}</h3>
-                        <div style="margin-top:auto; display:flex; gap:0.5rem; flex-wrap:wrap;">
-                            <button class="btn btn-edit" onclick="editProject(${p.id})" style="flex:1;">Editar</button>
-                            <button class="btn btn-delete" onclick="deleteProject(${p.id})"><i class="ph ph-trash"></i></button>
-                            ${!p.is_premium 
-                                ? `<button class="btn btn-premium" onclick="openPremiumModal(${p.id})" style="width:100%;">Destacar (9€)</button>` 
-                                : `<button class="btn btn-cancel-premium" onclick="cancelPremium(${p.id})" style="width:100%;">Cancelar Destacado</button>`
-                            }
-                        </div>
-                    </div>
-                </div>
-            `).join('') : `<p style="color:var(--text-muted);">No tienes proyectos publicados aún.</p>`;
+            if (!isLiked) {
+                // Estado: DIO LIKE
+                icon.classList.remove('ph');     // Quita estilo borde
+                icon.classList.add('ph-fill');   // Pone estilo relleno
+                span.textContent = count + 1;
+            } else {
+                // Estado: QUITÓ LIKE
+                icon.classList.remove('ph-fill'); // Quita estilo relleno
+                icon.classList.add('ph');         // Pone estilo borde
+                span.textContent = count > 0 ? count - 1 : 0;
+            }
+
+            // 2. ACTUALIZAR BASE DE DATOS (EN SEGUNDO PLANO)
+            if(!isLiked) { 
+                await supabase.from('project_likes').insert([{ project_id: id, user_email: currentUser.email }]); 
+                // Incrementar contador en tabla projects
+                const { data } = await supabase.from('projects').select('likes_count').eq('id', id).single();
+                const newCount = (data?.likes_count || 0) + 1;
+                await supabase.from('projects').update({ likes_count: newCount }).eq('id', id);
+            } else { 
+                await supabase.from('project_likes').delete().match({ project_id: id, user_email: currentUser.email }); 
+                // Decrementar contador
+                const { data } = await supabase.from('projects').select('likes_count').eq('id', id).single();
+                const newCount = (data?.likes_count || 0) - 1;
+                await supabase.from('projects').update({ likes_count: newCount < 0 ? 0 : newCount }).eq('id', id);
+            } 
         }
 
-        // --- AUTH ---
-        async function deleteAccount() {
-            if(!confirm('¿Estás seguro? Se borrarán TODOS tus proyectos.')) return;
-            const email = currentUser.email.trim().toLowerCase();
-            
-            await supabase.from('projects').delete().eq('author_email', email);
-            await supabase.from('app_users').delete().eq('email', email);
-            
-            handleLogout();
-            closeModal('profile');
-            showToast('Cuenta eliminada permanentemente');
-        }
-
-        function handleAuthSubmit(e) {
-            e.preventDefault();
-            const btn = document.getElementById('authSubmitBtn');
-            btn.textContent = 'Procesando...';
-            const email = document.getElementById('login-email').value.trim().toLowerCase();
-            const pass = document.getElementById('login-pass').value.trim();
-
-            setTimeout(async () => {
-                try {
-                    if (isLoginMode) {
-                        const { data: users } = await supabase.from('app_users').select('*').eq('email', email).eq('password', pass);
-                        if(users && users.length > 0) completeLogin(users[0]);
-                        else throw new Error('Credenciales incorrectas');
-                    } else {
-                        const name = document.getElementById('reg-name').value;
-                        const avatar = document.getElementById('reg-avatar-url').value;
-                        const { data: exist } = await supabase.from('app_users').select('*').eq('email', email);
-                        if(exist && exist.length > 0) throw new Error('Email ya registrado');
-                        await supabase.from('app_users').insert([{email, password: pass, name, avatar}]);
-                        completeLogin({email, name, avatar});
-                    }
-                    closeModal('auth');
-                } catch(err) {
-                    const msg = document.getElementById('authErrorMsg');
-                    msg.textContent = err.message;
-                    msg.style.display = 'block';
-                } finally {
-                    btn.textContent = isLoginMode ? 'Ingresar' : 'Registrarse';
-                }
-            }, 800);
-        }
-
-        // --- CRUD PROYECTOS ---
-        document.getElementById('projectForm').addEventListener('submit', async (e) => {
-            e.preventDefault();
-            const id = document.getElementById('pId').value;
-            const pData = {
-                title: document.getElementById('pTitle').value,
-                category: document.getElementById('pCat').value,
-                description: document.getElementById('pDesc').value,
-                price: document.getElementById('pPrice').value,
-                image_url: document.getElementById('pImgUrl').value,
-                business_url: document.getElementById('pUrl').value,
-                author_name: currentUser.name,
-                author_email: currentUser.email.trim().toLowerCase(),
-                author_avatar: currentUser.avatar
-            };
-
-            if (id) await supabase.from('projects').update(pData).eq('id', id);
-            else await supabase.from('projects').insert([pData]);
-            
-            await fetchProjects();
-            goToPage('dashboard');
-            showToast('Proyecto guardado');
-        });
-
-        // --- DETALLE Y RESEÑAS (CORREGIDO) ---
-        function openProject(id) {
-            selectedProjectId = id;
-            const p = projects.find(x => x.id === id);
-            if (!p) return;
-
-            document.getElementById('detail-title').textContent = p.title;
-            document.getElementById('detail-category').textContent = p.category;
-            document.getElementById('detail-desc').textContent = p.description;
-            document.getElementById('detail-price').textContent = p.price + '€';
-            document.getElementById('detail-date').textContent = new Date(p.created_at).toLocaleDateString();
-            document.getElementById('detail-author-name').textContent = p.author_name;
-            currentDetailEmail = p.author_email;
-            document.getElementById('detail-author-avatar').innerHTML = getAvatarHTML(p.author_name, p.author_avatar, 'medium');
-            
-            const imgEl = document.getElementById('detail-img');
-            if(p.image_url) { imgEl.src = p.image_url; imgEl.style.display = 'block'; } else { imgEl.style.display = 'none'; }
-            
-            const actions = document.getElementById('detail-actions');
-            actions.innerHTML = p.business_url ? `<a href="${p.business_url}" target="_blank" class="btn btn-primary">Visitar Web</a>` : '';
-            
-            // Cargar Reseñas (La función que faltaba)
-            loadReviews(id);
-            
-            // Resetear formulario de reseña
-            document.getElementById('review-comment').value = '';
-            setRating(0);
-            
-            goToPage('detail');
-        }
-
+        // --- RESEÑAS (REVIEWS) ---
         async function loadReviews(projectId) {
             const list = document.getElementById('reviews-list');
             list.innerHTML = '<p style="color:#aaa;">Cargando opiniones...</p>';
             
-            // Asumimos que existe una tabla 'reviews' en Supabase. Si no existe, esto dará error silencioso o vacío.
-            // Estructura ideal: id, project_id, user_name, rating, comment, created_at
             const { data, error } = await supabase.from('reviews').select('*').eq('project_id', projectId).order('created_at', {ascending: false});
             
-            if (error || !data || data.length === 0) {
+            if (error) {
+                console.error("Error reviews:", error);
+                list.innerHTML = '<p style="color:red; font-size:0.8rem;">Error cargando reseñas. Revisa la consola.</p>';
+                return;
+            }
+
+            if (!data || data.length === 0) {
                 list.innerHTML = '<p style="color:var(--text-muted); padding:1rem 0;">Aún no hay reseñas. ¡Sé el primero!</p>';
                 return;
             }
@@ -599,21 +503,18 @@
             if(currentRating === 0) { showToast('Elige una puntuación', 'error'); return; }
             
             const comment = document.getElementById('review-comment').value;
-            
             const newReview = {
                 project_id: selectedProjectId,
                 user_name: currentUser.name,
                 rating: currentRating,
-                comment: comment,
-                created_at: new Date().toISOString()
+                comment: comment
             };
 
-            // Insertar en tabla 'reviews'
             const { error } = await supabase.from('reviews').insert([newReview]);
             
             if(error) {
                 console.error(error);
-                showToast('Error al enviar reseña (¿Existe la tabla reviews?)', 'error');
+                showToast('Error al guardar. Revisa permisos (RLS) en Supabase.', 'error');
             } else {
                 showToast('Reseña enviada');
                 document.getElementById('review-comment').value = '';
@@ -621,25 +522,138 @@
                 loadReviews(selectedProjectId);
             }
         }
-        
-        // --- RESTO FUNCIONES ---
-        
-        function goToUserProfileFromDetail() {
-            if (currentDetailEmail) openPublicProfile(currentDetailEmail);
+
+        // --- DETALLE PROYECTO ---
+        function openProject(id) {
+            selectedProjectId = id;
+            const p = projects.find(x => x.id === id);
+            if (!p) return;
+
+            document.getElementById('detail-title').textContent = p.title;
+            document.getElementById('detail-category').textContent = p.category;
+            document.getElementById('detail-desc').textContent = p.description;
+            document.getElementById('detail-price').textContent = p.price + '€';
+            document.getElementById('detail-date').textContent = new Date(p.created_at).toLocaleDateString();
+            document.getElementById('detail-author-name').textContent = p.author_name;
+            currentDetailEmail = p.author_email;
+            document.getElementById('detail-author-avatar').innerHTML = getAvatarHTML(p.author_name, p.author_avatar, 'medium');
+            
+            const imgEl = document.getElementById('detail-img');
+            if(p.image_url) { imgEl.src = p.image_url; imgEl.style.display = 'block'; } else { imgEl.style.display = 'none'; }
+            
+            const actions = document.getElementById('detail-actions');
+            actions.innerHTML = p.business_url ? `<a href="${p.business_url}" target="_blank" class="btn btn-primary">Visitar Web</a>` : '';
+            
+            loadReviews(id);
+            document.getElementById('review-comment').value = '';
+            setRating(0);
+            goToPage('detail');
         }
-        
+
+        // --- DASHBOARD ---
+        function loadDashboard() {
+            if (!currentUser) return;
+            document.getElementById('dash-name').textContent = currentUser.name;
+            document.getElementById('dash-email').textContent = currentUser.email;
+            document.getElementById('dash-avatar-container').innerHTML = getAvatarHTML(currentUser.name, currentUser.avatar, 'large');
+            
+            const myProjects = projects.filter(p => (p.author_email || '').trim().toLowerCase() === currentUser.email.trim().toLowerCase());
+            
+            document.getElementById('stat-projects').textContent = myProjects.length;
+            document.getElementById('stat-premium').textContent = myProjects.filter(p => p.is_premium).length;
+            
+            const grid = document.getElementById('dashboard-grid');
+            grid.innerHTML = myProjects.length > 0 ? myProjects.map(p => `
+                <div class="project-card ${p.is_premium ? 'is-premium' : ''}">
+                    <div class="project-image-container">${p.image_url ? `<img src="${p.image_url}" class="project-image">` : '<div class="project-image-placeholder"><i class="ph ph-image"></i></div>'}</div>
+                    <div class="card-content">
+                        <h3>${p.title}</h3>
+                        <div style="margin-top:auto; display:flex; gap:0.5rem; flex-wrap:wrap;">
+                            <button class="btn btn-edit" onclick="editProject(${p.id})" style="flex:1;">Editar</button>
+                            <button class="btn btn-delete" onclick="deleteProject(${p.id})"><i class="ph ph-trash"></i></button>
+                            ${!p.is_premium 
+                                ? `<button class="btn btn-premium" onclick="openPremiumModal(${p.id})" style="width:100%;">Destacar (9€)</button>` 
+                                : `<button class="btn btn-cancel-premium" onclick="cancelPremium(${p.id})" style="width:100%;">Cancelar Destacado</button>`
+                            }
+                        </div>
+                    </div>
+                </div>
+            `).join('') : `<p style="color:var(--text-muted);">No tienes proyectos publicados.</p>`;
+        }
+
+        // --- FUNCIONES AUXILIARES & AUTH ---
+        function getAvatarHTML(name, url, size = 'medium') {
+            const sizePx = size === 'large' ? '90px' : (size === 'small' ? '28px' : '32px');
+            const fontSize = size === 'large' ? '2.5rem' : (size === 'small' ? '0.75rem' : '0.9rem');
+            const border = size === 'large' ? '4px solid white' : '1px solid #E4E4E7';
+            const colors = ['#FCA5A5', '#FCD34D', '#86EFAC', '#93C5FD', '#C4B5FD', '#FDBA74'];
+            const initial = name ? name.charAt(0).toUpperCase() : '?';
+            const bgColor = colors[(name ? name.charCodeAt(0) : 0) % colors.length];
+            if (url && url.trim() !== '') return `<img src="${url}" style="width:${sizePx}; height:${sizePx}; border-radius:50%; object-fit:cover; border:${border}; box-shadow:0 2px 5px rgba(0,0,0,0.1);">`;
+            return `<div style="width:${sizePx}; height:${sizePx}; border-radius:50%; background:${bgColor}; color:#18181B; display:flex; align-items:center; justify-content:center; font-weight:700; font-size:${fontSize}; border:${border}; text-transform:uppercase;">${initial}</div>`;
+        }
+
+        async function deleteAccount() {
+            if(!confirm('¿Estás seguro? Se borrarán TODOS tus proyectos.')) return;
+            const email = currentUser.email.trim().toLowerCase();
+            await supabase.from('projects').delete().eq('author_email', email);
+            await supabase.from('app_users').delete().eq('email', email);
+            handleLogout(); closeModal('profile'); showToast('Cuenta eliminada');
+        }
+
+        function handleAuthSubmit(e) {
+            e.preventDefault();
+            const btn = document.getElementById('authSubmitBtn');
+            btn.textContent = 'Procesando...';
+            const email = document.getElementById('login-email').value.trim().toLowerCase();
+            const pass = document.getElementById('login-pass').value.trim();
+            setTimeout(async () => {
+                try {
+                    if (isLoginMode) {
+                        const { data: users } = await supabase.from('app_users').select('*').eq('email', email).eq('password', pass);
+                        if(users && users.length > 0) completeLogin(users[0]); else throw new Error('Credenciales incorrectas');
+                    } else {
+                        const name = document.getElementById('reg-name').value;
+                        const avatar = document.getElementById('reg-avatar-url').value;
+                        const { data: exist } = await supabase.from('app_users').select('*').eq('email', email);
+                        if(exist && exist.length > 0) throw new Error('Email ya registrado');
+                        await supabase.from('app_users').insert([{email, password: pass, name, avatar}]);
+                        completeLogin({email, name, avatar});
+                    }
+                    closeModal('auth');
+                } catch(err) { const msg = document.getElementById('authErrorMsg'); msg.textContent = err.message; msg.style.display = 'block'; } 
+                finally { btn.textContent = isLoginMode ? 'Ingresar' : 'Registrarse'; }
+            }, 800);
+        }
+
+        document.getElementById('projectForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const id = document.getElementById('pId').value;
+            const pData = {
+                title: document.getElementById('pTitle').value,
+                category: document.getElementById('pCat').value,
+                description: document.getElementById('pDesc').value,
+                price: document.getElementById('pPrice').value,
+                image_url: document.getElementById('pImgUrl').value,
+                business_url: document.getElementById('pUrl').value,
+                author_name: currentUser.name,
+                author_email: currentUser.email.trim().toLowerCase(),
+                author_avatar: currentUser.avatar
+            };
+            if (id) await supabase.from('projects').update(pData).eq('id', id); else await supabase.from('projects').insert([pData]);
+            await fetchProjects(); goToPage('dashboard'); showToast('Proyecto guardado');
+        });
+
+        function goToUserProfileFromDetail() { if (currentDetailEmail) openPublicProfile(currentDetailEmail); }
         function openPublicProfile(email) {
             const safeEmail = (email || '').trim().toLowerCase();
             if (currentUser && currentUser.email.trim().toLowerCase() === safeEmail) { goToPage('dashboard'); return; }
-            
             const userProjects = projects.filter(p => (p.author_email || '').trim().toLowerCase() === safeEmail);
             if(userProjects.length === 0) return;
-            
             const author = userProjects[0];
             document.getElementById('pub-name').textContent = author.author_name;
             document.getElementById('pub-avatar-container').innerHTML = getAvatarHTML(author.author_name, author.author_avatar, 'large');
             document.getElementById('pub-stats').textContent = userProjects.length + ' Proyectos publicados';
-            
             renderProjects(userProjects, 'pub-grid');
             goToPage('profile');
         }
@@ -655,22 +669,14 @@
         }
         
         function updateNav() {
-            if (currentUser) {
-                document.getElementById('authBtns').classList.add('hidden');
-                document.getElementById('userBtns').classList.remove('hidden');
-            } else {
-                document.getElementById('authBtns').classList.remove('hidden');
-                document.getElementById('userBtns').classList.add('hidden');
-            }
+            if (currentUser) { document.getElementById('authBtns').classList.add('hidden'); document.getElementById('userBtns').classList.remove('hidden'); } 
+            else { document.getElementById('authBtns').classList.remove('hidden'); document.getElementById('userBtns').classList.add('hidden'); }
         }
         
         function completeLogin(user) {
             user.email = user.email.trim().toLowerCase();
-            currentUser = user;
-            localStorage.setItem('alex_session', JSON.stringify(user));
-            updateNav();
-            goToPage('dashboard');
-            showToast(`Hola, ${user.name}`);
+            currentUser = user; localStorage.setItem('alex_session', JSON.stringify(user));
+            updateNav(); goToPage('dashboard'); showToast(`Hola, ${user.name}`);
         }
 
         function handleLogout() { localStorage.removeItem('alex_session'); currentUser = null; updateNav(); goToPage('home'); showToast('Sesión cerrada'); }
@@ -680,76 +686,17 @@
         function showToast(msg, type='success') { const t = document.createElement('div'); t.className = 'toast'; if(type === 'error') t.style.borderLeft = '4px solid #ef4444'; else t.style.borderLeft = '4px solid #10b981'; t.textContent = msg; document.getElementById('toast-container').appendChild(t); setTimeout(() => t.remove(), 3000); }
         function prepareForm() { document.getElementById('projectForm').reset(); document.getElementById('pId').value = ''; document.getElementById('pImgPreview').innerHTML = ''; document.getElementById('form-title').textContent = 'Nuevo Proyecto'; goToPage('form'); }
         function checkAuthAndAct(action) { if(currentUser) prepareForm(); else openModal('auth', 'signup'); }
-        
-        function handleImagePreview(input, previewId, urlId) { 
-            const file = input.files[0]; 
-            if(file) { 
-                const reader = new FileReader(); 
-                reader.onload = (e) => { 
-                    if(previewId) document.getElementById(previewId).innerHTML = `<img src="${e.target.result}" style="width:100%">`; 
-                    if(urlId) document.getElementById(urlId).value = e.target.result; 
-                }; 
-                reader.readAsDataURL(file); 
-            } 
-        }
-        
+        function handleImagePreview(input, previewId, urlId) { const file = input.files[0]; if(file) { const reader = new FileReader(); reader.onload = (e) => { if(previewId) document.getElementById(previewId).innerHTML = `<img src="${e.target.result}" style="width:100%">`; if(urlId) document.getElementById(urlId).value = e.target.result; }; reader.readAsDataURL(file); } }
         function editProject(id) { const p = projects.find(x => x.id === id); document.getElementById('pId').value = p.id; document.getElementById('pTitle').value = p.title; document.getElementById('pCat').value = p.category; document.getElementById('pDesc').value = p.description; document.getElementById('pPrice').value = p.price; document.getElementById('pImgUrl').value = p.image_url || ''; document.getElementById('pUrl').value = p.business_url || ''; document.getElementById('form-title').textContent = 'Editar Proyecto'; if(p.image_url) document.getElementById('pImgPreview').innerHTML = `<img src="${p.image_url}" style="width:100%">`; goToPage('form'); }
-        
         async function deleteProject(id) { if(confirm('¿Eliminar?')) { await supabase.from('projects').delete().eq('id', id); await fetchProjects(); loadDashboard(); showToast('Eliminado'); } }
         function openEditProfile() { document.getElementById('edit-name').value = currentUser.name; document.getElementById('edit-avatar').value = currentUser.avatar || ''; openModal('profile'); }
-        
-        document.getElementById('profileForm').addEventListener('submit', async (e) => { 
-            e.preventDefault(); 
-            const newName = document.getElementById('edit-name').value; 
-            const newAvatar = document.getElementById('edit-avatar').value; 
-            
-            await supabase.from('app_users').update({ name: newName, avatar: newAvatar }).eq('email', currentUser.email); 
-            // Opcional: actualizar nombre en proyectos antiguos
-            await supabase.from('projects').update({ author_name: newName, author_avatar: newAvatar }).eq('author_email', currentUser.email); 
-            
-            currentUser.name = newName; 
-            currentUser.avatar = newAvatar; 
-            localStorage.setItem('alex_session', JSON.stringify(currentUser)); 
-            closeModal('profile'); 
-            loadDashboard(); 
-            showToast('Perfil actualizado'); 
-            await fetchProjects(); 
-        });
-        
+        document.getElementById('profileForm').addEventListener('submit', async (e) => { e.preventDefault(); const newName = document.getElementById('edit-name').value; const newAvatar = document.getElementById('edit-avatar').value; await supabase.from('app_users').update({ name: newName, avatar: newAvatar }).eq('email', currentUser.email); await supabase.from('projects').update({ author_name: newName, author_avatar: newAvatar }).eq('author_email', currentUser.email); currentUser.name = newName; currentUser.avatar = newAvatar; localStorage.setItem('alex_session', JSON.stringify(currentUser)); closeModal('profile'); loadDashboard(); showToast('Perfil actualizado'); await fetchProjects(); });
         function openPremiumModal(id) { selectedProjectId = id; openModal('premium'); document.getElementById('modal-premium').classList.add('active'); }
         function closePremiumModal() { document.getElementById('modal-premium').classList.remove('active'); }
         async function handlePremiumPurchase() { await supabase.from('projects').update({ is_premium: true }).eq('id', selectedProjectId); await fetchProjects(); closePremiumModal(); loadDashboard(); showToast('¡Destacado!'); }
         async function cancelPremium(id) { await supabase.from('projects').update({ is_premium: false }).eq('id', id); await fetchProjects(); loadDashboard(); showToast('Cancelado'); }
         function filterProjects(val, gridId) { const term = val.toLowerCase(); const filtered = projects.filter(p => p.title.toLowerCase().includes(term) || p.author_name.toLowerCase().includes(term)); renderProjects(filtered, gridId); }
         function setRating(n) { currentRating = n; const stars = document.querySelectorAll('#star-input span'); stars.forEach((s, i) => { s.classList.toggle('active', i < n); }); }
-        
-        // --- LOGICA LIKES MEJORADA (Sin RPC) ---
-        async function toggleLike(btn, id) { 
-            if(!currentUser) { openModal('auth','login'); return; } 
-            
-            // UI Optimizada
-            const span = btn.querySelector('span'); 
-            const isLiked = btn.classList.contains('liked'); 
-            let count = parseInt(span.textContent); 
-            
-            btn.classList.toggle('liked'); 
-            span.textContent = isLiked ? (count > 0 ? count - 1 : 0) : count + 1; 
-
-            // Actualización simple en BD (Evitamos RPC para simplificar)
-            // Primero verificamos si ya dio like en 'project_likes'
-            if(!isLiked) { 
-                await supabase.from('project_likes').insert([{ project_id: id, user_email: currentUser.email }]); 
-                // Actualizamos contador en projects manual
-                const { data } = await supabase.from('projects').select('likes_count').eq('id', id).single();
-                const newCount = (data.likes_count || 0) + 1;
-                await supabase.from('projects').update({ likes_count: newCount }).eq('id', id);
-            } else { 
-                await supabase.from('project_likes').delete().match({ project_id: id, user_email: currentUser.email }); 
-                const { data } = await supabase.from('projects').select('likes_count').eq('id', id).single();
-                const newCount = (data.likes_count || 0) - 1;
-                await supabase.from('projects').update({ likes_count: newCount < 0 ? 0 : newCount }).eq('id', id);
-            } 
-        }
     </script>
 </body>
 </html>
