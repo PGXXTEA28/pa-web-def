@@ -3,13 +3,12 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Proyectos Alex | Curated Projects</title>
+    <title>Proyectos Alex | Plataforma Premium</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Playfair+Display:ital,wght@0,600;0,800;1,600&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Playfair+Display:ital,wght@0,600;0,700;1,600&display=swap" rel="stylesheet">
     
     <script src="https://unpkg.com/@supabase/supabase-js@2"></script>
-    <!-- Iconos Phosphor para un look más moderno -->
     <script src="https://unpkg.com/@phosphor-icons/web"></script>
 
     <style>
@@ -19,672 +18,766 @@
             --bg-card: #FFFFFF;
             --text-main: #18181B;
             --text-muted: #71717A;
-            --primary: #18181B; /* Negro elegante */
-            --primary-hover: #27272A;
-            --accent: #6366F1; /* Índigo sutil para detalles */
-            --accent-gradient: linear-gradient(135deg, #6366F1 0%, #8B5CF6 100%);
+            --primary: #18181B;
+            --accent: #6366F1;
             --border: #E4E4E7;
-            --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.05);
-            --shadow-hover: 0 20px 25px -5px rgb(0 0 0 / 0.1), 0 8px 10px -6px rgb(0 0 0 / 0.1);
-            --radius: 1rem;
+            --radius: 12px;
+            --shadow-soft: 0 4px 6px -1px rgba(0, 0, 0, 0.05), 0 2px 4px -1px rgba(0, 0, 0, 0.03);
         }
 
         * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Inter', sans-serif; -webkit-font-smoothing: antialiased; }
         
-        body { 
-            background-color: var(--bg-body); 
-            color: var(--text-main); 
-            line-height: 1.6;
-            overflow-x: hidden;
-        }
+        body { background-color: var(--bg-body); color: var(--text-main); line-height: 1.6; overflow-x: hidden; }
 
-        h1, h2, h3, h4 { font-family: 'Playfair Display', serif; color: var(--text-main); letter-spacing: -0.02em; }
+        h1, h2, h3, h4 { font-family: 'Playfair Display', serif; letter-spacing: -0.02em; color: var(--text-main); }
         
         input, button, textarea, select { font-family: inherit; outline: none; }
 
-        .container { max-width: 1200px; margin: 0 auto; padding: 0 1.5rem; }
+        .container { max-width: 1100px; margin: 0 auto; padding: 0 1.5rem; }
         .hidden { display: none !important; }
 
-        /* --- NAVEGACIÓN (Glassmorphism) --- */
+        /* --- NAVEGACIÓN --- */
         nav { 
             position: sticky; top: 0; z-index: 100; 
-            background: rgba(255, 255, 255, 0.8); 
-            backdrop-filter: blur(12px); 
+            background: rgba(255, 255, 255, 0.85); backdrop-filter: blur(12px); 
             border-bottom: 1px solid rgba(0,0,0,0.05);
         }
-        nav .container { display: flex; height: 5rem; align-items: center; justify-content: space-between; }
+        nav .container { display: flex; height: 4.5rem; align-items: center; justify-content: space-between; }
         
-        .nav-brand { display: flex; align-items: center; gap: 0.75rem; text-decoration: none; color: inherit; transition: opacity 0.2s; }
+        .nav-brand { display: flex; align-items: center; gap: 0.75rem; text-decoration: none; color: inherit; cursor: pointer; }
         .nav-brand:hover { opacity: 0.8; }
-        .nav-brand span { font-size: 1.25rem; font-weight: 800; letter-spacing: -0.03em; }
-
+        
+        /* Logo SVG */
         .logo-svg { width: 2.5rem; height: 2.5rem; }
 
         .nav-buttons { display: flex; align-items: center; gap: 0.75rem; }
 
-        /* --- BOTONES MODERNOS --- */
-        button, .btn { 
-            padding: 0.6rem 1.2rem; border: none; border-radius: 99px; 
-            cursor: pointer; font-size: 0.9rem; font-weight: 500; 
-            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-            display: inline-flex; align-items: center; justify-content: center; gap: 0.5rem;
-            text-decoration: none;
+        /* --- BOTONES --- */
+        .btn { 
+            padding: 0.5rem 1rem; border-radius: 99px; border: 1px solid transparent; cursor: pointer; 
+            font-size: 0.85rem; font-weight: 500; transition: all 0.2s; 
+            display: inline-flex; align-items: center; gap: 0.4rem; text-decoration: none;
         }
-
-        .btn-primary { background-color: var(--primary); color: white; box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1); }
-        .btn-primary:hover { background-color: var(--primary-hover); transform: translateY(-2px); box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1); }
+        .btn-primary { background: var(--primary); color: white; box-shadow: var(--shadow-soft); }
+        .btn-primary:hover { transform: translateY(-1px); opacity: 0.9; }
         
-        .btn-outline { background: transparent; border: 1px solid var(--border); color: var(--text-main); }
-        .btn-outline:hover { border-color: var(--text-main); background: white; }
+        .btn-outline { background: white; border-color: var(--border); color: var(--text-main); }
+        .btn-outline:hover { border-color: var(--text-main); background: #F4F4F5; }
 
-        .btn-ghost { background: transparent; color: var(--text-muted); padding: 0.5rem; }
+        .btn-ghost { background: transparent; color: var(--text-muted); }
         .btn-ghost:hover { color: var(--text-main); background: rgba(0,0,0,0.03); }
-
-        .btn-premium { 
-            background: var(--accent-gradient); color: white; border: none;
-            box-shadow: 0 4px 15px rgba(99, 102, 241, 0.3);
-        }
-        .btn-premium:hover { transform: translateY(-2px); box-shadow: 0 8px 25px rgba(99, 102, 241, 0.4); filter: brightness(1.1); }
-
-        /* --- HERO SECTION --- */
-        .hero { padding: 8rem 0 6rem; text-align: center; position: relative; overflow: hidden; }
-        /* Fondo sutil decorativo */
-        .hero::before {
-            content: ''; position: absolute; top: -50%; left: 50%; transform: translateX(-50%);
-            width: 100%; height: 100%; max-width: 800px;
-            background: radial-gradient(circle, rgba(99,102,241,0.08) 0%, rgba(255,255,255,0) 70%);
-            z-index: -1;
-        }
         
-        .hero-badge { 
-            display: inline-block; padding: 0.35rem 1rem; border-radius: 99px; 
-            background: white; border: 1px solid var(--border); 
-            font-size: 0.8rem; font-weight: 600; color: var(--text-muted);
-            margin-bottom: 2rem; box-shadow: var(--shadow-sm);
-        }
-        
-        .hero h1 { 
-            font-size: 4rem; line-height: 1.1; margin-bottom: 1.5rem; 
-            background: -webkit-linear-gradient(#18181B, #52525B); -webkit-background-clip: text;
-        }
-        .hero p { font-size: 1.25rem; color: var(--text-muted); max-width: 600px; margin: 0 auto 2.5rem; font-weight: 300; }
+        .btn-accent { background: var(--accent); color: white; }
+        .btn-accent:hover { filter: brightness(1.1); transform: translateY(-1px); }
 
+        /* --- PAGINAS (SPA - Cambio instantáneo) --- */
+        .page { display: none; animation: fadeIn 0.3s ease; padding-bottom: 4rem; }
+        .page.active { display: block; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(5px); } to { opacity: 1; transform: translateY(0); } }
+
+        /* --- HERO --- */
+        .hero { padding: 6rem 0 4rem; text-align: center; }
+        .hero h1 { font-size: 3.5rem; line-height: 1.1; margin-bottom: 1.5rem; }
+        .hero p { font-size: 1.15rem; color: var(--text-muted); max-width: 600px; margin: 0 auto 2.5rem; }
+        
         /* --- SEARCH --- */
-        .search-section { padding: 0 0 4rem; }
-        .search-box-wrapper {
-            max-width: 500px; margin: 0 auto; position: relative;
-            background: white; border-radius: 99px; 
-            box-shadow: 0 10px 40px -10px rgba(0,0,0,0.08);
+        .search-wrapper {
+            max-width: 480px; margin: 0 auto 3rem; position: relative;
+            background: white; border-radius: 99px; box-shadow: var(--shadow-soft);
             border: 1px solid transparent; transition: all 0.3s;
         }
-        .search-box-wrapper:focus-within { border-color: var(--border); box-shadow: 0 20px 40px -10px rgba(0,0,0,0.12); transform: translateY(-2px); }
-        
-        .search-box-wrapper i { position: absolute; left: 1.5rem; top: 50%; transform: translateY(-50%); color: var(--text-muted); font-size: 1.2rem; }
-        .search-box-wrapper input { 
-            width: 100%; padding: 1.2rem 1.5rem 1.2rem 3.5rem; 
-            border: none; background: transparent; font-size: 1rem; 
-            border-radius: 99px; color: var(--text-main);
-        }
+        .search-wrapper:focus-within { border-color: var(--border); transform: translateY(-2px); }
+        .search-wrapper i { position: absolute; left: 1.2rem; top: 50%; transform: translateY(-50%); color: var(--text-muted); }
+        .search-wrapper input { width: 100%; padding: 1rem 1rem 1rem 3rem; border: none; background: transparent; font-size: 1rem; border-radius: 99px; }
 
-        /* --- CARDS DE PROYECTOS --- */
-        .projects-grid { 
-            display: grid; grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); 
-            gap: 2.5rem; padding-bottom: 4rem; 
-        }
+        /* --- GRID PROYECTOS --- */
+        .projects-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 2rem; }
 
         .project-card { 
             background: var(--bg-card); border-radius: var(--radius); 
-            border: 1px solid var(--border); transition: all 0.4s cubic-bezier(0.25, 0.8, 0.25, 1);
-            display: flex; flex-direction: column; overflow: hidden; position: relative;
+            border: 1px solid var(--border); overflow: hidden; 
+            transition: all 0.3s ease; display: flex; flex-direction: column;
         }
-        .project-card:hover { 
-            transform: translateY(-8px); 
-            box-shadow: var(--shadow-hover); 
-            border-color: transparent;
-        }
-
-        .project-card.is-premium { border: 1px solid #FCD34D; }
-        .project-card.is-premium::after {
-            content: ''; position: absolute; inset: 0; border-radius: var(--radius);
-            box-shadow: inset 0 0 0 1px rgba(252, 211, 77, 0.3), 0 10px 40px -10px rgba(245, 158, 11, 0.1);
-            pointer-events: none;
+        .project-card:hover { transform: translateY(-5px); box-shadow: 0 15px 30px -10px rgba(0,0,0,0.1); }
+        
+        /* Estilo Premium */
+        .project-card.is-premium { border: 1px solid #FBBF24; position: relative; }
+        .premium-badge {
+            position: absolute; top: 10px; right: 10px; background: rgba(255,255,255,0.9); 
+            backdrop-filter: blur(4px); padding: 4px 8px; border-radius: 6px; 
+            font-size: 0.7rem; font-weight: 700; color: #B45309; border: 1px solid #FDE68A; z-index: 10;
         }
 
-        .project-image-container { position: relative; height: 240px; overflow: hidden; cursor: pointer; }
-        .project-image { width: 100%; height: 100%; object-fit: cover; transition: transform 0.6s; }
+        .project-image-container { height: 200px; overflow: hidden; position: relative; background: #F4F4F5; }
+        .project-image { width: 100%; height: 100%; object-fit: cover; transition: transform 0.5s; }
         .project-card:hover .project-image { transform: scale(1.05); }
         
-        .project-image-placeholder {
-            width: 100%; height: 100%; 
-            background: linear-gradient(45deg, #f3f4f6 25%, #ffffff 25%, #ffffff 50%, #f3f4f6 50%, #f3f4f6 75%, #ffffff 75%, #ffffff 100%);
-            background-size: 20px 20px;
-            display: flex; align-items: center; justify-content: center; color: #cbd5e1; font-size: 3rem;
-        }
-
-        .card-content { padding: 1.5rem; display: flex; flex-direction: column; flex: 1; }
+        .card-content { padding: 1.25rem; display: flex; flex-direction: column; flex: 1; gap: 0.5rem; }
+        .card-category { font-size: 0.7rem; text-transform: uppercase; letter-spacing: 0.05em; color: var(--accent); font-weight: 700; }
+        .card-title { font-size: 1.15rem; font-weight: 700; line-height: 1.3; }
+        .card-desc { font-size: 0.9rem; color: var(--text-muted); display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; margin-bottom: 1rem; }
         
-        .card-category { 
-            font-size: 0.7rem; text-transform: uppercase; letter-spacing: 0.05em; 
-            color: var(--accent); font-weight: 700; margin-bottom: 0.5rem;
-        }
-        
-        .card-title { 
-            font-size: 1.25rem; font-weight: 700; margin-bottom: 0.75rem; 
-            line-height: 1.3; font-family: 'Playfair Display', serif; cursor: pointer;
-        }
-        .card-title:hover { color: var(--accent); }
-
-        .card-desc { 
-            font-size: 0.9rem; color: var(--text-muted); margin-bottom: 1.5rem; 
-            display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical; overflow: hidden;
-        }
-
         .card-footer { 
             margin-top: auto; padding-top: 1rem; border-top: 1px solid #F4F4F5; 
-            display: flex; justify-content: space-between; align-items: center;
+            display: flex; justify-content: space-between; align-items: center; 
         }
 
-        /* Autor & Likes */
-        .author-info { display: flex; align-items: center; gap: 0.75rem; cursor: pointer; }
-        .author-avatar { width: 32px; height: 32px; border-radius: 50%; object-fit: cover; background: #F4F4F5; }
-        .author-name { font-size: 0.85rem; font-weight: 500; color: var(--text-main); }
+        .author-row { display: flex; align-items: center; gap: 0.5rem; cursor: pointer; }
+        .author-row img { width: 24px; height: 24px; border-radius: 50%; object-fit: cover; }
+        .author-row span { font-size: 0.8rem; font-weight: 500; color: var(--text-main); }
+        .author-row:hover span { color: var(--accent); text-decoration: underline; }
+
+        .like-btn { background: none; border: none; cursor: pointer; color: var(--text-muted); font-size: 0.9rem; display: flex; align-items: center; gap: 4px; transition: color 0.2s; }
+        .like-btn:hover, .like-btn.liked { color: #EF4444; }
+
+        /* --- DASHBOARD --- */
+        .dashboard-header { background: white; border-bottom: 1px solid var(--border); padding: 3rem 0; margin-bottom: 2rem; }
+        .profile-stats { display: flex; gap: 2rem; margin-top: 1rem; }
+        .stat-item strong { font-size: 1.5rem; display: block; color: var(--text-main); }
+        .stat-item span { font-size: 0.85rem; color: var(--text-muted); }
+
+        /* --- VISTA DETALLE --- */
+        .detail-header { padding: 2rem 0; border-bottom: 1px solid var(--border); margin-bottom: 2rem; }
+        .detail-img { width: 100%; height: 400px; object-fit: cover; border-radius: var(--radius); margin-bottom: 2rem; background: #F4F4F5; }
         
-        .like-btn { 
-            display: flex; align-items: center; gap: 0.25rem; background: none; border: none; 
-            font-size: 0.85rem; color: var(--text-muted); cursor: pointer; transition: all 0.2s;
-            padding: 0.25rem 0.5rem; border-radius: 99px;
-        }
-        .like-btn:hover { background: #FEF2F2; color: #EF4444; }
-        .like-btn.liked { color: #EF4444; }
-        .like-btn.liked i { font-weight: fill; }
-
-        /* --- MODALES (Glass Clean) --- */
-        .modal-overlay { 
-            position: fixed; inset: 0; background: rgba(255,255,255,0.8); backdrop-filter: blur(8px);
-            z-index: 1000; display: flex; align-items: center; justify-content: center;
-            opacity: 0; visibility: hidden; transition: all 0.3s;
-        }
-        .modal-overlay.active { opacity: 1; visibility: visible; }
-        
-        .modal-card { 
-            background: white; width: 100%; max-width: 450px; padding: 3rem; 
-            border-radius: 1.5rem; box-shadow: 0 25px 50px -12px rgba(0,0,0,0.15); 
-            border: 1px solid rgba(0,0,0,0.05); transform: translateY(20px); transition: all 0.3s; 
-        }
-        .modal-overlay.active .modal-card { transform: translateY(0); }
-
         /* --- FORMULARIOS --- */
-        .form-group { margin-bottom: 1.5rem; }
-        .form-group label { display: block; margin-bottom: 0.5rem; font-size: 0.9rem; font-weight: 600; color: var(--text-main); }
-        .form-group input, .form-group textarea, .form-group select { 
-            width: 100%; padding: 0.8rem 1rem; border: 1px solid var(--border); 
-            border-radius: 0.5rem; font-size: 0.95rem; transition: border-color 0.2s;
-            background: #FAFAFA;
-        }
-        .form-group input:focus { border-color: var(--text-main); background: white; }
+        .form-container { max-width: 600px; margin: 3rem auto; background: white; padding: 2rem; border-radius: var(--radius); border: 1px solid var(--border); }
+        .form-group { margin-bottom: 1.2rem; }
+        .form-group label { display: block; margin-bottom: 0.4rem; font-size: 0.9rem; font-weight: 600; }
+        .form-group input, .form-group textarea, .form-group select { width: 100%; padding: 0.75rem; border: 1px solid var(--border); border-radius: 0.5rem; background: #FAFAFA; }
+        .form-group input:focus { background: white; border-color: var(--text-main); }
 
         /* --- TOAST & ADS --- */
         #toast-container { position: fixed; bottom: 20px; right: 20px; z-index: 9999; display: flex; flex-direction: column; gap: 10px; }
-        .toast { background: #18181B; color: white; padding: 1rem 1.5rem; border-radius: 0.5rem; font-size: 0.9rem; display: flex; align-items: center; gap: 10px; animation: slideIn 0.3s ease-out forwards; box-shadow: 0 10px 15px -3px rgba(0,0,0,0.1); }
+        .toast { background: #18181B; color: white; padding: 0.8rem 1.2rem; border-radius: 8px; font-size: 0.9rem; box-shadow: 0 10px 15px -3px rgba(0,0,0,0.1); animation: slideUp 0.3s ease-out; }
+        @keyframes slideUp { from { transform: translateY(20px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
         
-        .ad-container { width: 100%; margin: 3rem 0; display: flex; justify-content: center; }
-        .ad-placeholder { 
-            width: 100%; max-width: 728px; height: 90px; 
-            background-color: #F4F4F5; border-radius: 0.5rem; 
-            display: flex; flex-direction: column; align-items: center; justify-content: center; 
-            color: #A1A1AA; font-size: 0.8rem; letter-spacing: 0.05em; text-transform: uppercase;
-        }
+        .ad-placeholder { width: 100%; max-width: 728px; height: 90px; background: #F4F4F5; margin: 2rem auto; display: flex; align-items: center; justify-content: center; color: #A1A1AA; font-size: 0.8rem; letter-spacing: 1px; border-radius: 8px; }
 
-        /* --- RESPONSIVE --- */
-        @media (max-width: 768px) {
-            .hero h1 { font-size: 2.5rem; }
-            .nav-brand span { display: none; }
-            .projects-grid { grid-template-columns: 1fr; }
-        }
+        /* --- MODAL --- */
+        .modal-overlay { position: fixed; inset: 0; background: rgba(255,255,255,0.9); backdrop-filter: blur(5px); z-index: 2000; display: flex; align-items: center; justify-content: center; opacity: 0; visibility: hidden; transition: all 0.3s; }
+        .modal-overlay.active { opacity: 1; visibility: visible; }
+        .modal-card { background: white; width: 100%; max-width: 400px; padding: 2rem; border-radius: 1.5rem; box-shadow: 0 25px 50px -12px rgba(0,0,0,0.15); border: 1px solid var(--border); transform: translateY(20px); transition: all 0.3s; position: relative; }
+        .modal-overlay.active .modal-card { transform: translateY(0); }
+        .close-modal { position: absolute; top: 1rem; right: 1rem; background: none; border: none; font-size: 1.2rem; cursor: pointer; color: var(--text-muted); }
+
     </style>
 </head>
 <body>
 
-    <!-- TOAST CONTAINER -->
+    <!-- TOASTS -->
     <div id="toast-container"></div>
 
     <!-- NAVEGACIÓN -->
     <nav>
         <div class="container">
-            <a onclick="showPage('home')" class="nav-brand">
+            <div class="nav-brand" onclick="goToPage('home')">
                 <svg class="logo-svg" viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg">
                     <circle cx="100" cy="100" r="100" fill="#F9F7F2" />
                     <circle cx="100" cy="100" r="92" fill="none" stroke="#1A1A1A" stroke-width="1" />
-                    <defs>
-                        <path id="textCircleTop" d="M 30,100 A 70,70 0 1,1 170,100" />
-                        <path id="textCircleBottom" d="M 25,100 A 75,75 0 0,0 175,100" />
-                    </defs>
-                    <text font-family="'Inter', sans-serif" font-size="16" font-weight="700" fill="#1A1A1A" letter-spacing="2">
-                        <textPath href="#textCircleTop" startOffset="50%" text-anchor="middle">PROYECTOSALEX</textPath>
-                    </text>
+                    <path id="textCircleTop" d="M 30,100 A 70,70 0 1,1 170,100" fill="none"/>
+                    <path id="textCircleBottom" d="M 25,100 A 75,75 0 0,0 175,100" fill="none"/>
+                    <text font-family="'Inter', sans-serif" font-size="16" font-weight="700" fill="#1A1A1A" letter-spacing="2"><textPath href="#textCircleTop" startOffset="50%" text-anchor="middle">PROYECTOSALEX</textPath></text>
                     <text x="100" y="108" font-family="'Playfair Display', serif" font-size="70" font-weight="800" fill="#1A1A1A" text-anchor="middle" dominant-baseline="middle">PA</text>
                     <text x="100" y="140" font-family="'Inter', sans-serif" font-size="10" font-weight="600" fill="#1A1A1A" text-anchor="middle" letter-spacing="1">EST. 2024</text>
-                    <text font-family="'Inter', sans-serif" font-size="8" font-weight="600" fill="#1A1A1A" letter-spacing="1">
-                        <textPath href="#textCircleBottom" startOffset="50%" text-anchor="middle">SMALL STEPS • LONG DISTANCES</textPath>
-                    </text>
+                    <text font-family="'Inter', sans-serif" font-size="8" font-weight="600" fill="#1A1A1A" letter-spacing="1"><textPath href="#textCircleBottom" startOffset="50%" text-anchor="middle">SMALL STEPS • LONG DISTANCES</textPath></text>
                 </svg>
                 <span>Proyectos Alex</span>
-            </a>
+            </div>
             
             <div class="nav-buttons">
-                <button class="btn btn-ghost hidden" id="backHomeBtn" onclick="showPage('home')"><i class="ph ph-house"></i> Inicio</button>
+                <button class="btn btn-ghost hidden" id="navHomeBtn" onclick="goToPage('home')">Inicio</button>
                 
-                <div id="authButtons">
-                    <button class="btn btn-outline" onclick="openAuthModal('login')">Ingresar</button>
-                    <button class="btn btn-primary" onclick="openAuthModal('signup')">Registrarse</button>
+                <div id="authBtns">
+                    <button class="btn btn-outline" onclick="openModal('auth', 'login')">Ingresar</button>
+                    <button class="btn btn-primary" onclick="openModal('auth', 'signup')">Registrarse</button>
                 </div>
 
-                <div id="userMenu" class="hidden" style="display: flex; align-items: center; gap: 0.5rem;">
-                     <button class="btn btn-outline" onclick="showPage('dashboard')">
-                        <i class="ph ph-user"></i> Mi Cuenta
-                     </button>
-                     <button class="btn btn-ghost" onclick="handleLogout()" title="Salir">
-                        <i class="ph ph-sign-out" style="font-size: 1.2rem;"></i>
-                     </button>
+                <div id="userBtns" class="hidden">
+                    <button class="btn btn-outline" onclick="goToPage('dashboard')"><i class="ph ph-user"></i> Mi Cuenta</button>
+                    <button class="btn btn-ghost" onclick="doLogout()"><i class="ph ph-sign-out"></i></button>
                 </div>
             </div>
         </div>
     </nav>
 
     <!-- PÁGINA: HOME -->
-    <div id="home" class="page active">
+    <div id="page-home" class="page active">
         <header class="hero">
             <div class="container">
-                <span class="hero-badge">✨ Plataforma de Curación de Proyectos</span>
-                <h1>Dale Vida a Tus <br><span style="color: #6366F1; font-style: italic;">Grandes Ideas</span></h1>
-                <p>El espacio definitivo para creadores, emprendedores y visionarios. Comparte tu trabajo, recibe feedback y conecta con el mundo.</p>
+                <div style="display: inline-block; padding: 4px 12px; background: #EEF2FF; color: #6366F1; border-radius: 99px; font-size: 0.8rem; font-weight: 600; margin-bottom: 1.5rem;">Plataforma para Creadores</div>
+                <h1>Descubre Proyectos <br> <span style="color: var(--text-muted); font-style: italic;">Extraordinarios</span></h1>
+                <p>El lugar donde las ideas cobran vida. Conecta, comparte y crece.</p>
                 
-                <div class="search-section">
-                    <div class="search-box-wrapper">
-                        <i class="ph ph-magnifying-glass"></i>
-                        <input type="text" placeholder="Buscar por creador, categoría o proyecto..." onkeyup="filterProjects(this.value, 'homeProjectsGrid')">
-                    </div>
+                <div class="search-wrapper">
+                    <i class="ph ph-magnifying-glass"></i>
+                    <input type="text" placeholder="Buscar proyectos, categorías o creadores..." onkeyup="renderProjects(this.value)">
                 </div>
-                
-                <div class="hero-buttons">
-                    <button class="btn btn-primary" onclick="handleCreateProjectClick()">Publicar Proyecto <i class="ph ph-arrow-right"></i></button>
-                </div>
+
+                <button class="btn btn-primary" style="padding: 0.8rem 2rem; font-size: 1rem;" onclick="checkAuthAndAct('create')">Publicar Proyecto</button>
             </div>
         </header>
+        
+        <div class="ad-placeholder">PUBLICIDAD GOOGLE ADSENSE</div>
 
-        <div class="ad-container"><div class="ad-placeholder"><span class="ad-label">Sponsors</span><span class="ad-content">Google AdSense</span></div></div>
-
-        <section class="container">
-            <h3 style="margin-bottom: 2rem; font-size: 1.5rem;">Proyectos Destacados</h3>
-            <div id="homeProjectsGrid" class="projects-grid"></div>
-        </section>
+        <div class="container">
+            <div id="home-grid" class="projects-grid"></div>
+        </div>
+        
+        <div class="ad-placeholder">PUBLICIDAD</div>
     </div>
 
     <!-- PÁGINA: DASHBOARD -->
-    <div id="dashboard" class="page">
+    <div id="page-dashboard" class="page">
         <div class="dashboard-header">
-            <div class="container" style="padding: 3rem 0;">
+            <div class="container">
                 <div style="display: flex; justify-content: space-between; align-items: flex-end;">
                     <div style="display: flex; gap: 1.5rem; align-items: center;">
-                         <img id="dashboardAvatar" style="width: 80px; height: 80px; border-radius: 50%; object-fit: cover; border: 4px solid white; box-shadow: 0 4px 10px rgba(0,0,0,0.1);" src="">
-                         <div>
-                             <h2 id="userNameDisplay" style="margin-bottom: 0.25rem;">Usuario</h2>
-                             <p id="userEmailDisplay" style="color: var(--text-muted);">email@ejemplo.com</p>
-                             <button onclick="openEditProfile()" style="font-size: 0.8rem; color: var(--accent); background: none; padding: 0; margin-top: 0.5rem;">Editar perfil</button>
-                         </div>
+                        <img id="dash-avatar" style="width: 80px; height: 80px; border-radius: 50%; background: #eee; object-fit: cover;">
+                        <div>
+                            <h2 id="dash-name" style="margin-bottom: 0;">Usuario</h2>
+                            <p id="dash-email" style="color: var(--text-muted);">usuario@email.com</p>
+                            <button class="btn btn-ghost" style="padding: 0; font-size: 0.85rem; color: var(--accent);" onclick="openModal('profile')">Editar Perfil</button>
+                        </div>
                     </div>
-                    <button class="btn btn-primary" onclick="showPage('create-project')"><i class="ph ph-plus"></i> Nuevo Proyecto</button>
+                    <button class="btn btn-primary" onclick="goToPage('create')"><i class="ph ph-plus"></i> Nuevo Proyecto</button>
+                </div>
+                <div class="profile-stats">
+                    <div class="stat-item"><strong id="stat-projects">0</strong><span>Proyectos</span></div>
+                    <div class="stat-item"><strong id="stat-premium">0</strong><span>Destacados</span></div>
                 </div>
             </div>
         </div>
-
-        <div class="container" style="margin-top: 2rem;">
-             <div class="stats-grid">
-                <div class="stat-card"><h3>Mis Proyectos</h3><div class="value" id="userProjectCount">0</div></div>
-                <div class="stat-card"><h3>Destacados</h3><div class="value" id="userPremiumCount">0</div></div>
-            </div>
-            <h3 style="margin: 2rem 0;">Mi Portfolio</h3>
-            <div id="myProjectsGrid" class="projects-grid"></div>
+        <div class="container">
+            <div class="ad-placeholder">ANUNCIO DASHBOARD</div>
+            <h3 style="margin: 2rem 0;">Mis Proyectos</h3>
+            <div id="dashboard-grid" class="projects-grid"></div>
         </div>
     </div>
 
-    <!-- PÁGINA: CREAR/EDITAR FORMULARIOS (Simplificado visualmente) -->
-    <div id="create-project" class="page">
-        <div class="container" style="padding: 4rem 0;">
-            <div class="form-container">
-                <div style="display:flex; justify-content: space-between; align-items: center; margin-bottom: 2rem;">
-                    <h2>Publicar Proyecto</h2>
-                    <button class="btn btn-ghost" onclick="showPage('dashboard')"><i class="ph ph-x"></i></button>
+    <!-- PÁGINA: DETALLE PROYECTO -->
+    <div id="page-detail" class="page">
+        <div class="container" style="padding-top: 3rem;">
+            <button class="btn btn-outline" onclick="goToPage('home')" style="margin-bottom: 2rem;"><i class="ph ph-arrow-left"></i> Volver</button>
+            
+            <div class="detail-header">
+                <span id="detail-category" style="color: var(--accent); font-weight: 700; font-size: 0.9rem; text-transform: uppercase; letter-spacing: 1px;">CATEGORÍA</span>
+                <h1 id="detail-title" style="font-size: 3rem; margin: 0.5rem 0 1rem;">Título del Proyecto</h1>
+                <div style="display: flex; gap: 2rem; align-items: center; color: var(--text-muted);">
+                    <div id="detail-author-box" style="display: flex; align-items: center; gap: 0.5rem; cursor: pointer;" onclick="goToUserProfile()">
+                        <img id="detail-author-img" style="width: 30px; height: 30px; border-radius: 50%;">
+                        <span id="detail-author-name" style="font-weight: 500; color: var(--text-main);">Autor</span>
+                    </div>
+                    <span id="detail-date">Fecha</span>
+                    <span id="detail-price" style="color: var(--text-main); font-weight: 700; font-size: 1.2rem;">0€</span>
                 </div>
-                <form onsubmit="submitProject(event)">
+            </div>
+
+            <img id="detail-img" class="detail-img">
+            
+            <div style="max-width: 700px; margin: 0 auto; font-size: 1.1rem;">
+                <p id="detail-desc" style="white-space: pre-wrap;">Descripción...</p>
+                <div id="detail-actions" style="margin-top: 3rem; text-align: center;"></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- PÁGINA: PERFIL PÚBLICO -->
+    <div id="page-profile" class="page">
+        <div class="dashboard-header">
+            <div class="container" style="text-align: center;">
+                <img id="pub-avatar" style="width: 100px; height: 100px; border-radius: 50%; margin: 0 auto 1rem; display: block; object-fit: cover; background: #eee;">
+                <h2 id="pub-name">Nombre</h2>
+                <p id="pub-stats" style="color: var(--text-muted);">0 proyectos</p>
+            </div>
+        </div>
+        <div class="container">
+            <div id="pub-grid" class="projects-grid"></div>
+        </div>
+    </div>
+
+    <!-- PÁGINA: CREAR / EDITAR -->
+    <div id="page-form" class="page">
+        <div class="container" style="padding-top: 4rem;">
+            <div class="form-container">
+                <div style="display: flex; justify-content: space-between; margin-bottom: 2rem;">
+                    <h2 id="form-title">Nuevo Proyecto</h2>
+                    <button class="btn btn-ghost" onclick="window.history.back()"><i class="ph ph-x"></i></button>
+                </div>
+                <form id="projectForm">
+                    <input type="hidden" id="pId">
                     <div class="form-group"><label>Título</label><input type="text" id="pTitle" required></div>
                     <div class="form-group"><label>Categoría</label><select id="pCat"><option>Tecnología</option><option>Diseño</option><option>Arte</option><option>Negocios</option></select></div>
-                    <div class="form-group"><label>Descripción</label><textarea id="pDesc" rows="4" required></textarea></div>
+                    <div class="form-group"><label>Descripción</label><textarea id="pDesc" rows="5" required></textarea></div>
                     <div class="form-group"><label>Precio (€)</label><input type="number" id="pPrice" min="0" step="0.01" required></div>
                     <div class="form-group">
-                         <label>Imagen de Portada</label>
-                         <input type="file" id="pImgFile" accept="image/*" onchange="handleImagePreview(this, 'pImgUrl')">
-                         <input type="hidden" id="pImgUrl">
+                        <label>Imagen de Portada</label>
+                        <input type="file" id="pImgFile" accept="image/*" onchange="previewImage(this)">
+                        <input type="hidden" id="pImgBase64">
                     </div>
-                    <div class="form-group"><label>Web del Proyecto (Opcional)</label><input type="url" id="pUrl" placeholder="https://..."></div>
-                    <button type="submit" class="btn btn-primary" style="width: 100%;">Publicar Ahora</button>
+                    <div class="form-group"><label>Enlace Web (Opcional)</label><input type="url" id="pLink" placeholder="https://..."></div>
+                    
+                    <button type="submit" class="btn btn-primary" style="width: 100%; margin-top: 1rem;">Guardar Proyecto</button>
                 </form>
             </div>
         </div>
     </div>
 
-    <!-- MODALES (LOGIN / PREMIUM / PERFIL) -->
-    
-    <!-- Auth Modal -->
-    <div id="authModal" class="modal-overlay">
+    <!-- MODALES -->
+    <div id="modal-auth" class="modal-overlay">
         <div class="modal-card">
-            <button class="close-modal" onclick="closeAuthModal()"><i class="ph ph-x"></i></button>
-            <h2 id="authTitle" style="text-align: center; margin-bottom: 1.5rem;">Bienvenido</h2>
-            <div id="authErrorMsg" class="error-message hidden">Datos incorrectos</div>
+            <button class="close-modal" onclick="closeModal('auth')"><i class="ph ph-x"></i></button>
+            <h2 id="auth-title" style="text-align: center;">Bienvenido</h2>
+            <p id="auth-error" style="color: #ef4444; text-align: center; font-size: 0.9rem; margin: 1rem 0; display: none;">Error</p>
             
-            <form onsubmit="handleAuthSubmit(event)">
-                <div class="form-group hidden" id="nameGroup"><label>Nombre</label><input type="text" id="authName"></div>
-                <div class="form-group hidden" id="avatarGroup"><label>Foto (Opcional)</label><input type="file" id="authAvatarFile" onchange="handleImagePreview(this, 'authAvatarUrl')"><input type="hidden" id="authAvatarUrl"></div>
-                
-                <div class="form-group"><label>Email</label><input type="email" id="authEmail" required></div>
-                <div class="form-group"><label>Contraseña</label><input type="password" id="authPass" required></div>
-                
-                <button type="submit" class="btn btn-primary" style="width: 100%;" id="authSubmitBtn">Continuar</button>
+            <form id="authForm">
+                <div id="signup-fields" class="hidden">
+                    <div class="form-group"><label>Nombre</label><input type="text" id="reg-name"></div>
+                    <div class="form-group"><label>Foto (URL o vacía)</label><input type="url" id="reg-avatar" placeholder="https://..."></div>
+                </div>
+                <div class="form-group"><label>Email</label><input type="email" id="login-email" required></div>
+                <div class="form-group"><label>Contraseña</label><input type="password" id="login-pass" required></div>
+                <button type="submit" class="btn btn-primary" style="width: 100%;">Continuar</button>
             </form>
             
-            <p class="toggle-auth" onclick="toggleAuthMode()" id="authToggleLink" style="cursor:pointer; margin-top: 1rem; text-align: center; color: var(--text-muted); font-size: 0.9rem;">¿No tienes cuenta? <span style="color: var(--accent); font-weight: 600;">Regístrate</span></p>
+            <p style="text-align: center; margin-top: 1.5rem; font-size: 0.9rem; cursor: pointer; color: var(--text-muted);" onclick="toggleAuth()">
+                <span id="auth-switch-text">¿No tienes cuenta? Regístrate</span>
+            </p>
         </div>
     </div>
 
-    <!-- SCRIPT LOGIC -->
+    <!-- MODAL PERFIL -->
+    <div id="modal-profile" class="modal-overlay">
+        <div class="modal-card">
+            <button class="close-modal" onclick="closeModal('profile')"><i class="ph ph-x"></i></button>
+            <h2 style="text-align: center;">Editar Perfil</h2>
+            <form id="profileForm">
+                <div class="form-group"><label>Nombre</label><input type="text" id="edit-name" required></div>
+                <div class="form-group"><label>URL Avatar</label><input type="url" id="edit-avatar"></div>
+                <button type="submit" class="btn btn-primary" style="width: 100%;">Guardar</button>
+            </form>
+            <button onclick="deleteAccount()" class="btn btn-danger" style="width: 100%; margin-top: 1rem;">Borrar Cuenta</button>
+        </div>
+    </div>
+
+    <!-- LOGIC -->
     <script>
-        // *** CONFIGURACIÓN SUPABASE ***
-        const supabaseUrl = 'https://jvshcszolovsnqzkozka.supabase.co';
-        const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imp2c2hjc3pvbG92c25xemtvemthIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjQwMDQ5NDgsImV4cCI6MjA3OTU4MDk0OH0.ty4wwxMhQ8gm1SgweSf9JxcDrvt2IGwKzkH4EQP8ZB4';
-        const supabase = window.supabase ? window.supabase.createClient(supabaseUrl, supabaseKey) : null;
+        // --- CONFIG ---
+        const sbUrl = 'https://jvshcszolovsnqzkozka.supabase.co';
+        const sbKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imp2c2hjc3pvbG92c25xemtvemthIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjQwMDQ5NDgsImV4cCI6MjA3OTU4MDk0OH0.ty4wwxMhQ8gm1SgweSf9JxcDrvt2IGwKzkH4EQP8ZB4';
+        const supabase = window.supabase.createClient(sbUrl, sbKey);
 
+        // --- STATE ---
+        let currentUser = JSON.parse(localStorage.getItem('alex_user'));
         let projects = [];
-        let currentUser = JSON.parse(localStorage.getItem('alex_session')) || null;
-        let isLoginMode = true;
+        let isLogin = true;
 
-        document.addEventListener('DOMContentLoaded', async () => {
-            updateUI();
-            await fetchProjects();
+        // --- INIT ---
+        document.addEventListener('DOMContentLoaded', () => {
+            loadProjects();
+            updateNav();
         });
 
-        // --- CORE DATA FUNCTIONS ---
-        async function fetchProjects() {
-            if (supabase) {
-                // Recuperamos proyectos y sus likes count
-                const { data, error } = await supabase.from('projects').select('*').order('created_at', { ascending: false });
-                if (!error) { projects = data; }
+        // --- NAVIGATION SYSTEM (INSTANT) ---
+        function goToPage(pageId) {
+            document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+            document.getElementById('page-' + pageId).classList.add('active');
+            window.scrollTo(0, 0);
+            
+            if (pageId === 'home') {
+                document.getElementById('backHomeBtn').classList.add('hidden');
+                renderProjects(projects, 'home-grid');
             } else {
-                projects = JSON.parse(localStorage.getItem('alex_projects')) || [];
+                document.getElementById('backHomeBtn').classList.remove('hidden');
             }
-            renderProjects(projects);
+
+            if (pageId === 'dashboard') loadDashboard();
         }
 
-        // --- LIKES SYSTEM ---
-        async function toggleLike(btn, projectId) {
-            if (!currentUser) { showToast("Inicia sesión para dar like", "error"); openAuthModal('login'); return; }
-            
-            // UI Optimista
-            const icon = btn.querySelector('i');
-            const countSpan = btn.querySelector('span');
-            let currentCount = parseInt(countSpan.textContent);
-            const isLiked = btn.classList.contains('liked');
-
-            // Cambiar UI inmediatamente
-            btn.classList.toggle('liked');
-            icon.className = isLiked ? 'ph ph-heart' : 'ph-fill ph-heart';
-            countSpan.textContent = isLiked ? currentCount - 1 : currentCount + 1;
-
-            if (supabase) {
-                // Lógica Real Base de Datos
-                try {
-                    if (!isLiked) {
-                        // Dar like
-                        await supabase.from('project_likes').insert([{ project_id: projectId, user_email: currentUser.email }]);
-                        await supabase.rpc('increment_likes', { row_id: projectId }); // Asume que creaste esta función RPC, sino usa update normal
-                        // Fallback si no hay RPC: update manual
-                         const { data: p } = await supabase.from('projects').select('likes_count').eq('id', projectId).single();
-                         await supabase.from('projects').update({ likes_count: (p.likes_count || 0) + 1 }).eq('id', projectId);
-                    } else {
-                        // Quitar like
-                        await supabase.from('project_likes').delete().match({ project_id: projectId, user_email: currentUser.email });
-                        const { data: p } = await supabase.from('projects').select('likes_count').eq('id', projectId).single();
-                        await supabase.from('projects').update({ likes_count: Math.max(0, (p.likes_count || 0) - 1) }).eq('id', projectId);
-                    }
-                } catch (e) {
-                    console.error("Error likes", e);
-                }
+        function updateNav() {
+            if (currentUser) {
+                document.getElementById('authBtns').classList.add('hidden');
+                document.getElementById('userBtns').classList.remove('hidden');
+            } else {
+                document.getElementById('authBtns').classList.remove('hidden');
+                document.getElementById('userBtns').classList.add('hidden');
             }
         }
 
-        // --- RENDERIZADO ---
-        function renderProjects(list, gridId = 'homeProjectsGrid') {
-            const grid = document.getElementById(gridId);
-            if (!grid) return;
-            
-            if (list.length === 0) {
-                grid.innerHTML = '<div style="grid-column: 1/-1; text-align: center; padding: 4rem; color: var(--text-muted);">No hay proyectos para mostrar aún.</div>';
-                return;
+        // --- DATA & RENDER ---
+        async function loadProjects() {
+            const { data, error } = await supabase.from('projects').select('*').order('created_at', { ascending: false });
+            if (!error) {
+                projects = data;
+                renderProjects(projects, 'home-grid');
             }
+        }
 
-            grid.innerHTML = list.map(p => {
-                // Normalizar datos
-                const img = p.image_url || p.imageUrl || null;
-                const title = p.title;
-                const cat = p.category;
-                const desc = p.description;
-                const price = p.price;
-                const author = p.author_name || p.authorName || 'Anónimo';
-                const avatar = p.author_avatar || p.authorAvatar || null;
-                const isPrem = p.is_premium || p.isPremium;
-                const likes = p.likes_count || 0;
-
-                let imgHtml = img 
-                    ? `<div class="project-image-container"><img src="${img}" class="project-image" alt="${title}"></div>`
-                    : `<div class="project-image-container"><div class="project-image-placeholder"><i class="ph ph-cube"></i></div></div>`;
+        function renderProjects(list, containerId) {
+            const container = document.getElementById(containerId);
+            if (!container) return;
+            container.innerHTML = list.map(p => {
+                const img = p.image_url || null;
+                const avatar = p.author_avatar || 'https://ui-avatars.com/api/?name=' + p.author_name;
                 
-                let avatarHtml = avatar 
-                    ? `<img src="${avatar}" class="author-avatar">`
-                    : `<div class="author-avatar" style="display:flex;align-items:center;justify-content:center;font-weight:700;font-size:0.8rem;color:var(--text-muted);">${author.charAt(0)}</div>`;
-
                 return `
-                <article class="project-card ${isPrem ? 'is-premium' : ''}">
-                    ${imgHtml}
-                    <div class="card-content">
-                        <span class="card-category">${cat}</span>
-                        <h3 class="card-title">${title}</h3>
-                        <p class="card-desc">${desc}</p>
-                        
-                        <div class="card-footer">
-                            <div class="author-info">
-                                ${avatarHtml}
-                                <span class="author-name">${author}</span>
-                            </div>
-                            <button class="like-btn" onclick="toggleLike(this, ${p.id})">
-                                <i class="ph ph-heart"></i>
-                                <span>${likes}</span>
-                            </button>
-                        </div>
-                        ${isPrem ? '<div class="premium-badge" style="margin-top:1rem;"><i class="ph-fill ph-star"></i> Destacado</div>' : ''}
+                <div class="project-card ${p.is_premium ? 'is-premium' : ''}">
+                    ${p.is_premium ? '<div class="premium-badge">✨ Destacado</div>' : ''}
+                    <div class="project-image-container">
+                        ${img ? `<img src="${img}" class="project-image">` : `<div class="project-image-placeholder"><i class="ph ph-image"></i></div>`}
                     </div>
-                </article>
-                `;
+                    <div class="card-content">
+                        <span class="card-category">${p.category}</span>
+                        <h3 class="card-title">${p.title}</h3>
+                        <p class="card-desc">${p.description}</p>
+                        
+                        <div style="margin-top:auto;">
+                            <button class="btn btn-outline" style="width:100%; justify-content:center; margin-bottom:1rem;" onclick="openProject(${p.id})">Ver Detalles</button>
+                            <div class="card-footer">
+                                <div class="author-row" onclick="openPublicProfile('${p.author_email}')">
+                                    <img src="${avatar}">
+                                    <span>${p.author_name}</span>
+                                </div>
+                                <button class="like-btn" onclick="handleLike(this, ${p.id})">
+                                    <i class="ph ph-heart"></i> <span>${p.likes_count || 0}</span>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>`;
             }).join('');
         }
 
-        // --- HELPERS DE IMAGEN ---
-        function handleImagePreview(input, outputId) {
-            const file = input.files[0];
-            if (file) {
-                const reader = new FileReader();
-                reader.onload = (e) => {
-                    document.getElementById(outputId).value = e.target.result;
-                };
-                reader.readAsDataURL(file);
-            }
-        }
+        // --- ACTIONS ---
+        function openProject(id) {
+            const p = projects.find(x => x.id === id);
+            if (!p) return;
 
-        // --- AUTH & NAVIGATION ---
-        function updateUI() {
-            const authBtns = document.getElementById('authButtons');
-            const userMenu = document.getElementById('userMenu');
-            const backHome = document.getElementById('backHomeBtn');
+            document.getElementById('detail-category').textContent = p.category;
+            document.getElementById('detail-title').textContent = p.title;
+            document.getElementById('detail-desc').textContent = p.description;
+            document.getElementById('detail-price').textContent = p.price + '€';
+            document.getElementById('detail-date').textContent = new Date(p.created_at).toLocaleDateString();
             
-            if (currentUser) {
-                authBtns.classList.add('hidden');
-                userMenu.classList.remove('hidden');
+            // Autor
+            document.getElementById('detail-author-name').textContent = p.author_name;
+            document.getElementById('detail-author-img').src = p.author_avatar || 'https://ui-avatars.com/api/?name=' + p.author_name;
+            document.getElementById('detail-author-box').onclick = () => openPublicProfile(p.author_email);
+
+            // Imagen
+            const imgContainer = document.getElementById('detail-img');
+            if (p.image_url) {
+                imgContainer.src = p.image_url;
+                imgContainer.style.display = 'block';
             } else {
-                authBtns.classList.remove('hidden');
-                userMenu.classList.add('hidden');
+                imgContainer.style.display = 'none';
             }
-            
-            // Mostrar botón Inicio si no estamos en home
-            const isHome = document.getElementById('home').classList.contains('active');
-            if (isHome) backHome.classList.add('hidden');
-            else backHome.classList.remove('hidden');
-        }
 
-        function handleAuthSubmit(e) {
-            e.preventDefault();
-            const btn = document.getElementById('authSubmitBtn');
-            btn.textContent = 'Procesando...';
-            
-            setTimeout(async () => {
-                const email = document.getElementById('authEmail').value.toLowerCase();
-                const pass = document.getElementById('authPass').value;
-                
-                // Simulación Auth Local (Para producción usar supabase.auth)
-                let users = JSON.parse(localStorage.getItem('alex_users')) || [];
-                
-                if (isLoginMode) {
-                    const user = users.find(u => u.email === email && u.pass === pass);
-                    if (user) {
-                        currentUser = user;
-                        localStorage.setItem('alex_session', JSON.stringify(user));
-                        closeAuthModal();
-                        updateUI();
-                        showPage('dashboard');
-                        showToast(`Bienvenido de nuevo, ${user.name}`);
-                    } else {
-                        document.getElementById('authErrorMsg').classList.remove('hidden');
-                    }
-                } else {
-                    // Registro
-                    const name = document.getElementById('authName').value;
-                    const avatar = document.getElementById('authAvatarUrl').value;
-                    const newUser = { name, email, pass, avatar };
-                    users.push(newUser);
-                    localStorage.setItem('alex_users', JSON.stringify(users));
-                    currentUser = newUser;
-                    localStorage.setItem('alex_session', JSON.stringify(newUser));
-                    closeAuthModal();
-                    updateUI();
-                    showPage('dashboard');
-                    showToast('¡Cuenta creada con éxito!');
-                }
-                btn.textContent = isLoginMode ? 'Ingresar' : 'Registrarse';
-            }, 800);
-        }
-
-        function handleLogout() {
-            localStorage.removeItem('alex_session');
-            currentUser = null;
-            updateUI();
-            showPage('home');
-            showToast('Has cerrado sesión');
-        }
-
-        function showPage(pageId) {
-            document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
-            document.getElementById(pageId).classList.add('active');
-            window.scrollTo(0,0);
-            
-            if(pageId === 'dashboard') updateDashboard();
-            updateUI(); // Actualizar visibilidad de botones
-        }
-
-        function openAuthModal(mode) {
-            isLoginMode = (mode === 'login');
-            const title = document.getElementById('authTitle');
-            const submitBtn = document.getElementById('authSubmitBtn');
-            const toggleText = document.getElementById('authToggleLink');
-            const nameGroup = document.getElementById('nameGroup');
-            const avatarGroup = document.getElementById('avatarGroup');
-            
-            document.getElementById('authErrorMsg').classList.add('hidden');
-            document.getElementById('authModal').classList.add('active');
-            
-            if(isLoginMode) {
-                title.textContent = "Bienvenido de nuevo";
-                submitBtn.textContent = "Ingresar";
-                toggleText.textContent = "Crear cuenta nueva";
-                nameGroup.classList.add('hidden');
-                avatarGroup.classList.add('hidden');
-                document.getElementById('authName').removeAttribute('required');
-            } else {
-                title.textContent = "Únete a la comunidad";
-                submitBtn.textContent = "Crear Cuenta";
-                toggleText.textContent = "Ya tengo cuenta";
-                nameGroup.classList.remove('hidden');
-                avatarGroup.classList.remove('hidden');
-                document.getElementById('authName').setAttribute('required', 'true');
+            // Botones Acción
+            const actionBox = document.getElementById('detail-actions');
+            let btns = '';
+            if (p.business_url) {
+                btns += `<a href="${p.business_url}" target="_blank" class="btn btn-primary" style="padding:1rem 2rem; font-size:1.1rem;">Visitar Sitio Web <i class="ph ph-arrow-up-right"></i></a>`;
             }
-        }
-        
-        function closeAuthModal() { document.getElementById('authModal').classList.remove('active'); }
-        function toggleAuthMode() { openAuthModal(isLoginMode ? 'signup' : 'login'); }
+            actionBox.innerHTML = btns;
 
-        function showToast(msg, type='success') {
-            const toast = document.createElement('div');
-            toast.className = 'toast';
-            toast.style.borderLeft = type === 'error' ? '4px solid #ef4444' : '4px solid #10b981';
-            toast.textContent = msg;
-            document.getElementById('toast-container').appendChild(toast);
-            setTimeout(() => toast.remove(), 3000);
+            goToPage('detail');
         }
 
-        // --- PROYECTOS CRUD ---
-        async function submitProject(e) {
-            e.preventDefault();
+        function openPublicProfile(email) {
+            // Si es el propio usuario, ir a dashboard
+            if (currentUser && currentUser.email === email) {
+                goToPage('dashboard');
+                return;
+            }
+
+            const userProjects = projects.filter(p => p.author_email === email);
+            if (userProjects.length === 0) return;
+            
+            const author = userProjects[0];
+            document.getElementById('pub-name').textContent = author.author_name;
+            document.getElementById('pub-avatar').src = author.author_avatar || 'https://ui-avatars.com/api/?name=' + author.author_name;
+            document.getElementById('pub-stats').textContent = userProjects.length + ' Proyectos publicados';
+            
+            renderProjects(userProjects, 'pub-grid');
+            goToPage('profile');
+        }
+
+        // --- DASHBOARD & CRUD ---
+        function loadDashboard() {
             if (!currentUser) return;
             
-            const newProject = {
+            document.getElementById('dash-name').textContent = currentUser.name;
+            document.getElementById('dash-email').textContent = currentUser.email;
+            document.getElementById('dash-avatar').src = currentUser.avatar || 'https://ui-avatars.com/api/?name=' + currentUser.name;
+            
+            const myProjects = projects.filter(p => p.author_email === currentUser.email);
+            document.getElementById('stat-projects').textContent = myProjects.length;
+            document.getElementById('stat-premium').textContent = myProjects.filter(p => p.is_premium).length;
+
+            // Renderizar con botones de admin
+            const grid = document.getElementById('dashboard-grid');
+            grid.innerHTML = myProjects.map(p => `
+                <div class="project-card">
+                    <div class="project-image-container">
+                        ${p.image_url ? `<img src="${p.image_url}" class="project-image">` : ''}
+                    </div>
+                    <div class="card-content">
+                        <h3>${p.title}</h3>
+                        <div style="margin-top:auto; display:flex; gap:0.5rem; flex-wrap:wrap;">
+                            <button class="btn btn-outline" onclick="editProject(${p.id})" style="flex:1;">Editar</button>
+                            <button class="btn btn-delete" onclick="deleteProject(${p.id})"><i class="ph ph-trash"></i></button>
+                            ${!p.is_premium 
+                                ? `<button class="btn btn-premium" onclick="buyPremium(${p.id})" style="width:100%;">Destacar (9€)</button>` 
+                                : `<button class="btn btn-ghost" onclick="cancelPremium(${p.id})" style="width:100%; color:#B45309; background:#FFFBEB;">Cancelar Destacado</button>`
+                            }
+                        </div>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        function checkAuthAndAct(action) {
+            if (currentUser) {
+                if (action === 'create') {
+                    // Limpiar form
+                    document.getElementById('projectForm').reset();
+                    document.getElementById('pId').value = '';
+                    document.getElementById('form-title').textContent = 'Publicar Proyecto';
+                    goToPage('form');
+                }
+            } else {
+                showToast('Debes iniciar sesión', 'error');
+                openModal('auth', 'signup');
+            }
+        }
+
+        // Guardar Proyecto (Crear o Editar)
+        document.getElementById('projectForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const id = document.getElementById('pId').value;
+            
+            const projectData = {
                 title: document.getElementById('pTitle').value,
-                description: document.getElementById('pDesc').value,
                 category: document.getElementById('pCat').value,
+                description: document.getElementById('pDesc').value,
                 price: document.getElementById('pPrice').value,
-                image_url: document.getElementById('pImgUrl').value,
+                image_url: document.getElementById('pImgBase64').value,
                 business_url: document.getElementById('pUrl').value,
                 author_name: currentUser.name,
                 author_email: currentUser.email,
                 author_avatar: currentUser.avatar
             };
 
-            if(supabase) {
-                await supabase.from('projects').insert([newProject]);
-                await fetchProjects(); // Recargar
+            if (id) {
+                // Editar
+                await supabase.from('projects').update(projectData).eq('id', id);
+                showToast('Proyecto actualizado');
+            } else {
+                // Crear
+                await supabase.from('projects').insert([projectData]);
+                showToast('Proyecto publicado con éxito');
             }
-            showPage('home');
-            showToast('¡Proyecto publicado!');
-        }
-        
-        function filterProjects(val, gridId) {
-            const term = val.toLowerCase();
-            const filtered = projects.filter(p => 
-                p.title.toLowerCase().includes(term) || 
-                (p.author_name || '').toLowerCase().includes(term) ||
-                (p.category || '').toLowerCase().includes(term)
-            );
-            renderProjects(filtered, gridId);
+            
+            await loadProjects();
+            goToPage('dashboard');
+        });
+
+        function editProject(id) {
+            const p = projects.find(x => x.id === id);
+            document.getElementById('pId').value = p.id;
+            document.getElementById('pTitle').value = p.title;
+            document.getElementById('pCat').value = p.category;
+            document.getElementById('pDesc').value = p.description;
+            document.getElementById('pPrice').value = p.price;
+            document.getElementById('pImgBase64').value = p.image_url || '';
+            document.getElementById('pUrl').value = p.business_url || '';
+            document.getElementById('form-title').textContent = 'Editar Proyecto';
+            goToPage('form');
         }
 
-        function handleCreateProjectClick() {
-            if (currentUser) showPage('create-project');
-            else openAuthModal('signup');
+        async function deleteProject(id) {
+            if(confirm('¿Eliminar proyecto para siempre?')) {
+                await supabase.from('projects').delete().eq('id', id);
+                await loadProjects();
+                loadDashboard();
+                showToast('Eliminado correctamente');
+            }
+        }
+
+        // --- PREMIUM ---
+        async function buyPremium(id) {
+            const btn = event.target;
+            btn.textContent = 'Procesando...';
+            setTimeout(async () => {
+                await supabase.from('projects').update({ is_premium: true }).eq('id', id);
+                await loadProjects();
+                loadDashboard();
+                showToast('¡Proyecto Destacado!');
+            }, 1500);
+        }
+        
+        async function cancelPremium(id) {
+            await supabase.from('projects').update({ is_premium: false }).eq('id', id);
+            await loadProjects();
+            loadDashboard();
+            showToast('Destacado cancelado');
+        }
+
+        // --- AUTH SYSTEM ---
+        function openModal(type, mode) {
+            document.getElementById(`modal-${type}`).classList.add('active');
+            if (type === 'auth') {
+                isLogin = (mode === 'login');
+                toggleAuthUI();
+            }
+        }
+        
+        function closeModal(type) { document.getElementById(`modal-${type}`).classList.remove('active'); }
+        
+        function toggleAuth() { isLogin = !isLogin; toggleAuthUI(); }
+        
+        function toggleAuthUI() {
+            const title = document.getElementById('auth-title');
+            const switchText = document.getElementById('auth-switch-text');
+            const signupFields = document.getElementById('signup-fields');
+            
+            if (isLogin) {
+                title.textContent = 'Bienvenido de nuevo';
+                switchText.textContent = '¿No tienes cuenta? Regístrate';
+                signupFields.classList.add('hidden');
+            } else {
+                title.textContent = 'Crear cuenta';
+                switchText.textContent = '¿Ya tienes cuenta? Ingresa';
+                signupFields.classList.remove('hidden');
+            }
+        }
+
+        document.getElementById('authForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const email = document.getElementById('login-email').value.toLowerCase();
+            const pass = document.getElementById('login-pass').value;
+            
+            // Simulación Auth Local (Suficiente para esta etapa)
+            // En producción real usarías supabase.auth.signUp()
+            let users = JSON.parse(localStorage.getItem('alex_users')) || [];
+            
+            if (isLogin) {
+                const user = users.find(u => u.email === email && u.pass === pass);
+                if (user) {
+                    completeLogin(user);
+                } else {
+                    document.getElementById('auth-error').style.display = 'block';
+                    document.getElementById('auth-error').textContent = 'Credenciales incorrectas';
+                }
+            } else {
+                const name = document.getElementById('reg-name').value;
+                if(users.find(u => u.email === email)) {
+                     alert('Email ya registrado'); return;
+                }
+                const newUser = { email, pass, name, avatar: '' };
+                users.push(newUser);
+                localStorage.setItem('alex_users', JSON.stringify(users));
+                completeLogin(newUser);
+            }
+        });
+
+        function completeLogin(user) {
+            currentUser = user;
+            localStorage.setItem('alex_user', JSON.stringify(user));
+            closeModal('auth');
+            updateNav();
+            showToast(`Hola, ${user.name}`);
+            if(document.getElementById('page-dashboard').classList.contains('active')) loadDashboard();
+        }
+
+        function handleLogout() {
+            localStorage.removeItem('alex_user');
+            currentUser = null;
+            updateNav();
+            goToPage('home');
+            showToast('Sesión cerrada');
+        }
+
+        // --- PERFIL ---
+        function openEditProfile() {
+            document.getElementById('edit-name').value = currentUser.name;
+            document.getElementById('edit-avatar').value = currentUser.avatar || '';
+            openModal('profile');
+        }
+
+        document.getElementById('profileForm').addEventListener('submit', (e) => {
+            e.preventDefault();
+            currentUser.name = document.getElementById('edit-name').value;
+            currentUser.avatar = document.getElementById('edit-avatar').value;
+            
+            // Actualizar LocalStorage
+            localStorage.setItem('alex_user', JSON.stringify(currentUser));
+            let users = JSON.parse(localStorage.getItem('alex_users'));
+            const idx = users.findIndex(u => u.email === currentUser.email);
+            if(idx !== -1) { users[idx] = {...users[idx], ...currentUser}; localStorage.setItem('alex_users', JSON.stringify(users)); }
+            
+            closeModal('profile');
+            loadDashboard(); // Refrescar UI
+            showToast('Perfil actualizado');
+        });
+
+        function deleteAccount() {
+            if(!confirm('¿Seguro? Se borrarán todos tus proyectos.')) return;
+            // Borrar proyectos de BD
+            supabase.from('projects').delete().eq('author_email', currentUser.email).then(() => {
+                 // Borrar usuario local
+                let users = JSON.parse(localStorage.getItem('alex_users'));
+                users = users.filter(u => u.email !== currentUser.email);
+                localStorage.setItem('alex_users', JSON.stringify(users));
+                handleLogout();
+                closeModal('profile');
+            });
+        }
+
+        // --- UTILS ---
+        function previewImage(input, targetId) {
+            if(input.files && input.files[0]) {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    // Si targetId es un input hidden, guarda el valor
+                    const target = document.getElementById(targetId);
+                    if(target) target.value = e.target.result;
+                }
+                reader.readAsDataURL(input.files[0]);
+            }
+        }
+
+        function showToast(msg, type) {
+            const t = document.createElement('div');
+            t.className = 'toast';
+            if(type === 'error') t.style.borderLeft = '4px solid #ef4444';
+            else t.style.borderLeft = '4px solid #10b981';
+            t.textContent = msg;
+            document.getElementById('toast-container').appendChild(t);
+            setTimeout(() => t.remove(), 3000);
+        }
+
+        // --- LIKES ---
+        async function handleLike(btn, id) {
+            if(!currentUser) { openModal('auth', 'login'); return; }
+            
+            const span = btn.querySelector('span');
+            const icon = btn.querySelector('i');
+            let count = parseInt(span.textContent);
+            
+            // Optimistic UI
+            if(btn.classList.contains('liked')) {
+                btn.classList.remove('liked');
+                icon.className = 'ph ph-heart';
+                span.textContent = count - 1;
+                await supabase.rpc('decrement_likes', {row_id: id});
+            } else {
+                btn.classList.add('liked');
+                icon.className = 'ph-fill ph-heart';
+                span.textContent = count + 1;
+                await supabase.rpc('increment_likes', {row_id: id});
+            }
         }
 
     </script>
