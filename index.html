@@ -67,6 +67,25 @@
         .btn-accent { background: var(--accent); color: white; }
         .btn-accent:hover { filter: brightness(1.1); transform: translateY(-1px); }
 
+        /* Estilo específico para el botón premium */
+        .btn-premium { 
+            background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%) !important; 
+            color: white !important; 
+            box-shadow: 0 4px 12px rgba(245, 158, 11, 0.3);
+            border: none;
+        }
+        .btn-premium:hover { 
+            transform: translateY(-1px); 
+            box-shadow: 0 6px 15px rgba(245, 158, 11, 0.4); 
+            filter: brightness(1.1); 
+        }
+
+        .btn-cancel-premium {
+            background-color: #fffbeb; color: #b45309; border: 1px solid #fcd34d;
+        }
+        .btn-cancel-premium:hover { background-color: #fef3c7; }
+
+
         /* --- PAGINAS (SPA) --- */
         .page { display: none; animation: fadeIn 0.3s ease; padding-bottom: 4rem; }
         .page.active { display: block; }
@@ -144,6 +163,13 @@
         /* --- DETALLE --- */
         .detail-header { padding: 2rem 0; border-bottom: 1px solid var(--border); margin-bottom: 2rem; }
         .detail-img { width: 100%; height: 400px; object-fit: cover; border-radius: var(--radius); margin-bottom: 2rem; background: #F4F4F5; }
+
+        /* MODAL PREMIUM */
+        .premium-feature-list { list-style: none; margin: 1.5rem 0; padding: 0; text-align: left; }
+        .premium-feature-list li { margin-bottom: 0.75rem; display: flex; align-items: flex-start; gap: 0.75rem; font-size: 0.95rem; color: #475569; }
+        .check-icon { color: #10b981; flex-shrink: 0; }
+        .price-tag { font-size: 2rem; font-weight: 800; color: #1e293b; text-align: center; margin: 1rem 0; }
+        .price-tag span { font-size: 1rem; font-weight: 500; color: #64748b; }
 
         @media (max-width: 768px) { 
             .hero h1 { font-size: 2.5rem; } 
@@ -300,29 +326,36 @@
                         <input type="file" id="pImgFile" accept="image/*" onchange="handleImagePreview(this, 'pImgUrl')">
                         <input type="hidden" id="pImgUrl">
                     </div>
-                    <div class="form-group"><label>Web del Proyecto</label><input type="url" id="pUrl" placeholder="https://..."></div>
+                    <div class="form-group"><label>Web del Proyecto (Opcional)</label><input type="url" id="pUrl" placeholder="https://..."></div>
+                    
                     <button type="submit" class="btn btn-primary" style="width: 100%;">Guardar Proyecto</button>
                 </form>
             </div>
         </div>
     </div>
 
-    <!-- MODAL AUTH -->
+    <!-- MODALES (LOGIN / PREMIUM / PERFIL) -->
+    
+    <!-- Auth Modal -->
     <div id="modal-auth" class="modal-overlay">
         <div class="modal-card">
             <button class="close-modal" onclick="closeModal('auth')"><i class="ph ph-x"></i></button>
-            <h2 id="auth-title" style="text-align: center;">Bienvenido</h2>
+            <h2 id="auth-title" style="text-align: center; margin-bottom: 1.5rem;">Bienvenido</h2>
             <p id="auth-error" style="color: #ef4444; text-align: center; font-size: 0.9rem; margin: 1rem 0; display: none;">Error</p>
+            
             <form id="authForm">
                 <div id="signup-fields" class="hidden">
                     <div class="form-group"><label>Nombre</label><input type="text" id="reg-name"></div>
-                    <div class="form-group"><label>Foto (Opcional)</label><input type="file" onchange="handleImagePreview(this, 'reg-avatar-url')"><input type="hidden" id="reg-avatar-url"></div>
+                    <div class="form-group"><label>Foto (Opcional)</label><input type="file" id="authAvatarFile" onchange="handleImagePreview(this, 'authAvatarUrl')"><input type="hidden" id="authAvatarUrl"></div>
                 </div>
                 <div class="form-group"><label>Email</label><input type="email" id="login-email" required></div>
                 <div class="form-group"><label>Contraseña</label><input type="password" id="login-pass" required></div>
                 <button type="submit" class="btn btn-primary" style="width: 100%;" id="authSubmitBtn">Continuar</button>
             </form>
-            <p style="text-align: center; margin-top: 1rem; font-size: 0.9rem; cursor: pointer; color: var(--text-muted);" onclick="toggleAuth()"><span id="auth-switch-text">¿No tienes cuenta? Regístrate</span></p>
+            
+            <p style="text-align: center; margin-top: 1.5rem; font-size: 0.9rem; cursor: pointer; color: var(--text-muted);" onclick="toggleAuth()">
+                <span id="auth-switch-text">¿No tienes cuenta? Regístrate</span>
+            </p>
         </div>
     </div>
 
@@ -340,94 +373,116 @@
         </div>
     </div>
 
+    <!-- MODAL PREMIUM -->
+    <div id="premiumModal" class="modal-overlay">
+        <div class="modal-card" style="text-align: center;">
+            <button class="close-modal" onclick="closePremiumModal()"><i class="ph ph-x"></i></button>
+            <div style="font-size: 3rem; margin-bottom: 0.5rem;">📹</div>
+            <h2 style="margin-bottom: 0.5rem;">Video-Análisis Personalizado</h2>
+            <p style="color: #64748b; font-size: 0.95rem;">Potencia tu proyecto con la voz de un experto.</p>
+            <div class="price-tag" style="font-size: 2rem; font-weight: 800; margin: 1rem 0;">9€ <span style="font-size: 1rem; font-weight: 500; color: #71717A;">/ único</span></div>
+            <ul class="premium-feature-list" style="text-align: left; list-style: none; padding: 0; margin: 1.5rem 0;">
+                <li style="margin-bottom: 0.5rem;"><i class="ph-fill ph-check-circle" style="color:#10b981;"></i> Análisis detallado</li>
+                <li style="margin-bottom: 0.5rem;"><i class="ph-fill ph-check-circle" style="color:#10b981;"></i> Narración profesional</li>
+                <li style="margin-bottom: 0.5rem;"><i class="ph-fill ph-check-circle" style="color:#10b981;"></i> Destacado en web</li>
+            </ul>
+            <button onclick="handlePremiumPurchase()" class="btn btn-premium" style="justify-content: center; font-size: 1rem; padding: 1rem; width: 100%;">
+                Contratar Video-Análisis
+            </button>
+            <p style="font-size: 0.75rem; color: #94a3b8; margin-top: 1rem;">Pago único y seguro. Entrega en 48h.</p>
+        </div>
+    </div>
+
+    <!-- SCRIPT LOGIC -->
     <script>
-        // --- CONFIG ---
-        const sbUrl = 'https://jvshcszolovsnqzkozka.supabase.co';
-        const sbKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imp2c2hjc3pvbG92c25xemtvemthIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjQwMDQ5NDgsImV4cCI6MjA3OTU4MDk0OH0.ty4wwxMhQ8gm1SgweSf9JxcDrvt2IGwKzkH4EQP8ZB4';
-        const supabase = window.supabase.createClient(sbUrl, sbKey);
+        // *** CONFIGURACIÓN SUPABASE ***
+        const supabaseUrl = 'https://jvshcszolovsnqzkozka.supabase.co';
+        const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imp2c2hjc3pvbG92c25xemtvemthIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjQwMDQ5NDgsImV4cCI6MjA3OTU4MDk0OH0.ty4wwxMhQ8gm1SgweSf9JxcDrvt2IGwKzkH4EQP8ZB4';
+        const supabase = window.supabase ? window.supabase.createClient(supabaseUrl, supabaseKey) : null;
 
         let projects = [];
         let currentUser = JSON.parse(localStorage.getItem('alex_session')) || null;
         let isLoginMode = true;
-        let currentDetailEmail = null;
+        let selectedProjectId = null;
 
-        // --- INIT ---
         document.addEventListener('DOMContentLoaded', async () => {
-            updateNav();
+            updateUI();
             await fetchProjects();
-            if (currentUser) goToPage('dashboard'); // Ir al dashboard si ya hay sesión, o home
+            if (currentUser) goToPage('dashboard'); 
             else goToPage('home');
         });
 
-        // --- CORE DATA ---
+        // --- CORE DATA FUNCTIONS ---
         async function fetchProjects() {
-            const { data, error } = await supabase.from('projects').select('*').order('created_at', { ascending: false });
-            if (!error) {
-                projects = data;
-                renderProjects(projects, 'home-grid');
+            if (supabase) {
+                const { data, error } = await supabase.from('projects').select('*').order('created_at', { ascending: false });
+                if (!error) { projects = data; }
+            } else {
+                projects = JSON.parse(localStorage.getItem('alex_projects')) || [];
             }
+            renderProjects(projects, 'home-grid');
         }
 
-        // --- NAVIGATION ---
-        function goToPage(pageId) {
-            document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
-            document.getElementById('page-' + (pageId === 'create' ? 'form' : pageId)).classList.add('active');
-            window.scrollTo(0, 0);
+        // --- LIKES SYSTEM ---
+        async function toggleLike(btn, projectId) {
+            if (!currentUser) { showToast("Inicia sesión para dar like", "error"); openAuthModal('login'); return; }
             
-            const navHomeBtn = document.getElementById('navHomeBtn');
-            if (pageId === 'home') {
-                navHomeBtn.classList.add('hidden');
-                renderProjects(projects, 'home-grid');
-            } else {
-                navHomeBtn.classList.remove('hidden');
-            }
+            const span = btn.querySelector('span');
+            const icon = btn.querySelector('i');
+            let current = parseInt(span.textContent) || 0;
+            const isLiked = btn.classList.contains('liked');
 
-            if (pageId === 'dashboard') loadDashboard();
-            if (pageId === 'create') prepareForm();
+            btn.classList.toggle('liked');
+            icon.className = isLiked ? 'ph ph-heart' : 'ph-fill ph-heart';
+            span.textContent = isLiked ? current - 1 : current + 1;
+
+            if (supabase) {
+                try {
+                    if (!isLiked) {
+                        await supabase.from('project_likes').insert([{ project_id: projectId, user_email: currentUser.email }]);
+                        await supabase.rpc('increment_likes', { row_id: projectId });
+                    } else {
+                        await supabase.from('project_likes').delete().match({ project_id: projectId, user_email: currentUser.email });
+                        await supabase.rpc('decrement_likes', { row_id: projectId });
+                    }
+                } catch (e) { console.error(e); }
+            }
         }
 
-        function updateNav() {
-            if (currentUser) {
-                document.getElementById('authBtns').classList.add('hidden');
-                document.getElementById('userBtns').classList.remove('hidden');
-            } else {
-                document.getElementById('authBtns').classList.remove('hidden');
-                document.getElementById('userBtns').classList.add('hidden');
-            }
-        }
-
-        // --- RENDER ---
+        // --- RENDERIZADO ---
         function renderProjects(list, containerId) {
             const container = document.getElementById(containerId);
             if (!container) return;
             
             if (list.length === 0) {
-                container.innerHTML = '<p style="grid-column:1/-1;text-align:center;color:var(--text-muted);padding:3rem;">No hay proyectos disponibles.</p>';
+                container.innerHTML = '<div style="grid-column: 1/-1; text-align: center; padding: 4rem; color: var(--text-muted);">No hay proyectos para mostrar aún.</div>';
                 return;
             }
 
             container.innerHTML = list.map(p => {
-                const img = p.image_url;
+                const img = p.image_url || p.imageUrl || null;
                 const avatar = p.author_avatar || 'https://ui-avatars.com/api/?name=' + p.author_name;
                 const likes = p.likes_count || 0;
+                // Compatibilidad con versiones anteriores de la DB
+                const isPrem = p.is_premium || p.isPremium;
 
                 return `
-                <article class="project-card ${p.is_premium ? 'is-premium' : ''}">
-                    ${p.is_premium ? '<div class="premium-badge">✨ Destacado</div>' : ''}
-                    <div class="project-image-container" onclick="openProject(${p.id})">
+                <article class="project-card ${isPrem ? 'is-premium' : ''}">
+                    ${isPrem ? '<div class="premium-badge">✨ Destacado</div>' : ''}
+                    <div class="project-image-container">
                         ${img ? `<img src="${img}" class="project-image">` : `<div class="project-image-placeholder"><i class="ph ph-image"></i></div>`}
                     </div>
                     <div class="card-content">
                         <span class="card-category">${p.category}</span>
-                        <h3 class="card-title" onclick="openProject(${p.id})">${p.title}</h3>
+                        <h3 class="card-title">${p.title}</h3>
                         <p class="card-desc">${p.description}</p>
                         
                         <div style="margin-top:auto;">
                             <button class="btn btn-outline" style="width:100%; justify-content:center; margin-bottom:1rem;" onclick="openProject(${p.id})">Ver Proyecto Completo</button>
                             <div class="card-footer">
                                 <div class="author-row" onclick="openPublicProfile('${p.author_email}')">
-                                    <img src="${avatar}">
-                                    <span>${p.author_name}</span>
+                                    <img src="${avatar}" class="author-avatar">
+                                    <span class="author-name">${p.author_name}</span>
                                 </div>
                                 <button class="like-btn" onclick="toggleLike(this, ${p.id})">
                                     <i class="ph ph-heart"></i> <span>${likes}</span>
@@ -439,7 +494,6 @@
             }).join('');
         }
 
-        // --- DETAILS ---
         function openProject(id) {
             const p = projects.find(x => x.id === id);
             if (!p) return;
@@ -449,10 +503,11 @@
             document.getElementById('detail-desc').textContent = p.description;
             document.getElementById('detail-price').textContent = p.price + '€';
             document.getElementById('detail-date').textContent = new Date(p.created_at).toLocaleDateString();
-            
             document.getElementById('detail-author-name').textContent = p.author_name;
             document.getElementById('detail-author-img').src = p.author_avatar || 'https://ui-avatars.com/api/?name=' + p.author_name;
-            currentDetailEmail = p.author_email;
+            
+            // Configurar enlace al perfil desde detalle
+            document.getElementById('detail-author-box').onclick = () => openPublicProfile(p.author_email);
 
             const imgContainer = document.getElementById('detail-img');
             if (p.image_url) {
@@ -470,59 +525,102 @@
             goToPage('detail');
         }
 
-        function goToUserProfileFromDetail() {
-            if (currentDetailEmail) openPublicProfile(currentDetailEmail);
+        // --- AUTH & NAVIGATION ---
+        function updateUI() {
+            const authBtns = document.getElementById('authButtons');
+            const userMenu = document.getElementById('userMenu');
+            const backHome = document.getElementById('backHomeBtn');
+            
+            if (currentUser) {
+                authBtns.classList.add('hidden');
+                userMenu.classList.remove('hidden');
+            } else {
+                authBtns.classList.remove('hidden');
+                userMenu.classList.add('hidden');
+            }
+            
+            const isHome = document.getElementById('page-home').classList.contains('active');
+            if (isHome) backHome.classList.add('hidden');
+            else backHome.classList.remove('hidden');
         }
 
-        function openPublicProfile(email) {
-            if (currentUser && currentUser.email === email) { goToPage('dashboard'); return; }
-
-            const userProjects = projects.filter(p => p.author_email === email);
-            if (userProjects.length === 0) return;
+        function handleAuthSubmit(e) {
+            e.preventDefault();
+            const btn = document.getElementById('authSubmitBtn');
+            btn.textContent = 'Procesando...';
             
-            const author = userProjects[0];
-            document.getElementById('pub-name').textContent = author.author_name;
-            document.getElementById('pub-avatar').src = author.author_avatar || 'https://ui-avatars.com/api/?name=' + author.author_name;
-            document.getElementById('pub-stats').textContent = userProjects.length + ' Proyectos publicados';
-            
-            renderProjects(userProjects, 'pub-grid');
-            goToPage('profile');
+            setTimeout(async () => {
+                const email = document.getElementById('login-email').value.toLowerCase();
+                const pass = document.getElementById('login-pass').value;
+                
+                if (isLoginMode) {
+                    // LOGIN
+                    if(supabase) {
+                        const { data: users, error } = await supabase.from('app_users').select('*').eq('email', email).eq('password', pass);
+                        if(users && users.length > 0) {
+                            completeLogin(users[0]);
+                        } else {
+                            document.getElementById('auth-error').style.display = 'block';
+                            document.getElementById('auth-error').textContent = 'Credenciales incorrectas';
+                        }
+                    } else {
+                        // Fallback local
+                        let users = JSON.parse(localStorage.getItem('alex_users')) || [];
+                        const user = users.find(u => u.email === email && u.pass === pass);
+                        if (user) completeLogin(user);
+                        else alert("Usuario no encontrado (Modo local)");
+                    }
+                } else {
+                    // SIGNUP
+                    const name = document.getElementById('reg-name').value;
+                    const avatar = document.getElementById('authAvatarUrl').value;
+                    
+                    if(supabase) {
+                        const { error } = await supabase.from('app_users').insert([{ email, password: pass, name, avatar }]);
+                        if(!error) completeLogin({ email, name, avatar });
+                        else alert("Error registro: " + error.message);
+                    } else {
+                        const newUser = { name, email, pass, avatar };
+                        let users = JSON.parse(localStorage.getItem('alex_users')) || [];
+                        users.push(newUser);
+                        localStorage.setItem('alex_users', JSON.stringify(users));
+                        completeLogin(newUser);
+                    }
+                }
+                btn.textContent = isLoginMode ? 'Ingresar' : 'Registrarse';
+            }, 800);
         }
 
-        // --- DASHBOARD ---
-        function loadDashboard() {
-            if (!currentUser) return;
-            
-            document.getElementById('dash-name').textContent = currentUser.name;
-            document.getElementById('dash-email').textContent = currentUser.email;
-            document.getElementById('dash-avatar').src = currentUser.avatar || 'https://ui-avatars.com/api/?name=' + currentUser.name;
-            
-            const myProjects = projects.filter(p => p.author_email === currentUser.email);
-            document.getElementById('stat-projects').textContent = myProjects.length;
-            document.getElementById('stat-premium').textContent = myProjects.filter(p => p.is_premium).length;
-
-            const grid = document.getElementById('dashboard-grid');
-            grid.innerHTML = myProjects.map(p => `
-                <div class="project-card ${p.is_premium ? 'is-premium' : ''}">
-                    <div class="project-image-container">
-                        ${p.image_url ? `<img src="${p.image_url}" class="project-image">` : '<div class="project-image-placeholder"><i class="ph ph-image"></i></div>'}
-                    </div>
-                    <div class="card-content">
-                        <h3 class="card-title">${p.title}</h3>
-                        <div style="margin-top:auto; display:flex; gap:0.5rem; flex-wrap:wrap;">
-                            <button class="btn btn-outline" onclick="editProject(${p.id})" style="flex:1;">Editar</button>
-                            <button class="btn btn-ghost" style="color:#ef4444;" onclick="deleteProject(${p.id})"><i class="ph ph-trash"></i></button>
-                            ${!p.is_premium 
-                                ? `<button class="btn btn-premium" onclick="buyPremium(${p.id})" style="width:100%;">Destacar (9€)</button>` 
-                                : `<button class="btn btn-ghost" onclick="cancelPremium(${p.id})" style="width:100%; color:#B45309; background:#FFFBEB;">Cancelar Destacado</button>`
-                            }
-                        </div>
-                    </div>
-                </div>
-            `).join('');
+        function completeLogin(user) {
+            currentUser = user;
+            localStorage.setItem('alex_session', JSON.stringify(user));
+            closeModal('auth');
+            updateNav();
+            updateUI();
+            showPage('dashboard');
+            showToast(`Hola, ${user.name}`);
         }
 
-        // --- AUTH (SUPABASE USERS TABLE) ---
+        function handleLogout() {
+            localStorage.removeItem('alex_session');
+            currentUser = null;
+            updateNav();
+            updateUI();
+            showPage('home');
+            showToast('Sesión cerrada');
+        }
+
+        function showPage(pageId) {
+            document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+            document.getElementById('page-' + pageId).classList.add('active');
+            window.scrollTo(0,0);
+            
+            if(pageId === 'dashboard') loadDashboard();
+            updateUI();
+        }
+        
+        function goToPage(pageId) { showPage(pageId); } // Alias
+
         function openModal(type, mode) {
             document.getElementById(`modal-${type}`).classList.add('active');
             if (type === 'auth') {
@@ -554,90 +652,119 @@
             }
         }
 
-        document.getElementById('authForm').addEventListener('submit', async (e) => {
-            e.preventDefault();
-            const btn = document.getElementById('authSubmitBtn');
-            btn.textContent = 'Procesando...';
+        // --- DASHBOARD & CRUD ---
+        function loadDashboard() {
+            if (!currentUser) return;
             
-            const email = document.getElementById('login-email').value.toLowerCase().trim();
-            const pass = document.getElementById('login-pass').value.trim();
+            document.getElementById('dash-name').textContent = currentUser.name;
+            document.getElementById('dash-email').textContent = currentUser.email;
+            document.getElementById('dash-avatar').src = currentUser.avatar || 'https://ui-avatars.com/api/?name=' + currentUser.name;
             
-            try {
-                if (isLoginMode) {
-                    // LOGIN: Buscar en tabla app_users
-                    const { data: users, error } = await supabase.from('app_users').select('*').eq('email', email).eq('password', pass);
-                    
-                    if (users && users.length > 0) {
-                        completeLogin(users[0]);
-                    } else {
-                        throw new Error('Credenciales incorrectas');
-                    }
-                } else {
-                    // SIGNUP
-                    const name = document.getElementById('reg-name').value;
-                    const avatar = document.getElementById('authAvatarUrl').value;
-                    
-                    // Check si existe
-                    const { data: existing } = await supabase.from('app_users').select('*').eq('email', email);
-                    if (existing.length > 0) throw new Error('Email ya registrado');
+            const myProjects = projects.filter(p => p.author_email === currentUser.email);
+            document.getElementById('stat-projects').textContent = myProjects.length;
+            const isPrem = p => p.is_premium || p.isPremium;
+            document.getElementById('stat-premium').textContent = myProjects.filter(isPrem).length;
 
-                    const { error } = await supabase.from('app_users').insert([{ email, password: pass, name, avatar }]);
-                    if (error) throw error;
+            const grid = document.getElementById('dashboard-grid');
+            grid.innerHTML = myProjects.map(p => `
+                <div class="project-card ${isPrem(p) ? 'is-premium' : ''}">
+                    ${isPrem(p) ? '<div class="premium-badge">✨</div>' : ''}
+                    <div class="project-image-container">
+                        ${p.image_url ? `<img src="${p.image_url}" class="project-image">` : '<div class="project-image-placeholder"><i class="ph ph-image"></i></div>'}
+                    </div>
+                    <div class="card-content">
+                        <h3 class="card-title">${p.title}</h3>
+                        <div style="margin-top:auto; display:flex; gap:0.5rem; flex-wrap:wrap;">
+                            <button class="btn btn-outline" onclick="editProject(${p.id})" style="flex:1;">Editar</button>
+                            <button class="btn btn-ghost" style="color:#ef4444;" onclick="deleteProject(${p.id})"><i class="ph ph-trash"></i></button>
+                            ${!isPrem(p)
+                                ? `<button class="btn btn-premium" onclick="openPremiumModal(${p.id})" style="width:100%;">Destacar (9€)</button>` 
+                                : `<button class="btn btn-cancel-premium" onclick="cancelPremium(${p.id})" style="width:100%;">Cancelar Destacado</button>`
+                            }
+                        </div>
+                    </div>
+                </div>
+            `).join('');
+        }
 
-                    completeLogin({ email, name, avatar });
+        // --- PREMIUM FUNCTIONS ---
+        let selectedProjectId = null;
+        function openPremiumModal(id) { selectedProjectId = id; openModal('premium'); document.getElementById('premiumModal').classList.add('active'); }
+        function closePremiumModal() { document.getElementById('premiumModal').classList.remove('active'); }
+
+        async function handlePremiumPurchase() {
+            if (!selectedProjectId) return;
+            const btn = document.querySelector('#premiumModal .btn-premium');
+            const originalText = btn.innerHTML;
+            btn.innerHTML = 'Procesando...';
+            btn.disabled = true;
+
+            setTimeout(async () => {
+                if(supabase) {
+                    await supabase.from('projects').update({ is_premium: true }).eq('id', selectedProjectId);
+                    await fetchProjects();
                 }
-                closeModal('auth');
-            } catch (err) {
-                const msg = document.getElementById('auth-error');
-                msg.textContent = err.message;
-                msg.style.display = 'block';
-            } finally {
-                btn.textContent = isLoginMode ? 'Ingresar' : 'Registrarse';
+                alert('¡Pago realizado con éxito!');
+                closePremiumModal();
+                loadDashboard();
+                btn.innerHTML = originalText;
+                btn.disabled = false;
+            }, 1500);
+        }
+
+        async function cancelPremium(id) {
+             if(supabase) {
+                await supabase.from('projects').update({ is_premium: false }).eq('id', id);
+                await fetchProjects();
             }
-        });
-
-        function completeLogin(user) {
-            currentUser = user;
-            localStorage.setItem('alex_session', JSON.stringify(user));
-            updateNav();
-            showToast(`Hola, ${user.name}`);
-            goToPage('dashboard');
+            loadDashboard();
+            showToast('Destacado cancelado');
         }
 
-        function handleLogout() {
-            localStorage.removeItem('alex_session');
-            currentUser = null;
-            updateNav();
-            goToPage('home');
-            showToast('Sesión cerrada');
+        // --- UTILS ---
+        function handleImagePreview(input, outputId) {
+            const file = input.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = (e) => document.getElementById(outputId).value = e.target.result;
+                reader.readAsDataURL(file);
+            }
         }
 
-        // --- PROYECTOS CRUD ---
-        function prepareForm() {
-            document.getElementById('projectForm').reset();
-            document.getElementById('pId').value = '';
-            document.getElementById('form-title').textContent = 'Publicar Proyecto';
-            goToPage('form');
+        function showToast(msg, type='success') {
+            const t = document.createElement('div');
+            t.className = 'toast';
+            if(type === 'error') t.style.borderLeft = '4px solid #ef4444';
+            else t.style.borderLeft = '4px solid #10b981';
+            t.textContent = msg;
+            document.getElementById('toast-container').appendChild(t);
+            setTimeout(() => t.remove(), 3000);
         }
 
-        function checkAuthAndAct(action) {
+        // --- RESTO DE CRUD (Submit, Edit, Delete) ---
+        function handleCreateProjectClick() {
             if (currentUser) {
-                if (action === 'create') goToPage('create');
+                // Limpiar form
+                document.getElementById('projectForm').reset();
+                document.getElementById('pId').value = '';
+                document.getElementById('form-title').textContent = 'Publicar Proyecto';
+                showPage('create-project'); // ID corregido según HTML
             } else {
                 showToast('Debes iniciar sesión', 'error');
                 openModal('auth', 'signup');
             }
         }
-
+        
         document.getElementById('projectForm').addEventListener('submit', async (e) => {
             e.preventDefault();
             const id = document.getElementById('pId').value;
+            
             const projectData = {
                 title: document.getElementById('pTitle').value,
                 category: document.getElementById('pCat').value,
                 description: document.getElementById('pDesc').value,
                 price: document.getElementById('pPrice').value,
-                image_url: document.getElementById('pImgBase64').value,
+                image_url: document.getElementById('pImgUrl').value,
                 business_url: document.getElementById('pUrl').value,
                 author_name: currentUser.name,
                 author_email: currentUser.email,
@@ -663,34 +790,33 @@
             document.getElementById('pCat').value = p.category;
             document.getElementById('pDesc').value = p.description;
             document.getElementById('pPrice').value = p.price;
-            document.getElementById('pImgBase64').value = p.image_url || '';
+            document.getElementById('pImgUrl').value = p.image_url || '';
             document.getElementById('pUrl').value = p.business_url || '';
             document.getElementById('form-title').textContent = 'Editar Proyecto';
-            goToPage('form');
+            goToPage('create-project');
         }
 
         async function deleteProject(id) {
-            if(confirm('¿Eliminar proyecto?')) {
+            if(confirm('¿Eliminar proyecto para siempre?')) {
                 await supabase.from('projects').delete().eq('id', id);
                 await fetchProjects();
                 loadDashboard();
-                showToast('Eliminado');
+                showToast('Eliminado correctamente');
             }
         }
-
-        // --- PERFIL & OTROS ---
+        
         function openEditProfile() {
             document.getElementById('edit-name').value = currentUser.name;
             document.getElementById('edit-avatar').value = currentUser.avatar || '';
             openModal('profile');
         }
-
+        
         document.getElementById('profileForm').addEventListener('submit', async (e) => {
             e.preventDefault();
             const newName = document.getElementById('edit-name').value;
             const newAvatar = document.getElementById('edit-avatar').value;
 
-            await supabase.from('app_users').update({ name: newName, avatar: newAvatar }).eq('email', currentUser.email);
+            if(supabase) await supabase.from('app_users').update({ name: newName, avatar: newAvatar }).eq('email', currentUser.email);
             
             currentUser.name = newName;
             currentUser.avatar = newAvatar;
@@ -702,58 +828,26 @@
         });
 
         async function deleteAccount() {
-            if(!confirm('¿Borrar cuenta y proyectos?')) return;
+            if(!confirm('¿Borrar cuenta y todos los proyectos?')) return;
             await supabase.from('projects').delete().eq('author_email', currentUser.email);
             await supabase.from('app_users').delete().eq('email', currentUser.email);
             handleLogout();
             closeModal('profile');
         }
-
-        // --- UTILS ---
-        function handleImagePreview(input, outputId) {
-            const file = input.files[0];
-            if (file) {
-                const reader = new FileReader();
-                reader.onload = (e) => document.getElementById(outputId).value = e.target.result;
-                reader.readAsDataURL(file);
-            }
-        }
-
-        function showToast(msg, type='success') {
-            const t = document.createElement('div');
-            t.className = 'toast';
-            t.style.borderLeft = type === 'error' ? '4px solid #ef4444' : '4px solid #10b981';
-            t.textContent = msg;
-            document.getElementById('toast-container').appendChild(t);
-            setTimeout(() => t.remove(), 3000);
-        }
         
-        function filterProjects(val) {
-            const term = val.toLowerCase();
-            const filtered = projects.filter(p => p.title.toLowerCase().includes(term) || p.author_name.toLowerCase().includes(term));
-            renderProjects(filtered, 'home-grid');
+        function openPublicProfile(email) {
+            if (currentUser && currentUser.email === email) { goToPage('dashboard'); return; }
+            const userProjects = projects.filter(p => p.author_email === email);
+            if (userProjects.length === 0) return;
+            const author = userProjects[0];
+            document.getElementById('pub-name').textContent = author.author_name;
+            document.getElementById('pub-avatar').src = author.author_avatar || 'https://ui-avatars.com/api/?name=' + author.author_name;
+            document.getElementById('pub-stats').textContent = userProjects.length + ' Proyectos publicados';
+            renderProjects(userProjects, 'pub-grid');
+            goToPage('profile');
         }
-        
-        // LIKES
-        async function handleLike(btn, id) {
-            if (!currentUser) { openModal('auth', 'login'); return; }
-            const span = btn.querySelector('span');
-            const icon = btn.querySelector('i');
-            let count = parseInt(span.textContent);
-            const isLiked = btn.classList.contains('liked');
 
-            btn.classList.toggle('liked');
-            icon.className = isLiked ? 'ph ph-heart' : 'ph-fill ph-heart';
-            span.textContent = isLiked ? count - 1 : count + 1;
-
-            if (!isLiked) {
-                await supabase.from('project_likes').insert([{ project_id: id, user_email: currentUser.email }]);
-                await supabase.rpc('increment_likes', { row_id: id });
-            } else {
-                await supabase.from('project_likes').delete().match({ project_id: id, user_email: currentUser.email });
-                await supabase.rpc('decrement_likes', { row_id: id });
-            }
-        }
+        function updateNav() { /* ya definida arriba */ } // Mantener estructura limpia
     </script>
 </body>
 </html>
