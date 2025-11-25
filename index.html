@@ -15,9 +15,8 @@
         /* --- VARIABLES & RESET --- */
         :root {
             --bg-body: #FAFAFA; --bg-card: #FFFFFF; --text-main: #18181B; --text-muted: #71717A;
-            --primary: #18181B; --accent: #6366F1; --border: #E4E4E7; --radius: 16px;
-            --shadow-soft: 0 4px 20px -2px rgba(0, 0, 0, 0.05);
-            --shadow-hover: 0 20px 40px -4px rgba(0, 0, 0, 0.1);
+            --primary: #18181B; --accent: #6366F1; --border: #E4E4E7; --radius: 12px;
+            --shadow-soft: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
         }
         * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Inter', sans-serif; -webkit-font-smoothing: antialiased; }
         body { background-color: var(--bg-body); color: var(--text-main); line-height: 1.6; overflow-x: hidden; }
@@ -30,10 +29,13 @@
         nav { position: sticky; top: 0; z-index: 100; background: rgba(255, 255, 255, 0.85); backdrop-filter: blur(12px); border-bottom: 1px solid rgba(0,0,0,0.05); }
         nav .container { display: flex; height: 4.5rem; align-items: center; justify-content: space-between; }
         .nav-brand { display: flex; align-items: center; gap: 0.75rem; text-decoration: none; color: inherit; cursor: pointer; }
+        
+        /* LOGO CSS PURO (INDESTRUCTIBLE) */
         .logo-badge { width: 2.5rem; height: 2.5rem; background-color: #F9F7F2; border: 2px solid #1e293b; border-radius: 50%; display: flex; align-items: center; justify-content: center; position: relative; flex-shrink: 0; }
         .logo-badge::after { content: ''; position: absolute; top: 2px; left: 2px; right: 2px; bottom: 2px; border: 1px solid #1e293b; border-radius: 50%; opacity: 0.3; }
         .logo-text { font-family: 'Playfair Display', serif; font-weight: 800; font-size: 1rem; color: #1e293b; padding-top: 2px; }
         .nav-brand span { font-size: 1.2rem; font-weight: 700; letter-spacing: -0.02em; }
+        
         .nav-buttons { display: flex; align-items: center; gap: 0.75rem; }
 
         /* --- BOTONES --- */
@@ -44,14 +46,14 @@
         .btn-outline:hover { border-color: var(--text-main); background: #F4F4F5; }
         .btn-ghost { background: transparent; color: var(--text-muted); }
         .btn-ghost:hover { color: var(--text-main); background: rgba(0,0,0,0.03); }
-        .btn-premium { background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%) !important; color: white !important; box-shadow: 0 4px 12px rgba(245, 158, 11, 0.3); border: none; }
+        .btn-premium { background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%); color: white; box-shadow: 0 4px 12px rgba(245, 158, 11, 0.3); border: none; }
         .btn-premium:hover { transform: translateY(-1px); filter: brightness(1.1); }
         .btn-cancel-premium { background-color: #fffbeb; color: #b45309; border: 1px solid #fcd34d; }
         .btn-cancel-premium:hover { background-color: #fef3c7; }
-        .btn-delete { background-color: #FEF2F2; color: #DC2626; }
-        .btn-delete:hover { background-color: #FEE2E2; }
-        .btn-edit { background-color: #EFF6FF; color: #2563EB; }
-        .btn-edit:hover { background-color: #DBEAFE; }
+        .btn-delete { background-color: #fff1f2; color: #e11d48; border: 1px solid transparent; width: 100%; margin-top: 0.5rem; padding: 0.625rem; border-radius: 0.5rem; font-weight: 600; font-size: 0.875rem; display: flex; align-items: center; justify-content: center; gap: 0.5rem; transition: all 0.2s; cursor: pointer; }
+        .btn-delete:hover { background-color: #ffe4e6; color: #be123c; }
+        .btn-edit { background-color: #eff6ff; color: #2563eb; border: 1px solid transparent; width: 100%; margin-top: 0.5rem; padding: 0.625rem; border-radius: 0.5rem; font-weight: 600; font-size: 0.875rem; display: flex; align-items: center; justify-content: center; gap: 0.5rem; transition: all 0.2s; cursor: pointer; }
+        .btn-edit:hover { background-color: #dbeafe; color: #1e40af; }
 
         /* --- PAGINAS (SPA) --- */
         .page { display: none; animation: fadeIn 0.3s ease; padding-bottom: 4rem; }
@@ -86,12 +88,11 @@
         .card-desc { font-size: 0.9rem; color: var(--text-muted); display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; margin-bottom: 1rem; }
         .card-footer { margin-top: auto; padding-top: 1rem; border-top: 1px solid #F4F4F5; display: flex; justify-content: space-between; align-items: center; }
         
-        /* Avatar Styles Updated */
         .author-row { display: flex; align-items: center; gap: 0.5rem; cursor: pointer; }
-        .avatar-circle { width: 28px; height: 28px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 0.8rem; font-weight: 700; color: white; object-fit: cover; flex-shrink: 0; }
-        .author-name { font-size: 0.85rem; font-weight: 500; color: var(--text-main); }
-        .author-row:hover .author-name { text-decoration: underline; }
-
+        .author-row img { width: 24px; height: 24px; border-radius: 50%; object-fit: cover; }
+        .author-row span { font-size: 0.8rem; font-weight: 500; color: var(--text-main); }
+        .author-row:hover span { text-decoration: underline; }
+        
         .like-btn { background: none; border: none; cursor: pointer; color: var(--text-muted); font-size: 0.9rem; display: flex; align-items: center; gap: 4px; transition: color 0.2s; }
         .like-btn:hover, .like-btn.liked { color: #EF4444; }
         .like-btn.liked i { font-weight: fill; }
@@ -102,14 +103,19 @@
         .stat-item strong { font-size: 1.5rem; display: block; color: var(--text-main); }
         .stat-item span { font-size: 0.85rem; color: var(--text-muted); }
         
-        .profile-avatar-lg { width: 90px; height: 90px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 2.5rem; font-weight: 700; color: white; border: 4px solid white; box-shadow: 0 10px 20px -5px rgba(0,0,0,0.1); flex-shrink: 0; object-fit: cover; }
+        .profile-avatar-large { width: 90px; height: 90px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 2.5rem; font-weight: 700; color: white; border: 4px solid white; box-shadow: 0 10px 20px -5px rgba(0,0,0,0.1); flex-shrink: 0; object-fit: cover; }
 
         /* --- FORMULARIOS --- */
         .form-container { max-width: 600px; margin: 3rem auto; background: white; padding: 2rem; border-radius: var(--radius); border: 1px solid var(--border); }
         .form-group { margin-bottom: 1.2rem; }
         .form-group label { display: block; margin-bottom: 0.4rem; font-size: 0.9rem; font-weight: 600; }
         .form-group input, .form-group textarea, .form-group select { width: 100%; padding: 0.75rem; border: 1px solid var(--border); border-radius: 0.5rem; background: #FAFAFA; }
-        
+        /* Input de archivo personalizado básico */
+        input[type="file"] { padding: 0.5rem; background: #f8fafc; }
+        .upload-separator { display: flex; align-items: center; margin: 1rem 0; color: #94a3b8; font-size: 0.8rem; }
+        .upload-separator::before, .upload-separator::after { content: ""; flex: 1; height: 1px; background: #e2e8f0; }
+        .upload-separator span { padding: 0 0.5rem; }
+
         /* --- TOAST & ADS --- */
         #toast-container { position: fixed; bottom: 20px; right: 20px; z-index: 9999; display: flex; flex-direction: column; gap: 10px; }
         .toast { background: #18181B; color: white; padding: 0.8rem 1.2rem; border-radius: 8px; font-size: 0.9rem; box-shadow: 0 10px 15px -3px rgba(0,0,0,0.1); animation: slideUp 0.3s ease-out; }
@@ -126,27 +132,21 @@
         /* --- DETALLE --- */
         .detail-header { padding: 2rem 0; border-bottom: 1px solid var(--border); margin-bottom: 2rem; }
         .detail-img { width: 100%; height: 450px; object-fit: cover; border-radius: var(--radius); margin-bottom: 3rem; background: #F4F4F5; box-shadow: var(--shadow-soft); }
-        
-        /* --- RESEÑAS (NUEVO) --- */
+
+        /* --- REVIEWS --- */
         .reviews-section { margin-top: 4rem; padding-top: 2rem; border-top: 1px solid var(--border); }
-        .rating-stars { color: #FCD34D; font-size: 1.2rem; }
         .review-card { background: #F9FAFB; padding: 1.5rem; border-radius: 12px; margin-bottom: 1rem; }
-        .review-header { display: flex; justify-content: space-between; margin-bottom: 0.5rem; }
         .star-input { display: flex; gap: 0.5rem; font-size: 1.5rem; color: #D4D4D8; cursor: pointer; margin-bottom: 1rem; }
         .star-input span.active { color: #FCD34D; }
-        
-        @media (max-width: 768px) { 
-            .hero h1 { font-size: 2.5rem; } 
-            .projects-grid { grid-template-columns: 1fr; } 
-            .nav-brand span { display: none; }
-            .detail-img { height: 250px; }
-        }
+
+        @media (max-width: 768px) { .hero h1 { font-size: 2.5rem; } .projects-grid { grid-template-columns: 1fr; } .nav-brand span { display: none; } .detail-img { height: 250px; } }
     </style>
 </head>
 <body>
-
+    <!-- TOASTS -->
     <div id="toast-container"></div>
 
+    <!-- NAVEGACIÓN -->
     <nav>
         <div class="container">
             <div class="nav-brand" onclick="goToPage('home')">
@@ -183,7 +183,7 @@
         </header>
         <div class="ad-placeholder">PUBLICIDAD GOOGLE ADSENSE</div>
         <div class="container">
-            <h3 style="margin-bottom: 2rem; font-size: 1.8rem;">Explorar Proyectos</h3>
+            <h3 style="margin-bottom: 2rem;">Destacados</h3>
             <div id="homeProjectsGrid" class="projects-grid"></div>
         </div>
         <div class="ad-placeholder">PUBLICIDAD</div>
@@ -195,14 +195,14 @@
             <div class="container">
                 <div style="display: flex; justify-content: space-between; align-items: flex-end;">
                     <div style="display: flex; gap: 1.5rem; align-items: center;">
-                        <div id="dash-avatar-container"></div> <!-- Avatar dinámico -->
+                        <div id="dash-avatar-container"></div>
                         <div>
                             <h2 id="dash-name" style="margin-bottom: 0.2rem; font-size: 2rem;">Usuario</h2>
                             <p id="dash-email" style="color: var(--text-muted); font-size: 1rem;">email@ejemplo.com</p>
                             <button onclick="openEditProfile()" class="btn btn-ghost" style="padding: 0; margin-top: 0.5rem; font-size: 0.85rem; color: var(--accent);">Editar perfil</button>
                         </div>
                     </div>
-                    <button class="btn btn-primary" onclick="prepareForm()"><i class="ph ph-plus"></i> Crear Proyecto</button>
+                    <button class="btn btn-primary" onclick="prepareForm()"><i class="ph ph-plus"></i> Nuevo Proyecto</button>
                 </div>
                 <div class="profile-stats">
                     <div class="stat-item"><strong id="userProjectCount">0</strong><span>Proyectos</span></div>
@@ -212,7 +212,7 @@
         </div>
         <div class="container">
             <div class="ad-placeholder">ANUNCIO DASHBOARD</div>
-            <h3 style="margin: 3rem 0 2rem; font-size: 1.8rem;">Mi Portfolio</h3>
+            <h3 style="margin: 3rem 0 2rem; font-size: 1.8rem;">Mis Proyectos</h3>
             <div id="dashboard-grid" class="projects-grid"></div>
         </div>
     </div>
@@ -256,10 +256,8 @@
                 <p id="detail-desc" style="white-space: pre-wrap; line-height: 1.8;">Descripción...</p>
                 <div id="detail-actions" style="margin-top: 4rem; text-align: center; padding-top: 2rem; border-top: 1px solid var(--border);"></div>
             
-                <!-- SECCIÓN REVIEWS -->
                 <div class="reviews-section">
                     <h3 style="margin-bottom: 1.5rem;">Reseñas</h3>
-                    
                     <div id="review-form" style="background: white; padding: 2rem; border-radius: 12px; border: 1px solid var(--border); margin-bottom: 2rem;">
                         <h4 style="margin-bottom: 1rem;">Deja tu valoración</h4>
                         <div class="star-input" id="star-input">
@@ -268,14 +266,13 @@
                         <textarea id="review-comment" class="form-group" style="width:100%;" rows="3" placeholder="Escribe tu opinión..."></textarea>
                         <button onclick="submitReview()" class="btn btn-primary">Enviar Reseña</button>
                     </div>
-
                     <div id="reviews-list"></div>
                 </div>
             </div>
         </div>
     </div>
 
-    <!-- PÁGINA: PERFIL PÚBLICO -->
+    <!-- PERFIL PÚBLICO -->
     <div id="page-profile" class="page">
         <div class="dashboard-header" style="text-align: center;">
             <div class="container">
@@ -289,7 +286,7 @@
         </div>
     </div>
 
-    <!-- FORMULARIOS & MODALES (Idénticos al anterior pero pulidos) -->
+    <!-- FORMULARIOS -->
     <div id="page-form" class="page">
         <div class="container" style="padding: 4rem 0;">
             <div class="modal-card" style="max-width: 600px; margin: 0 auto; box-shadow: none; border: 1px solid var(--border);">
@@ -300,28 +297,35 @@
                 <form id="projectForm">
                     <input type="hidden" id="pId">
                     <div class="form-group"><label>Título</label><input type="text" id="pTitle" required></div>
-                    <div class="form-group"><label>Categoría</label><select id="pCat"><option>Tecnología</option><option>Diseño</option><option>Arte</option><option>Negocios</option></select></div>
+                    <div class="form-group"><label>Categoría</label>
+                        <select id="pCat">
+                            <option>Tecnología</option><option>Diseño</option><option>Arte</option><option>Negocios</option>
+                            <option>Educación</option><option>Marketing</option><option>Música</option>
+                            <option>Fotografía</option><option>Escritura</option><option>Salud</option>
+                            <option>Deportes</option><option>Finanzas</option><option>Otros</option>
+                        </select>
+                    </div>
                     <div class="form-group"><label>Descripción</label><textarea id="pDesc" rows="6" required></textarea></div>
                     <div class="form-group"><label>Precio (€)</label><input type="number" id="pPrice" min="0" step="0.01" required></div>
                     <div class="form-group">
-                        <label>Imagen</label>
+                        <label>Imagen de Portada</label>
                         <div class="upload-separator"><span>Seleccionar archivo</span></div>
                         <input type="file" id="pImgFile" accept="image/*" onchange="handleImagePreview(this, 'pImgPreview', 'pImgUrl')">
                         <input type="hidden" id="pImgUrl">
                         <div id="pImgPreview" style="margin-top:1rem; max-width:100%; border-radius:0.5rem; overflow:hidden;"></div>
                     </div>
-                    <div class="form-group"><label>Web</label><input type="url" id="pUrl" placeholder="https://..."></div>
+                    <div class="form-group"><label>Web (Opcional)</label><input type="url" id="pUrl" placeholder="https://..."></div>
                     <button type="submit" class="btn btn-primary" style="width: 100%; padding: 1rem;">Guardar Proyecto</button>
                 </form>
             </div>
         </div>
     </div>
 
-    <!-- MODAL AUTH -->
+    <!-- MODALES -->
     <div id="modal-auth" class="modal-overlay">
         <div class="modal-card">
             <button class="close-modal" onclick="closeModal('auth')">✕</button>
-            <h2 id="auth-title" style="text-align: center; margin-bottom: 1.5rem;">Bienvenido</h2>
+            <h2 id="auth-title" style="text-align: center; margin-bottom: 1.5rem;">Iniciar Sesión</h2>
             <div id="authErrorMsg" class="error-message hidden">Error</div>
             <form id="authForm">
                 <div id="signup-fields" class="hidden">
@@ -336,28 +340,32 @@
         </div>
     </div>
 
-    <!-- MODAL PERFIL -->
     <div id="modal-profile" class="modal-overlay">
         <div class="modal-card">
             <button class="close-modal" onclick="closeModal('profile')">✕</button>
             <h2 style="text-align: center;">Editar Perfil</h2>
             <form id="profileForm">
                 <div class="form-group"><label>Nombre</label><input type="text" id="edit-name" required></div>
-                <div class="form-group"><label>URL Avatar</label><input type="url" id="edit-avatar"></div>
-                <button type="submit" class="btn btn-primary" style="width: 100%;">Guardar</button>
+                <div class="form-group"><label>Avatar (URL)</label><input type="text" id="edit-avatar"></div>
+                <button type="submit" class="btn btn-primary" style="width: 100%; margin-top: 1rem;">Guardar Cambios</button>
             </form>
             <button onclick="deleteAccount()" class="btn btn-delete" style="width: 100%; margin-top: 1rem;">Borrar Cuenta</button>
         </div>
     </div>
 
-    <!-- MODAL PREMIUM -->
     <div id="modal-premium" class="modal-overlay">
         <div class="modal-card" style="text-align: center;">
             <button class="close-modal" onclick="closePremiumModal()">✕</button>
             <div style="font-size: 3.5rem; margin-bottom: 0.5rem;">📹</div>
-            <h2>Video-Análisis</h2>
-            <div class="price-tag" style="font-size: 2rem; font-weight: 800;">9€</div>
-            <button onclick="handlePremiumPurchase()" class="btn btn-premium" style="width: 100%; margin-top:1.5rem;">Contratar</button>
+            <h2 style="margin-bottom: 0.5rem;">Video-Análisis</h2>
+            <p style="color: var(--text-muted); font-size: 0.95rem; margin-bottom: 1.5rem;">Recibe feedback profesional de un experto.</p>
+            <div class="price-tag" style="font-size: 2.5rem; font-weight: 800; margin-bottom: 1.5rem; color: var(--text-main);">9€ <span style="font-size: 1rem; font-weight: 500; color: var(--text-muted);">/ único</span></div>
+            <ul style="text-align: left; list-style: none; padding: 0; margin-bottom: 2rem;">
+                <li style="margin-bottom: 0.8rem; display:flex; gap:0.5rem;"><i class="ph-fill ph-check-circle" style="color:#10b981;"></i> Análisis detallado</li>
+                <li style="margin-bottom: 0.8rem; display:flex; gap:0.5rem;"><i class="ph-fill ph-check-circle" style="color:#10b981;"></i> Narración profesional</li>
+                <li style="display:flex; gap:0.5rem;"><i class="ph-fill ph-check-circle" style="color:#10b981;"></i> Insignia Destacado</li>
+            </ul>
+            <button onclick="handlePremiumPurchase()" class="btn btn-premium" style="width: 100%; padding: 1rem; font-size: 1rem;">Contratar Ahora</button>
         </div>
     </div>
 
@@ -372,8 +380,8 @@
         let selectedProjectId = null;
         let currentProjectReviews = [];
         let currentRating = 0;
+        let currentDetailEmail = null;
 
-        // --- INIT ---
         document.addEventListener('DOMContentLoaded', async () => {
             updateNav();
             await fetchProjects();
@@ -385,14 +393,12 @@
             const sizePx = size === 'large' ? '90px' : (size === 'small' ? '24px' : '32px');
             const fontSize = size === 'large' ? '2.5rem' : (size === 'small' ? '0.7rem' : '0.85rem');
             const border = size === 'large' ? '4px solid white' : '1px solid #E4E4E7';
-            
-            // Colores aleatorios para el fondo basados en el nombre
             const colors = ['#FCA5A5', '#FCD34D', '#86EFAC', '#93C5FD', '#C4B5FD', '#FDBA74'];
             const charCode = name ? name.charCodeAt(0) : 0;
             const bgColor = colors[charCode % colors.length];
             const initial = name ? name.charAt(0).toUpperCase() : '?';
 
-            if (url) {
+            if (url && url.trim() !== '') {
                 return `<img src="${url}" style="width:${sizePx}; height:${sizePx}; border-radius:50%; object-fit:cover; border:${border}; box-shadow:0 2px 5px rgba(0,0,0,0.1);">`;
             }
             return `<div style="width:${sizePx}; height:${sizePx}; border-radius:50%; background:${bgColor}; color:#18181B; display:flex; align-items:center; justify-content:center; font-weight:700; font-size:${fontSize}; border:${border}; text-transform:uppercase;">${initial}</div>`;
@@ -452,7 +458,6 @@
             const { data } = await supabase.from('reviews').select('*').eq('project_id', projectId).order('created_at', {ascending:false});
             currentProjectReviews = data || [];
             
-            // Calcular media
             let avg = 0;
             if (currentProjectReviews.length > 0) {
                 const sum = currentProjectReviews.reduce((a, b) => a + b.rating, 0);
@@ -504,11 +509,10 @@
             document.getElementById('detail-category').textContent = p.category;
             document.getElementById('detail-date').textContent = new Date(p.created_at).toLocaleDateString();
             document.getElementById('detail-author-name').textContent = p.author_name;
+            currentDetailEmail = p.author_email;
             
-            // Avatar Autor Detalle
             document.getElementById('detail-author-avatar').innerHTML = getAvatarHTML(p.author_name, p.author_avatar, 'medium');
-            document.getElementById('detail-author-box').onclick = () => openPublicProfile(p.author_email);
-
+            
             const imgEl = document.getElementById('detail-img');
             if(p.image_url) { imgEl.src = p.image_url; imgEl.style.display = 'block'; }
             else { imgEl.style.display = 'none'; }
@@ -516,9 +520,12 @@
             const actions = document.getElementById('detail-actions');
             actions.innerHTML = p.business_url ? `<a href="${p.business_url}" target="_blank" class="btn btn-primary">Visitar Web</a>` : '';
 
-            // Cargar reseñas
             loadReviews(id);
             goToPage('detail');
+        }
+        
+        function goToUserProfileFromDetail() {
+            if (currentDetailEmail) openPublicProfile(currentDetailEmail);
         }
 
         // --- DASHBOARD & PERFIL ---
@@ -528,7 +535,11 @@
             document.getElementById('dash-email').textContent = currentUser.email;
             document.getElementById('dash-avatar-container').innerHTML = getAvatarHTML(currentUser.name, currentUser.avatar, 'large');
             
-            const myProjects = projects.filter(p => p.author_email === currentUser.email);
+            // FIX: Usar filtro insensible a mayúsculas
+            const myProjects = projects.filter(p => 
+                (p.author_email || '').toLowerCase() === currentUser.email.toLowerCase()
+            );
+            
             document.getElementById('stat-projects').textContent = myProjects.length;
             document.getElementById('stat-premium').textContent = myProjects.filter(p => p.is_premium).length;
             
@@ -552,8 +563,10 @@
         }
         
         function openPublicProfile(email) {
-            if (currentUser && currentUser.email === email) { goToPage('dashboard'); return; }
-            const userProjects = projects.filter(p => p.author_email === email);
+            // Comparación insensible a mayúsculas
+            if (currentUser && currentUser.email.toLowerCase() === email.toLowerCase()) { goToPage('dashboard'); return; }
+            
+            const userProjects = projects.filter(p => (p.author_email || '').toLowerCase() === email.toLowerCase());
             if(userProjects.length === 0) return;
             
             const authorName = userProjects[0].author_name;
@@ -575,6 +588,7 @@
             if (id === 'home') { document.getElementById('navHomeBtn').classList.add('hidden'); renderProjects(projects, 'homeProjectsGrid'); }
             else document.getElementById('navHomeBtn').classList.remove('hidden');
             if (id === 'dashboard') loadDashboard();
+            updateNav();
         }
 
         function updateNav() {
@@ -629,9 +643,10 @@
             currentUser = null;
             updateNav();
             goToPage('home');
+            showToast('Sesión cerrada');
         }
 
-        // --- PROYECTOS CRUD (Create/Edit/Delete) ---
+        // --- PROYECTOS CRUD ---
         function prepareForm() {
             document.getElementById('projectForm').reset();
             document.getElementById('pId').value = '';
@@ -683,15 +698,16 @@
         }
 
         async function deleteProject(id) {
-            if(confirm('¿Borrar?')) {
+            if(confirm('¿Eliminar proyecto para siempre?')) {
                 await supabase.from('projects').delete().eq('id', id);
                 await fetchProjects();
                 loadDashboard();
+                showToast('Eliminado correctamente');
             }
         }
         
         // --- PREMIUM ---
-        function openPremiumModal(id) { selectedProjectId = id; document.getElementById('modal-premium').classList.add('active'); }
+        function openPremiumModal(id) { selectedProjectId = id; openModal('premium'); document.getElementById('modal-premium').classList.add('active'); }
         function closePremiumModal() { document.getElementById('modal-premium').classList.remove('active'); }
         async function handlePremiumPurchase() {
              await supabase.from('projects').update({ is_premium: true }).eq('id', selectedProjectId);
@@ -704,6 +720,7 @@
             await supabase.from('projects').update({ is_premium: false }).eq('id', id);
             await fetchProjects();
             loadDashboard();
+            showToast('Destacado cancelado');
         }
 
         // --- UTILS ---
@@ -738,7 +755,7 @@
         }
         function filterProjects(val, gridId) {
             const term = val.toLowerCase();
-            const filtered = projects.filter(p => p.title.toLowerCase().includes(term) || p.author_name.toLowerCase().includes(term));
+            const filtered = projects.filter(p => p.title.toLowerCase().includes(term) || p.author_name.toLowerCase().includes(term) || p.category.toLowerCase().includes(term));
             renderProjects(filtered, gridId);
         }
         async function toggleLike(btn, id) {
@@ -756,6 +773,37 @@
                 await supabase.from('project_likes').delete().match({ project_id: id, user_email: currentUser.email });
                 await supabase.rpc('decrement_likes', { row_id: id });
             }
+        }
+        
+        // --- PERFIL EDIT ---
+        function openEditProfile() {
+            document.getElementById('edit-name').value = currentUser.name;
+            document.getElementById('edit-avatar').value = currentUser.avatar || '';
+            openModal('profile');
+        }
+
+        document.getElementById('profileForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const newName = document.getElementById('edit-name').value;
+            const newAvatar = document.getElementById('edit-avatar').value;
+
+            await supabase.from('app_users').update({ name: newName, avatar: newAvatar }).eq('email', currentUser.email);
+            
+            currentUser.name = newName;
+            currentUser.avatar = newAvatar;
+            localStorage.setItem('alex_session', JSON.stringify(currentUser));
+            
+            closeModal('profile');
+            loadDashboard();
+            showToast('Perfil actualizado');
+        });
+        
+        async function deleteAccount() {
+            if(!confirm('¿Seguro?')) return;
+            await supabase.from('projects').delete().eq('author_email', currentUser.email);
+            await supabase.from('app_users').delete().eq('email', currentUser.email);
+            handleLogout();
+            closeModal('profile');
         }
     </script>
 </body>
