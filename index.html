@@ -14,202 +14,127 @@
     <style>
         /* --- VARIABLES & RESET --- */
         :root {
-            --bg-body: #FAFAFA;
-            --bg-card: #FFFFFF;
-            --text-main: #18181B;
-            --text-muted: #71717A;
-            --primary: #18181B;
-            --accent: #6366F1;
-            --border: #E4E4E7;
-            --radius: 16px; /* Bordes más redondeados y modernos */
-            --shadow-soft: 0 4px 20px -2px rgba(0, 0, 0, 0.05); /* Sombra más suave y difusa */
+            --bg-body: #FAFAFA; --bg-card: #FFFFFF; --text-main: #18181B; --text-muted: #71717A;
+            --primary: #18181B; --accent: #6366F1; --border: #E4E4E7; --radius: 16px;
+            --shadow-soft: 0 4px 20px -2px rgba(0, 0, 0, 0.05);
             --shadow-hover: 0 20px 40px -4px rgba(0, 0, 0, 0.1);
         }
-
         * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Inter', sans-serif; -webkit-font-smoothing: antialiased; }
-        
-        body { 
-            background-color: var(--bg-body); 
-            color: var(--text-main); 
-            line-height: 1.6; 
-            overflow-x: hidden; 
-        }
-
+        body { background-color: var(--bg-body); color: var(--text-main); line-height: 1.6; overflow-x: hidden; }
         h1, h2, h3, h4 { font-family: 'Playfair Display', serif; letter-spacing: -0.02em; color: var(--text-main); }
-        
         input, button, textarea, select { font-family: inherit; outline: none; }
-
         .container { max-width: 1100px; margin: 0 auto; padding: 0 1.5rem; }
         .hidden { display: none !important; }
 
-        /* --- NAVEGACIÓN (Glassmorphism Mejorado) --- */
-        nav { 
-            position: sticky; top: 0; z-index: 100; 
-            background: rgba(255, 255, 255, 0.8); 
-            backdrop-filter: blur(16px); 
-            border-bottom: 1px solid rgba(0,0,0,0.05);
-        }
-        nav .container { display: flex; height: 5rem; align-items: center; justify-content: space-between; }
-        
-        .nav-brand { display: flex; align-items: center; gap: 0.75rem; text-decoration: none; color: inherit; cursor: pointer; transition: opacity 0.2s; }
-        .nav-brand:hover { opacity: 0.7; }
-        
-        /* LOGO CSS PURO (DISEÑO PREMIUM) */
-        .logo-badge {
-            width: 3rem; height: 3rem;
-            background-color: #F9F7F2;
-            border: 2px solid #1e293b;
-            border-radius: 50%;
-            display: flex; align-items: center; justify-content: center;
-            position: relative;
-            box-shadow: 0 4px 6px rgba(0,0,0,0.05);
-            flex-shrink: 0;
-        }
-        .logo-badge::after {
-            content: ''; position: absolute;
-            top: 3px; left: 3px; right: 3px; bottom: 3px;
-            border: 1px solid #1e293b; border-radius: 50%; opacity: 0.3;
-        }
-        .logo-text {
-            font-family: 'Playfair Display', serif; font-weight: 800; font-size: 1.2rem; color: #1e293b;
-            z-index: 1; line-height: 1; padding-top: 2px;
-        }
-        .nav-brand span { font-size: 1.25rem; font-weight: 700; letter-spacing: -0.03em; }
-
+        /* --- NAVEGACIÓN --- */
+        nav { position: sticky; top: 0; z-index: 100; background: rgba(255, 255, 255, 0.85); backdrop-filter: blur(12px); border-bottom: 1px solid rgba(0,0,0,0.05); }
+        nav .container { display: flex; height: 4.5rem; align-items: center; justify-content: space-between; }
+        .nav-brand { display: flex; align-items: center; gap: 0.75rem; text-decoration: none; color: inherit; cursor: pointer; }
+        .logo-badge { width: 2.5rem; height: 2.5rem; background-color: #F9F7F2; border: 2px solid #1e293b; border-radius: 50%; display: flex; align-items: center; justify-content: center; position: relative; flex-shrink: 0; }
+        .logo-badge::after { content: ''; position: absolute; top: 2px; left: 2px; right: 2px; bottom: 2px; border: 1px solid #1e293b; border-radius: 50%; opacity: 0.3; }
+        .logo-text { font-family: 'Playfair Display', serif; font-weight: 800; font-size: 1rem; color: #1e293b; padding-top: 2px; }
+        .nav-brand span { font-size: 1.2rem; font-weight: 700; letter-spacing: -0.02em; }
         .nav-buttons { display: flex; align-items: center; gap: 0.75rem; }
 
         /* --- BOTONES --- */
-        .btn { 
-            padding: 0.6rem 1.2rem; border-radius: 99px; border: 1px solid transparent; cursor: pointer; 
-            font-size: 0.9rem; font-weight: 500; transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1); 
-            display: inline-flex; align-items: center; gap: 0.5rem; text-decoration: none;
-        }
-        .btn-primary { background: var(--primary); color: white; box-shadow: 0 4px 10px rgba(0,0,0,0.1); }
-        .btn-primary:hover { transform: translateY(-2px); box-shadow: 0 8px 20px rgba(0,0,0,0.15); }
-        
+        .btn { padding: 0.5rem 1rem; border-radius: 99px; border: 1px solid transparent; cursor: pointer; font-size: 0.85rem; font-weight: 500; transition: all 0.2s; display: inline-flex; align-items: center; gap: 0.4rem; text-decoration: none; }
+        .btn-primary { background: var(--primary); color: white; box-shadow: var(--shadow-soft); }
+        .btn-primary:hover { transform: translateY(-1px); opacity: 0.9; }
         .btn-outline { background: white; border-color: var(--border); color: var(--text-main); }
-        .btn-outline:hover { border-color: var(--text-main); background: #fff; transform: translateY(-1px); }
-
-        .btn-ghost { background: transparent; color: var(--text-muted); padding: 0.5rem 0.8rem; }
-        .btn-ghost:hover { color: var(--text-main); background: rgba(0,0,0,0.04); }
-
-        /* Botón Premium Dorado */
-        .btn-premium { 
-            background: linear-gradient(135deg, #F59E0B 0%, #D97706 100%) !important; 
-            color: white !important; border: none;
-            box-shadow: 0 4px 15px rgba(245, 158, 11, 0.25);
-        }
-        .btn-premium:hover { transform: translateY(-2px); box-shadow: 0 8px 25px rgba(245, 158, 11, 0.35); filter: brightness(1.1); }
-
-        .btn-cancel-premium { background-color: #FFFBEB; color: #B45309; border: 1px solid #FCD34D; }
-        .btn-cancel-premium:hover { background-color: #FEF3C7; }
-        
+        .btn-outline:hover { border-color: var(--text-main); background: #F4F4F5; }
+        .btn-ghost { background: transparent; color: var(--text-muted); }
+        .btn-ghost:hover { color: var(--text-main); background: rgba(0,0,0,0.03); }
+        .btn-premium { background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%) !important; color: white !important; box-shadow: 0 4px 12px rgba(245, 158, 11, 0.3); border: none; }
+        .btn-premium:hover { transform: translateY(-1px); filter: brightness(1.1); }
+        .btn-cancel-premium { background-color: #fffbeb; color: #b45309; border: 1px solid #fcd34d; }
+        .btn-cancel-premium:hover { background-color: #fef3c7; }
         .btn-delete { background-color: #FEF2F2; color: #DC2626; }
         .btn-delete:hover { background-color: #FEE2E2; }
-
         .btn-edit { background-color: #EFF6FF; color: #2563EB; }
         .btn-edit:hover { background-color: #DBEAFE; }
 
         /* --- PAGINAS (SPA) --- */
-        .page { display: none; animation: fadeIn 0.4s cubic-bezier(0.4, 0, 0.2, 1); padding-bottom: 4rem; }
+        .page { display: none; animation: fadeIn 0.3s ease; padding-bottom: 4rem; }
         .page.active { display: block; }
-        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(5px); } to { opacity: 1; transform: translateY(0); } }
 
         /* --- HERO --- */
-        .hero { padding: 8rem 0 5rem; text-align: center; }
-        .hero h1 { font-size: 3.8rem; line-height: 1.1; margin-bottom: 1.5rem; letter-spacing: -0.03em; }
-        .hero p { font-size: 1.25rem; color: var(--text-muted); max-width: 600px; margin: 0 auto 3rem; font-weight: 300; }
+        .hero { padding: 6rem 0 4rem; text-align: center; }
+        .hero h1 { font-size: 3.5rem; line-height: 1.1; margin-bottom: 1.5rem; }
+        .hero p { font-size: 1.15rem; color: var(--text-muted); max-width: 600px; margin: 0 auto 2.5rem; }
         
         /* --- SEARCH --- */
-        .search-wrapper { 
-            max-width: 550px; margin: 0 auto 4rem; position: relative; 
-            background: white; border-radius: 99px; 
-            box-shadow: 0 10px 30px -5px rgba(0,0,0,0.08); 
-            border: 1px solid transparent; transition: all 0.3s;
-        }
-        .search-wrapper:focus-within { border-color: var(--border); box-shadow: 0 15px 35px -5px rgba(0,0,0,0.12); transform: translateY(-2px); }
-        .search-wrapper i { position: absolute; left: 1.5rem; top: 50%; transform: translateY(-50%); color: var(--text-muted); font-size: 1.2rem; }
-        .search-wrapper input { width: 100%; padding: 1.2rem 1.5rem 1.2rem 3.5rem; border: none; background: transparent; font-size: 1.1rem; border-radius: 99px; }
+        .search-wrapper { max-width: 480px; margin: 0 auto 3rem; position: relative; background: white; border-radius: 99px; box-shadow: var(--shadow-soft); border: 1px solid transparent; transition: all 0.3s; }
+        .search-wrapper:focus-within { border-color: var(--border); transform: translateY(-2px); }
+        .search-wrapper i { position: absolute; left: 1.2rem; top: 50%; transform: translateY(-50%); color: var(--text-muted); }
+        .search-wrapper input { width: 100%; padding: 1rem 1rem 1rem 3rem; border: none; background: transparent; font-size: 1rem; border-radius: 99px; }
 
         /* --- GRID --- */
-        .projects-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(340px, 1fr)); gap: 2.5rem; }
-
-        .project-card { 
-            background: var(--bg-card); border-radius: var(--radius); 
-            border: 1px solid var(--border); overflow: hidden; 
-            transition: all 0.3s ease; display: flex; flex-direction: column;
-            box-shadow: var(--shadow-soft);
-        }
-        .project-card:hover { transform: translateY(-8px); box-shadow: var(--shadow-hover); border-color: transparent; }
-        
-        .project-card.is-premium { border: 1px solid #FCD34D; position: relative; }
-        .project-card.is-premium::after { content: ''; position: absolute; inset: 0; pointer-events: none; box-shadow: inset 0 0 0 1px rgba(252, 211, 77, 0.2); border-radius: var(--radius); }
-        
-        .premium-badge { 
-            position: absolute; top: 12px; right: 12px; background: rgba(255,255,255,0.95); 
-            backdrop-filter: blur(4px); padding: 6px 12px; border-radius: 99px; 
-            font-size: 0.75rem; font-weight: 700; color: #B45309; border: 1px solid #FDE68A; 
-            z-index: 10; box-shadow: 0 2px 4px rgba(0,0,0,0.05); display: flex; align-items: center; gap: 4px;
-        }
-
-        .project-image-container { height: 240px; overflow: hidden; position: relative; background: #F4F4F5; cursor: pointer; }
-        .project-image { width: 100%; height: 100%; object-fit: cover; transition: transform 0.6s; }
+        .projects-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 2rem; }
+        .project-card { background: var(--bg-card); border-radius: var(--radius); border: 1px solid var(--border); overflow: hidden; transition: all 0.3s ease; display: flex; flex-direction: column; }
+        .project-card:hover { transform: translateY(-5px); box-shadow: 0 15px 30px -10px rgba(0,0,0,0.1); }
+        .project-card.is-premium { border: 1px solid #FBBF24; position: relative; }
+        .premium-badge { position: absolute; top: 10px; right: 10px; background: rgba(255,255,255,0.9); backdrop-filter: blur(4px); padding: 4px 8px; border-radius: 6px; font-size: 0.7rem; font-weight: 700; color: #B45309; border: 1px solid #FDE68A; z-index: 10; }
+        .project-image-container { height: 200px; overflow: hidden; position: relative; background: #F4F4F5; cursor: pointer; }
+        .project-image { width: 100%; height: 100%; object-fit: cover; transition: transform 0.5s; }
         .project-card:hover .project-image { transform: scale(1.05); }
-        .project-image-placeholder { width: 100%; height: 100%; display: flex; align-items: center; justify-content: center; color: #A1A1AA; font-size: 3rem; }
-
-        .card-content { padding: 1.5rem; display: flex; flex-direction: column; flex: 1; }
-        .card-category { font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.05em; color: var(--accent); font-weight: 700; margin-bottom: 0.5rem; }
-        .card-title { font-size: 1.4rem; font-weight: 700; line-height: 1.2; margin-bottom: 0.75rem; cursor: pointer; transition: color 0.2s; }
+        .project-image-placeholder { width: 100%; height: 100%; display: flex; align-items: center; justify-content: center; color: #A1A1AA; font-size: 2rem; }
+        .card-content { padding: 1.25rem; display: flex; flex-direction: column; flex: 1; gap: 0.5rem; }
+        .card-category { font-size: 0.7rem; text-transform: uppercase; letter-spacing: 0.05em; color: var(--accent); font-weight: 700; }
+        .card-title { font-size: 1.15rem; font-weight: 700; line-height: 1.3; cursor: pointer; transition: color 0.2s; }
         .card-title:hover { color: var(--accent); }
-        .card-desc { font-size: 0.95rem; color: var(--text-muted); display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical; overflow: hidden; margin-bottom: 1.5rem; font-weight: 300; }
+        .card-desc { font-size: 0.9rem; color: var(--text-muted); display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; margin-bottom: 1rem; }
+        .card-footer { margin-top: auto; padding-top: 1rem; border-top: 1px solid #F4F4F5; display: flex; justify-content: space-between; align-items: center; }
         
-        .card-footer { margin-top: auto; padding-top: 1.25rem; border-top: 1px solid #F4F4F5; display: flex; justify-content: space-between; align-items: center; }
-        
-        .author-row { display: flex; align-items: center; gap: 0.6rem; cursor: pointer; }
-        .author-row img { width: 32px; height: 32px; border-radius: 50%; object-fit: cover; border: 2px solid white; box-shadow: 0 2px 4px rgba(0,0,0,0.05); }
-        .author-row span { font-size: 0.85rem; font-weight: 500; color: var(--text-main); }
-        .author-row:hover span { text-decoration: underline; }
+        /* Avatar Styles Updated */
+        .author-row { display: flex; align-items: center; gap: 0.5rem; cursor: pointer; }
+        .avatar-circle { width: 28px; height: 28px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 0.8rem; font-weight: 700; color: white; object-fit: cover; flex-shrink: 0; }
+        .author-name { font-size: 0.85rem; font-weight: 500; color: var(--text-main); }
+        .author-row:hover .author-name { text-decoration: underline; }
 
-        .like-btn { background: none; border: none; cursor: pointer; color: var(--text-muted); font-size: 0.9rem; display: flex; align-items: center; gap: 6px; transition: all 0.2s; padding: 6px 10px; border-radius: 99px; }
-        .like-btn:hover { background: #FEF2F2; color: #EF4444; }
-        .like-btn.liked { color: #EF4444; }
+        .like-btn { background: none; border: none; cursor: pointer; color: var(--text-muted); font-size: 0.9rem; display: flex; align-items: center; gap: 4px; transition: color 0.2s; }
+        .like-btn:hover, .like-btn.liked { color: #EF4444; }
         .like-btn.liked i { font-weight: fill; }
 
         /* --- DASHBOARD --- */
-        .dashboard-header { background: white; border-bottom: 1px solid var(--border); padding: 3rem 0; margin-bottom: 3rem; }
-        .profile-stats { display: flex; gap: 3rem; margin-top: 1.5rem; }
-        .stat-item strong { font-size: 1.8rem; display: block; color: var(--text-main); line-height: 1; margin-bottom: 0.25rem; }
-        .stat-item span { font-size: 0.85rem; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.05em; font-weight: 600; }
+        .dashboard-header { background: white; border-bottom: 1px solid var(--border); padding: 3rem 0; margin-bottom: 2rem; }
+        .profile-stats { display: flex; gap: 2rem; margin-top: 1rem; }
+        .stat-item strong { font-size: 1.5rem; display: block; color: var(--text-main); }
+        .stat-item span { font-size: 0.85rem; color: var(--text-muted); }
+        
+        .profile-avatar-lg { width: 90px; height: 90px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 2.5rem; font-weight: 700; color: white; border: 4px solid white; box-shadow: 0 10px 20px -5px rgba(0,0,0,0.1); flex-shrink: 0; object-fit: cover; }
 
         /* --- FORMULARIOS --- */
-        .form-container { max-width: 600px; margin: 3rem auto; background: white; padding: 2.5rem; border-radius: var(--radius); border: 1px solid var(--border); box-shadow: var(--shadow-soft); }
-        .form-group { margin-bottom: 1.5rem; }
-        .form-group label { display: block; margin-bottom: 0.5rem; font-size: 0.9rem; font-weight: 600; color: var(--text-main); }
-        .form-group input, .form-group textarea, .form-group select { width: 100%; padding: 0.85rem 1rem; border: 1px solid var(--border); border-radius: 0.6rem; background: #FAFAFA; font-size: 0.95rem; transition: all 0.2s; }
-        .form-group input:focus { background: white; border-color: var(--text-main); box-shadow: 0 0 0 2px rgba(0,0,0,0.05); }
-        .upload-separator { display: flex; align-items: center; margin: 1rem 0; color: var(--text-muted); font-size: 0.8rem; }
-        .upload-separator::before, .upload-separator::after { content: ""; flex: 1; height: 1px; background: var(--border); }
-        .upload-separator span { padding: 0 0.8rem; }
-
-        /* --- TOAST & ADS --- */
-        #toast-container { position: fixed; bottom: 24px; right: 24px; z-index: 9999; display: flex; flex-direction: column; gap: 10px; }
-        .toast { background: #18181B; color: white; padding: 1rem 1.5rem; border-radius: 0.6rem; font-size: 0.9rem; box-shadow: 0 10px 20px -5px rgba(0,0,0,0.2); animation: slideUp 0.3s cubic-bezier(0.4, 0, 0.2, 1); display: flex; align-items: center; gap: 10px; }
-        @keyframes slideUp { from { transform: translateY(20px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
+        .form-container { max-width: 600px; margin: 3rem auto; background: white; padding: 2rem; border-radius: var(--radius); border: 1px solid var(--border); }
+        .form-group { margin-bottom: 1.2rem; }
+        .form-group label { display: block; margin-bottom: 0.4rem; font-size: 0.9rem; font-weight: 600; }
+        .form-group input, .form-group textarea, .form-group select { width: 100%; padding: 0.75rem; border: 1px solid var(--border); border-radius: 0.5rem; background: #FAFAFA; }
         
-        .ad-placeholder { width: 100%; max-width: 728px; height: 90px; background: #F4F4F5; margin: 3rem auto; display: flex; align-items: center; justify-content: center; color: #A1A1AA; font-size: 0.8rem; letter-spacing: 1px; border-radius: 0.5rem; text-transform: uppercase; border: 1px dashed #E4E4E7; }
+        /* --- TOAST & ADS --- */
+        #toast-container { position: fixed; bottom: 20px; right: 20px; z-index: 9999; display: flex; flex-direction: column; gap: 10px; }
+        .toast { background: #18181B; color: white; padding: 0.8rem 1.2rem; border-radius: 8px; font-size: 0.9rem; box-shadow: 0 10px 15px -3px rgba(0,0,0,0.1); animation: slideUp 0.3s ease-out; }
+        @keyframes slideUp { from { transform: translateY(20px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
+        .ad-placeholder { width: 100%; max-width: 728px; height: 90px; background: #F4F4F5; margin: 2rem auto; display: flex; align-items: center; justify-content: center; color: #A1A1AA; font-size: 0.8rem; letter-spacing: 1px; border-radius: 8px; border: 1px dashed #E4E4E7; }
 
         /* --- MODAL --- */
-        .modal-overlay { position: fixed; inset: 0; background: rgba(255,255,255,0.85); backdrop-filter: blur(8px); z-index: 2000; display: flex; align-items: center; justify-content: center; opacity: 0; visibility: hidden; transition: all 0.3s; }
+        .modal-overlay { position: fixed; inset: 0; background: rgba(255,255,255,0.9); backdrop-filter: blur(5px); z-index: 2000; display: flex; align-items: center; justify-content: center; opacity: 0; visibility: hidden; transition: all 0.3s; }
         .modal-overlay.active { opacity: 1; visibility: visible; }
-        .modal-card { background: white; width: 100%; max-width: 420px; padding: 2.5rem; border-radius: 1.5rem; box-shadow: 0 25px 50px -12px rgba(0,0,0,0.15); border: 1px solid var(--border); transform: translateY(20px); transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1); position: relative; }
+        .modal-card { background: white; width: 100%; max-width: 400px; padding: 2rem; border-radius: 1.5rem; box-shadow: 0 25px 50px -12px rgba(0,0,0,0.15); border: 1px solid var(--border); transform: translateY(20px); transition: all 0.3s; position: relative; }
         .modal-overlay.active .modal-card { transform: translateY(0); }
-        .close-modal { position: absolute; top: 1.2rem; right: 1.2rem; background: none; border: none; font-size: 1.4rem; cursor: pointer; color: var(--text-muted); transition: color 0.2s; }
-        .close-modal:hover { color: var(--text-main); }
+        .close-modal { position: absolute; top: 1rem; right: 1rem; background: none; border: none; font-size: 1.2rem; cursor: pointer; color: var(--text-muted); }
 
         /* --- DETALLE --- */
-        .detail-header { padding: 2rem 0 3rem; border-bottom: 1px solid var(--border); margin-bottom: 3rem; }
+        .detail-header { padding: 2rem 0; border-bottom: 1px solid var(--border); margin-bottom: 2rem; }
         .detail-img { width: 100%; height: 450px; object-fit: cover; border-radius: var(--radius); margin-bottom: 3rem; background: #F4F4F5; box-shadow: var(--shadow-soft); }
-
+        
+        /* --- RESEÑAS (NUEVO) --- */
+        .reviews-section { margin-top: 4rem; padding-top: 2rem; border-top: 1px solid var(--border); }
+        .rating-stars { color: #FCD34D; font-size: 1.2rem; }
+        .review-card { background: #F9FAFB; padding: 1.5rem; border-radius: 12px; margin-bottom: 1rem; }
+        .review-header { display: flex; justify-content: space-between; margin-bottom: 0.5rem; }
+        .star-input { display: flex; gap: 0.5rem; font-size: 1.5rem; color: #D4D4D8; cursor: pointer; margin-bottom: 1rem; }
+        .star-input span.active { color: #FCD34D; }
+        
         @media (max-width: 768px) { 
             .hero h1 { font-size: 2.5rem; } 
             .projects-grid { grid-template-columns: 1fr; } 
@@ -222,25 +147,18 @@
 
     <div id="toast-container"></div>
 
-    <!-- NAVEGACIÓN -->
     <nav>
         <div class="container">
             <div class="nav-brand" onclick="goToPage('home')">
-                <!-- LOGO CSS PURO (El que te gustó) -->
-                <div class="logo-badge">
-                    <span class="logo-text">PA</span>
-                </div>
+                <div class="logo-badge"><span class="logo-text">PA</span></div>
                 <span>Proyectos Alex</span>
             </div>
-            
             <div class="nav-buttons">
                 <button class="btn btn-ghost hidden" id="navHomeBtn" onclick="goToPage('home')"><i class="ph ph-house"></i> Inicio</button>
-                
                 <div id="authBtns">
                     <button class="btn btn-outline" onclick="openModal('auth', 'login')">Ingresar</button>
                     <button class="btn btn-primary" onclick="openModal('auth', 'signup')">Registrarse</button>
                 </div>
-
                 <div id="userBtns" class="hidden" style="display: flex; align-items: center; gap: 0.5rem;">
                      <button class="btn btn-outline" onclick="goToPage('dashboard')"><i class="ph ph-user"></i> Mi Cuenta</button>
                      <button class="btn btn-ghost" onclick="handleLogout()" title="Salir"><i class="ph ph-sign-out" style="font-size: 1.2rem;"></i></button>
@@ -249,43 +167,38 @@
         </div>
     </nav>
 
-    <!-- PÁGINA: HOME -->
+    <!-- HOME -->
     <div id="page-home" class="page active">
         <header class="hero">
             <div class="container">
                 <div style="display: inline-block; padding: 6px 16px; background: #F4F4F5; color: #18181B; border-radius: 99px; font-size: 0.85rem; font-weight: 600; margin-bottom: 1.5rem; border: 1px solid #E4E4E7;">✨ Plataforma de Proyectos Digitales</div>
                 <h1>Dale Vida a Tus <br> <span style="background: linear-gradient(90deg, #6366F1, #8B5CF6); -webkit-background-clip: text; -webkit-text-fill-color: transparent;">Grandes Ideas</span></h1>
                 <p>La plataforma premium para creadores. Comparte, inspira y crece.</p>
-                
                 <div class="search-wrapper">
                     <i class="ph ph-magnifying-glass"></i>
-                    <input type="text" placeholder="Buscar proyectos, categorías o creadores..." onkeyup="filterProjects(this.value, 'homeProjectsGrid')">
+                    <input type="text" placeholder="Buscar..." onkeyup="filterProjects(this.value, 'homeProjectsGrid')">
                 </div>
-                
                 <button class="btn btn-primary" style="padding: 0.8rem 2rem; font-size: 1rem;" onclick="checkAuthAndAct('create')">Publicar Proyecto <i class="ph ph-arrow-right"></i></button>
             </div>
         </header>
-        
         <div class="ad-placeholder">PUBLICIDAD GOOGLE ADSENSE</div>
-
         <div class="container">
             <h3 style="margin-bottom: 2rem; font-size: 1.8rem;">Explorar Proyectos</h3>
             <div id="homeProjectsGrid" class="projects-grid"></div>
         </div>
-        
         <div class="ad-placeholder">PUBLICIDAD</div>
     </div>
 
-    <!-- PÁGINA: DASHBOARD -->
+    <!-- DASHBOARD -->
     <div id="page-dashboard" class="page">
         <div class="dashboard-header">
             <div class="container">
                 <div style="display: flex; justify-content: space-between; align-items: flex-end;">
                     <div style="display: flex; gap: 1.5rem; align-items: center;">
-                        <img id="dashboardAvatar" class="profile-avatar-large" style="width: 90px; height: 90px; border-radius: 50%; object-fit: cover; border: 4px solid white; box-shadow: 0 10px 20px -5px rgba(0,0,0,0.1);" src="">
+                        <div id="dash-avatar-container"></div> <!-- Avatar dinámico -->
                         <div>
-                            <h2 id="userNameDisplay" style="margin-bottom: 0.2rem; font-size: 2rem;">Usuario</h2>
-                            <p id="userEmailDisplay" style="color: var(--text-muted); font-size: 1rem;">email@ejemplo.com</p>
+                            <h2 id="dash-name" style="margin-bottom: 0.2rem; font-size: 2rem;">Usuario</h2>
+                            <p id="dash-email" style="color: var(--text-muted); font-size: 1rem;">email@ejemplo.com</p>
                             <button onclick="openEditProfile()" class="btn btn-ghost" style="padding: 0; margin-top: 0.5rem; font-size: 0.85rem; color: var(--accent);">Editar perfil</button>
                         </div>
                     </div>
@@ -300,11 +213,11 @@
         <div class="container">
             <div class="ad-placeholder">ANUNCIO DASHBOARD</div>
             <h3 style="margin: 3rem 0 2rem; font-size: 1.8rem;">Mi Portfolio</h3>
-            <div id="myProjectsGrid" class="projects-grid"></div>
+            <div id="dashboard-grid" class="projects-grid"></div>
         </div>
     </div>
 
-    <!-- PÁGINA: DETALLE PROYECTO -->
+    <!-- DETALLE -->
     <div id="page-detail" class="page">
         <div class="container" style="padding-top: 3rem;">
             <button class="btn btn-outline" onclick="goToPage('home')" style="margin-bottom: 2rem;"><i class="ph ph-arrow-left"></i> Volver</button>
@@ -314,14 +227,20 @@
                     <span id="detail-category" style="background: #EEF2FF; color: #6366F1; padding: 4px 12px; border-radius: 99px; font-size: 0.8rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.05em;">CATEGORÍA</span>
                     <span id="detail-date" style="color: var(--text-muted); font-size: 0.9rem;">Fecha</span>
                 </div>
-                <h1 id="detail-title" style="font-size: 3.5rem; line-height: 1.1; margin-bottom: 1.5rem;">Título del Proyecto</h1>
+                <h1 id="detail-title" style="font-size: 3.5rem; line-height: 1.1; margin-bottom: 1.5rem;">Título</h1>
+                
                 <div style="display: flex; gap: 3rem; align-items: center; border-top: 1px solid var(--border); padding-top: 1.5rem;">
                     <div id="detail-author-box" style="display: flex; align-items: center; gap: 0.8rem; cursor: pointer;" onclick="goToUserProfileFromDetail()">
-                        <img id="detail-author-img" style="width: 48px; height: 48px; border-radius: 50%; object-fit: cover; box-shadow: 0 2px 5px rgba(0,0,0,0.05);">
+                        <div id="detail-author-avatar"></div>
                         <div>
                             <span style="display: block; font-size: 0.8rem; color: var(--text-muted); line-height: 1;">Creado por</span>
                             <span id="detail-author-name" style="font-weight: 600; font-size: 1rem; color: var(--text-main);">Autor</span>
                         </div>
+                    </div>
+                    <div style="width: 1px; height: 40px; background: var(--border);"></div>
+                    <div>
+                        <span style="display: block; font-size: 0.8rem; color: var(--text-muted); line-height: 1;">Valoración</span>
+                        <div id="detail-rating" style="color: #FCD34D; font-weight: 700; font-size: 1.2rem;">-</div>
                     </div>
                     <div style="width: 1px; height: 40px; background: var(--border);"></div>
                     <div>
@@ -336,6 +255,22 @@
             <div style="max-width: 800px; margin: 0 auto; font-size: 1.15rem; color: #374151;">
                 <p id="detail-desc" style="white-space: pre-wrap; line-height: 1.8;">Descripción...</p>
                 <div id="detail-actions" style="margin-top: 4rem; text-align: center; padding-top: 2rem; border-top: 1px solid var(--border);"></div>
+            
+                <!-- SECCIÓN REVIEWS -->
+                <div class="reviews-section">
+                    <h3 style="margin-bottom: 1.5rem;">Reseñas</h3>
+                    
+                    <div id="review-form" style="background: white; padding: 2rem; border-radius: 12px; border: 1px solid var(--border); margin-bottom: 2rem;">
+                        <h4 style="margin-bottom: 1rem;">Deja tu valoración</h4>
+                        <div class="star-input" id="star-input">
+                            <span onclick="setRating(1)">★</span><span onclick="setRating(2)">★</span><span onclick="setRating(3)">★</span><span onclick="setRating(4)">★</span><span onclick="setRating(5)">★</span>
+                        </div>
+                        <textarea id="review-comment" class="form-group" style="width:100%;" rows="3" placeholder="Escribe tu opinión..."></textarea>
+                        <button onclick="submitReview()" class="btn btn-primary">Enviar Reseña</button>
+                    </div>
+
+                    <div id="reviews-list"></div>
+                </div>
             </div>
         </div>
     </div>
@@ -344,7 +279,7 @@
     <div id="page-profile" class="page">
         <div class="dashboard-header" style="text-align: center;">
             <div class="container">
-                <img id="pub-avatar" style="width: 120px; height: 120px; border-radius: 50%; margin: 0 auto 1.5rem; display: block; object-fit: cover; background: #eee; border: 4px solid white; box-shadow: 0 10px 30px -10px rgba(0,0,0,0.15);">
+                <div id="pub-avatar-container" style="display:flex; justify-content:center; margin-bottom:1.5rem;"></div>
                 <h2 id="pub-name" style="font-size: 2.5rem; margin-bottom: 0.5rem;">Nombre</h2>
                 <p id="pub-stats" style="color: var(--text-muted); font-size: 1.1rem;">0 proyectos publicados</p>
             </div>
@@ -354,13 +289,13 @@
         </div>
     </div>
 
-    <!-- PÁGINA: CREAR / EDITAR -->
+    <!-- FORMULARIOS & MODALES (Idénticos al anterior pero pulidos) -->
     <div id="page-form" class="page">
-        <div class="container" style="padding-top: 3rem;">
-            <div class="form-container">
-                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 2rem;">
-                    <h2 id="form-title" style="margin: 0;">Nuevo Proyecto</h2>
-                    <button class="btn btn-ghost" onclick="goToPage('dashboard')"><i class="ph ph-x" style="font-size: 1.5rem;"></i></button>
+        <div class="container" style="padding: 4rem 0;">
+            <div class="modal-card" style="max-width: 600px; margin: 0 auto; box-shadow: none; border: 1px solid var(--border);">
+                <div style="display: flex; justify-content: space-between; margin-bottom: 2rem;">
+                    <h2 id="form-title">Nuevo Proyecto</h2>
+                    <button class="btn btn-ghost" onclick="goToPage('dashboard')"><i class="ph ph-x"></i></button>
                 </div>
                 <form id="projectForm">
                     <input type="hidden" id="pId">
@@ -369,29 +304,29 @@
                     <div class="form-group"><label>Descripción</label><textarea id="pDesc" rows="6" required></textarea></div>
                     <div class="form-group"><label>Precio (€)</label><input type="number" id="pPrice" min="0" step="0.01" required></div>
                     <div class="form-group">
-                        <label>Imagen de Portada</label>
+                        <label>Imagen</label>
                         <div class="upload-separator"><span>Seleccionar archivo</span></div>
                         <input type="file" id="pImgFile" accept="image/*" onchange="handleImagePreview(this, 'pImgPreview', 'pImgUrl')">
                         <input type="hidden" id="pImgUrl">
                         <div id="pImgPreview" style="margin-top:1rem; max-width:100%; border-radius:0.5rem; overflow:hidden;"></div>
                     </div>
-                    <div class="form-group"><label>Enlace Web (Opcional)</label><input type="url" id="pUrl" placeholder="https://..."></div>
-                    <button type="submit" class="btn btn-primary" style="width: 100%; padding: 1rem; margin-top: 1rem;">Guardar Proyecto</button>
+                    <div class="form-group"><label>Web</label><input type="url" id="pUrl" placeholder="https://..."></div>
+                    <button type="submit" class="btn btn-primary" style="width: 100%; padding: 1rem;">Guardar Proyecto</button>
                 </form>
             </div>
         </div>
     </div>
 
-    <!-- MODALES -->
+    <!-- MODAL AUTH -->
     <div id="modal-auth" class="modal-overlay">
         <div class="modal-card">
-            <button class="close-modal" onclick="closeModal('auth')"><i class="ph ph-x"></i></button>
+            <button class="close-modal" onclick="closeModal('auth')">✕</button>
             <h2 id="auth-title" style="text-align: center; margin-bottom: 1.5rem;">Bienvenido</h2>
             <div id="authErrorMsg" class="error-message hidden">Error</div>
             <form id="authForm">
                 <div id="signup-fields" class="hidden">
                     <div class="form-group"><label>Nombre</label><input type="text" id="reg-name"></div>
-                    <div class="form-group"><label>Foto (Opcional)</label><input type="file" onchange="handleImagePreview(this, null, 'authAvatarUrl')"><input type="hidden" id="authAvatarUrl"></div>
+                    <div class="form-group"><label>Foto (URL opcional)</label><input type="url" id="reg-avatar-url" placeholder="https://..."></div>
                 </div>
                 <div class="form-group"><label>Email</label><input type="email" id="login-email" required></div>
                 <div class="form-group"><label>Contraseña</label><input type="password" id="login-pass" required></div>
@@ -401,88 +336,245 @@
         </div>
     </div>
 
+    <!-- MODAL PERFIL -->
     <div id="modal-profile" class="modal-overlay">
         <div class="modal-card">
-            <button class="close-modal" onclick="closeModal('profile')"><i class="ph ph-x"></i></button>
-            <h2 style="text-align: center; margin-bottom: 1.5rem;">Editar Perfil</h2>
+            <button class="close-modal" onclick="closeModal('profile')">✕</button>
+            <h2 style="text-align: center;">Editar Perfil</h2>
             <form id="profileForm">
                 <div class="form-group"><label>Nombre</label><input type="text" id="edit-name" required></div>
-                <div class="form-group"><label>Avatar</label><input type="file" onchange="handleImagePreview(this, null, 'edit-avatar')"><input type="hidden" id="edit-avatar"></div>
-                <button type="submit" class="btn btn-primary" style="width: 100%; margin-top: 1rem;">Guardar Cambios</button>
+                <div class="form-group"><label>URL Avatar</label><input type="url" id="edit-avatar"></div>
+                <button type="submit" class="btn btn-primary" style="width: 100%;">Guardar</button>
             </form>
             <button onclick="deleteAccount()" class="btn btn-delete" style="width: 100%; margin-top: 1rem;">Borrar Cuenta</button>
         </div>
     </div>
 
+    <!-- MODAL PREMIUM -->
     <div id="modal-premium" class="modal-overlay">
         <div class="modal-card" style="text-align: center;">
-            <button class="close-modal" onclick="closePremiumModal()"><i class="ph ph-x"></i></button>
+            <button class="close-modal" onclick="closePremiumModal()">✕</button>
             <div style="font-size: 3.5rem; margin-bottom: 0.5rem;">📹</div>
-            <h2 style="margin-bottom: 0.5rem;">Video-Análisis</h2>
-            <p style="color: var(--text-muted); font-size: 0.95rem; margin-bottom: 1.5rem;">Recibe feedback profesional de un experto.</p>
-            <div class="price-tag" style="font-size: 2.5rem; font-weight: 800; margin-bottom: 1.5rem; color: var(--text-main);">9€ <span style="font-size: 1rem; font-weight: 500; color: var(--text-muted);">/ único</span></div>
-            <ul style="text-align: left; list-style: none; padding: 0; margin-bottom: 2rem;">
-                <li style="margin-bottom: 0.8rem; display:flex; gap:0.5rem;"><i class="ph-fill ph-check-circle" style="color:#10b981;"></i> Análisis detallado</li>
-                <li style="margin-bottom: 0.8rem; display:flex; gap:0.5rem;"><i class="ph-fill ph-check-circle" style="color:#10b981;"></i> Narración profesional</li>
-                <li style="display:flex; gap:0.5rem;"><i class="ph-fill ph-check-circle" style="color:#10b981;"></i> Insignia Destacado</li>
-            </ul>
-            <button onclick="handlePremiumPurchase()" class="btn btn-premium" style="width: 100%; padding: 1rem; font-size: 1rem;">Contratar Ahora</button>
+            <h2>Video-Análisis</h2>
+            <div class="price-tag" style="font-size: 2rem; font-weight: 800;">9€</div>
+            <button onclick="handlePremiumPurchase()" class="btn btn-premium" style="width: 100%; margin-top:1.5rem;">Contratar</button>
         </div>
     </div>
 
-    <!-- SCRIPT -->
     <script>
         const supabaseUrl = 'https://jvshcszolovsnqzkozka.supabase.co';
         const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imp2c2hjc3pvbG92c25xemtvemthIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjQwMDQ5NDgsImV4cCI6MjA3OTU4MDk0OH0.ty4wwxMhQ8gm1SgweSf9JxcDrvt2IGwKzkH4EQP8ZB4';
-        const supabase = window.supabase ? window.supabase.createClient(supabaseUrl, supabaseKey) : null;
+        const supabase = window.supabase.createClient(supabaseUrl, supabaseKey);
 
         let projects = [];
         let currentUser = JSON.parse(localStorage.getItem('alex_session')) || null;
         let isLoginMode = true;
         let selectedProjectId = null;
-        let currentDetailEmail = null;
+        let currentProjectReviews = [];
+        let currentRating = 0;
 
+        // --- INIT ---
         document.addEventListener('DOMContentLoaded', async () => {
             updateNav();
             await fetchProjects();
-            
-            if (currentUser) {
-                 // Si el usuario refrescó la página en una sección, intentar mantenerla o ir a dashboard
-                 goToPage('dashboard');
-            } else {
-                goToPage('home');
-            }
+            if (currentUser) goToPage('dashboard'); else goToPage('home');
         });
+
+        // --- AVATAR GENERATOR ---
+        function getAvatarHTML(name, url, size = 'medium') {
+            const sizePx = size === 'large' ? '90px' : (size === 'small' ? '24px' : '32px');
+            const fontSize = size === 'large' ? '2.5rem' : (size === 'small' ? '0.7rem' : '0.85rem');
+            const border = size === 'large' ? '4px solid white' : '1px solid #E4E4E7';
+            
+            // Colores aleatorios para el fondo basados en el nombre
+            const colors = ['#FCA5A5', '#FCD34D', '#86EFAC', '#93C5FD', '#C4B5FD', '#FDBA74'];
+            const charCode = name ? name.charCodeAt(0) : 0;
+            const bgColor = colors[charCode % colors.length];
+            const initial = name ? name.charAt(0).toUpperCase() : '?';
+
+            if (url) {
+                return `<img src="${url}" style="width:${sizePx}; height:${sizePx}; border-radius:50%; object-fit:cover; border:${border}; box-shadow:0 2px 5px rgba(0,0,0,0.1);">`;
+            }
+            return `<div style="width:${sizePx}; height:${sizePx}; border-radius:50%; background:${bgColor}; color:#18181B; display:flex; align-items:center; justify-content:center; font-weight:700; font-size:${fontSize}; border:${border}; text-transform:uppercase;">${initial}</div>`;
+        }
 
         // --- CORE ---
         async function fetchProjects() {
-            if(supabase) {
-                const { data, error } = await supabase.from('projects').select('*').order('created_at', { ascending: false });
-                if (!error) projects = data;
-            } else {
-                projects = JSON.parse(localStorage.getItem('alex_projects')) || [];
-            }
-            renderProjects(projects, 'homeProjectsGrid');
+            const { data, error } = await supabase.from('projects').select('*').order('created_at', { ascending: false });
+            if (!error) { projects = data; renderProjects(projects, 'homeProjectsGrid'); }
         }
 
-        function goToPage(pageId) {
-            document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
-            document.getElementById('page-' + pageId).classList.add('active');
-            window.scrollTo(0, 0);
-            
-            const navHomeBtn = document.getElementById('navHomeBtn');
-            if (pageId === 'home') {
-                navHomeBtn.classList.add('hidden');
-                renderProjects(projects, 'homeProjectsGrid');
-            } else {
-                navHomeBtn.classList.remove('hidden');
-            }
+        function renderProjects(list, containerId) {
+            const container = document.getElementById(containerId);
+            if (!container) return;
+            if (!list || list.length === 0) { container.innerHTML = '<div style="grid-column:1/-1;text-align:center;padding:3rem;color:var(--text-muted);">Sin proyectos.</div>'; return; }
 
-            if (pageId === 'dashboard') loadDashboard();
-            if (pageId === 'form') {
-                // Si llegamos aquí sin preparar (ej. refrescar), limpiar form
-                // Pero si venimos de "edit", los valores ya estarán puestos
+            container.innerHTML = list.map(p => {
+                const img = p.image_url || null;
+                const authorName = p.author_name || 'Anónimo';
+                const authorAvatar = p.author_avatar;
+                
+                return `
+                <article class="project-card ${p.is_premium ? 'is-premium' : ''}">
+                    ${p.is_premium ? '<div class="premium-badge">✨ Destacado</div>' : ''}
+                    <div class="project-image-container" onclick="openProject(${p.id})">
+                        ${img ? `<img src="${img}" class="project-image">` : `<div class="project-image-placeholder"><i class="ph ph-image"></i></div>`}
+                    </div>
+                    <div class="card-content">
+                        <span class="card-category">${p.category}</span>
+                        <h3 class="card-title" onclick="openProject(${p.id})">${p.title}</h3>
+                        <p class="card-desc">${p.description}</p>
+                        <div style="margin-top:auto;">
+                            <button class="btn btn-outline" style="width:100%;justify-content:center;margin-bottom:1rem;" onclick="openProject(${p.id})">Ver Detalles</button>
+                            <div class="card-footer">
+                                <div class="author-row" onclick="openPublicProfile('${p.author_email}')">
+                                    ${getAvatarHTML(authorName, authorAvatar, 'small')}
+                                    <span>${authorName}</span>
+                                </div>
+                                <button class="like-btn" onclick="toggleLike(this, ${p.id})"><i class="ph ph-heart"></i> <span>${p.likes_count || 0}</span></button>
+                            </div>
+                        </div>
+                    </div>
+                </article>`;
+            }).join('');
+        }
+
+        // --- REVIEWS ---
+        function setRating(n) {
+            currentRating = n;
+            const stars = document.querySelectorAll('#star-input span');
+            stars.forEach((s, i) => {
+                s.classList.toggle('active', i < n);
+            });
+        }
+
+        async function loadReviews(projectId) {
+            const { data } = await supabase.from('reviews').select('*').eq('project_id', projectId).order('created_at', {ascending:false});
+            currentProjectReviews = data || [];
+            
+            // Calcular media
+            let avg = 0;
+            if (currentProjectReviews.length > 0) {
+                const sum = currentProjectReviews.reduce((a, b) => a + b.rating, 0);
+                avg = (sum / currentProjectReviews.length).toFixed(1);
             }
+            document.getElementById('detail-rating').textContent = avg > 0 ? `★ ${avg} (${currentProjectReviews.length})` : 'Sin valoraciones';
+
+            const list = document.getElementById('reviews-list');
+            list.innerHTML = currentProjectReviews.map(r => `
+                <div class="review-card">
+                    <div class="review-header">
+                        <strong>${r.user_name}</strong>
+                        <span style="color:#FCD34D;">${'★'.repeat(r.rating)}</span>
+                    </div>
+                    <p style="font-size:0.9rem; color:#4b5563;">${r.comment}</p>
+                </div>
+            `).join('');
+        }
+
+        async function submitReview() {
+            if(!currentUser) { openModal('auth', 'login'); return; }
+            if(currentRating === 0) { showToast('Selecciona una valoración', 'error'); return; }
+            
+            const comment = document.getElementById('review-comment').value;
+            
+            await supabase.from('reviews').insert([{
+                project_id: selectedProjectId,
+                user_email: currentUser.email,
+                user_name: currentUser.name,
+                user_avatar: currentUser.avatar,
+                rating: currentRating,
+                comment: comment
+            }]);
+            
+            document.getElementById('review-comment').value = '';
+            setRating(0);
+            showToast('¡Gracias por tu opinión!');
+            loadReviews(selectedProjectId);
+        }
+
+        // --- DETALLE ---
+        function openProject(id) {
+            selectedProjectId = id;
+            const p = projects.find(x => x.id === id);
+            
+            document.getElementById('detail-title').textContent = p.title;
+            document.getElementById('detail-desc').textContent = p.description;
+            document.getElementById('detail-price').textContent = p.price + '€';
+            document.getElementById('detail-category').textContent = p.category;
+            document.getElementById('detail-date').textContent = new Date(p.created_at).toLocaleDateString();
+            document.getElementById('detail-author-name').textContent = p.author_name;
+            
+            // Avatar Autor Detalle
+            document.getElementById('detail-author-avatar').innerHTML = getAvatarHTML(p.author_name, p.author_avatar, 'medium');
+            document.getElementById('detail-author-box').onclick = () => openPublicProfile(p.author_email);
+
+            const imgEl = document.getElementById('detail-img');
+            if(p.image_url) { imgEl.src = p.image_url; imgEl.style.display = 'block'; }
+            else { imgEl.style.display = 'none'; }
+
+            const actions = document.getElementById('detail-actions');
+            actions.innerHTML = p.business_url ? `<a href="${p.business_url}" target="_blank" class="btn btn-primary">Visitar Web</a>` : '';
+
+            // Cargar reseñas
+            loadReviews(id);
+            goToPage('detail');
+        }
+
+        // --- DASHBOARD & PERFIL ---
+        function loadDashboard() {
+            if (!currentUser) return;
+            document.getElementById('dash-name').textContent = currentUser.name;
+            document.getElementById('dash-email').textContent = currentUser.email;
+            document.getElementById('dash-avatar-container').innerHTML = getAvatarHTML(currentUser.name, currentUser.avatar, 'large');
+            
+            const myProjects = projects.filter(p => p.author_email === currentUser.email);
+            document.getElementById('stat-projects').textContent = myProjects.length;
+            document.getElementById('stat-premium').textContent = myProjects.filter(p => p.is_premium).length;
+            
+            const grid = document.getElementById('dashboard-grid');
+            grid.innerHTML = myProjects.map(p => `
+                <div class="project-card ${p.is_premium ? 'is-premium' : ''}">
+                    <div class="project-image-container">${p.image_url ? `<img src="${p.image_url}" class="project-image">` : ''}</div>
+                    <div class="card-content">
+                        <h3>${p.title}</h3>
+                        <div style="margin-top:auto; display:flex; gap:0.5rem; flex-wrap:wrap;">
+                            <button class="btn btn-outline" onclick="editProject(${p.id})" style="flex:1;">Editar</button>
+                            <button class="btn btn-delete" onclick="deleteProject(${p.id})"><i class="ph ph-trash"></i></button>
+                            ${!p.is_premium 
+                                ? `<button class="btn btn-premium" onclick="openPremiumModal(${p.id})" style="width:100%;">Destacar (9€)</button>` 
+                                : `<button class="btn btn-cancel-premium" onclick="cancelPremium(${p.id})" style="width:100%;">Cancelar Destacado</button>`
+                            }
+                        </div>
+                    </div>
+                </div>
+            `).join('');
+        }
+        
+        function openPublicProfile(email) {
+            if (currentUser && currentUser.email === email) { goToPage('dashboard'); return; }
+            const userProjects = projects.filter(p => p.author_email === email);
+            if(userProjects.length === 0) return;
+            
+            const authorName = userProjects[0].author_name;
+            const authorAvatar = userProjects[0].author_avatar;
+            
+            document.getElementById('pub-name').textContent = authorName;
+            document.getElementById('pub-stats').textContent = userProjects.length + ' Proyectos';
+            document.getElementById('pub-avatar-container').innerHTML = getAvatarHTML(authorName, authorAvatar, 'large');
+            
+            renderProjects(userProjects, 'pub-grid');
+            goToPage('profile');
+        }
+
+        // --- AUTH & HELPERS ---
+        function goToPage(id) {
+            document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+            document.getElementById('page-'+id).classList.add('active');
+            window.scrollTo(0,0);
+            if (id === 'home') { document.getElementById('navHomeBtn').classList.add('hidden'); renderProjects(projects, 'homeProjectsGrid'); }
+            else document.getElementById('navHomeBtn').classList.remove('hidden');
+            if (id === 'dashboard') loadDashboard();
         }
 
         function updateNav() {
@@ -495,172 +587,30 @@
             }
         }
 
-        // --- RENDER ---
-        function renderProjects(list, containerId) {
-            const container = document.getElementById(containerId);
-            if (!container) return;
-            
-            if (!list || list.length === 0) {
-                container.innerHTML = '<div style="grid-column: 1/-1; text-align: center; padding: 4rem; color: var(--text-muted);">No hay proyectos disponibles.</div>';
-                return;
-            }
-
-            container.innerHTML = list.map(p => {
-                const img = p.image_url || null;
-                const avatar = p.author_avatar || 'https://ui-avatars.com/api/?name=' + p.author_name;
-                const likes = p.likes_count || 0;
-                const isPrem = p.is_premium || p.isPremium;
-
-                return `
-                <article class="project-card ${isPrem ? 'is-premium' : ''}">
-                    ${isPrem ? '<div class="premium-badge"><i class="ph-fill ph-star"></i> Destacado</div>' : ''}
-                    <div class="project-image-container" onclick="openProject(${p.id})">
-                        ${img ? `<img src="${img}" class="project-image">` : `<div class="project-image-placeholder"><i class="ph ph-image"></i></div>`}
-                    </div>
-                    <div class="card-content">
-                        <span class="card-category">${p.category}</span>
-                        <h3 class="card-title" onclick="openProject(${p.id})">${p.title}</h3>
-                        <p class="card-desc">${p.description}</p>
-                        
-                        <div style="margin-top:auto;">
-                            <button class="btn btn-outline" style="width:100%; justify-content:center; margin-bottom:1rem;" onclick="openProject(${p.id})">Ver Proyecto Completo</button>
-                            <div class="card-footer">
-                                <div class="author-row" onclick="openPublicProfile('${p.author_email}')">
-                                    <img src="${avatar}">
-                                    <span>${p.author_name}</span>
-                                </div>
-                                <button class="like-btn" onclick="toggleLike(this, ${p.id})">
-                                    <i class="ph ph-heart"></i> <span>${likes}</span>
-                                </button>
-                            </div>
-                        </div>
-                    </div>
-                </article>`;
-            }).join('');
-        }
-
-        // --- ACTIONS ---
-        function openProject(id) {
-            const p = projects.find(x => x.id === id);
-            if (!p) return;
-
-            document.getElementById('detail-category').textContent = p.category;
-            document.getElementById('detail-title').textContent = p.title;
-            document.getElementById('detail-desc').textContent = p.description;
-            document.getElementById('detail-price').textContent = p.price + '€';
-            document.getElementById('detail-date').textContent = new Date(p.created_at).toLocaleDateString();
-            
-            document.getElementById('detail-author-name').textContent = p.author_name;
-            document.getElementById('detail-author-img').src = p.author_avatar || 'https://ui-avatars.com/api/?name=' + p.author_name;
-            currentDetailEmail = p.author_email;
-
-            const imgContainer = document.getElementById('detail-img');
-            if (p.image_url) {
-                imgContainer.src = p.image_url;
-                imgContainer.style.display = 'block';
-            } else {
-                imgContainer.style.display = 'none';
-            }
-
-            const actionBox = document.getElementById('detail-actions');
-            actionBox.innerHTML = p.business_url 
-                ? `<a href="${p.business_url}" target="_blank" class="btn btn-primary" style="padding:1rem 2rem; font-size:1.1rem;">Visitar Sitio Web <i class="ph ph-arrow-up-right"></i></a>`
-                : '';
-
-            goToPage('detail');
-        }
-
-        function goToUserProfileFromDetail() {
-            if (currentDetailEmail) openPublicProfile(currentDetailEmail);
-        }
-
-        function openPublicProfile(email) {
-            if (currentUser && currentUser.email === email) { goToPage('dashboard'); return; }
-            const userProjects = projects.filter(p => p.author_email === email);
-            if (userProjects.length === 0) return;
-            
-            const author = userProjects[0];
-            document.getElementById('pub-name').textContent = author.author_name;
-            document.getElementById('pub-avatar').src = author.author_avatar || 'https://ui-avatars.com/api/?name=' + author.author_name;
-            document.getElementById('pub-stats').textContent = userProjects.length + ' Proyectos publicados';
-            
-            renderProjects(userProjects, 'pub-grid');
-            goToPage('profile');
-        }
-
-        // --- AUTH ---
-        function openModal(type, mode) {
-            document.getElementById(`modal-${type}`).classList.add('active');
-            if (type === 'auth') {
-                isLoginMode = (mode === 'login');
-                toggleAuthUI();
-            }
-        }
-        function closeModal(type) { document.getElementById(`modal-${type}`).classList.remove('active'); }
-        function toggleAuth() { isLoginMode = !isLoginMode; toggleAuthUI(); }
-
-        function toggleAuthUI() {
-            const title = document.getElementById('auth-title');
-            const switchText = document.getElementById('auth-switch-text');
-            const signupFields = document.getElementById('signup-fields');
-            document.getElementById('authErrorMsg').style.display = 'none';
-            
-            if (isLoginMode) {
-                title.textContent = 'Bienvenido de nuevo';
-                switchText.textContent = '¿No tienes cuenta? Regístrate';
-                signupFields.classList.add('hidden');
-                document.getElementById('authSubmitBtn').textContent = "Ingresar";
-            } else {
-                title.textContent = 'Crear cuenta';
-                switchText.textContent = '¿Ya tienes cuenta? Ingresa';
-                signupFields.classList.remove('hidden');
-                document.getElementById('authSubmitBtn').textContent = "Registrarse";
-            }
-        }
-
         document.getElementById('authForm').addEventListener('submit', async (e) => {
             e.preventDefault();
             const btn = document.getElementById('authSubmitBtn');
             btn.textContent = 'Procesando...';
-            
             const email = document.getElementById('login-email').value.toLowerCase().trim();
             const pass = document.getElementById('login-pass').value.trim();
-            
+
             try {
                 if (isLoginMode) {
-                    if(supabase) {
-                        const { data: users, error } = await supabase.from('app_users').select('*').eq('email', email).eq('password', pass);
-                        if(users && users.length > 0) completeLogin(users[0]);
-                        else throw new Error('Credenciales incorrectas');
-                    } else {
-                        // Local Fallback
-                        let users = JSON.parse(localStorage.getItem('alex_users')) || [];
-                        const user = users.find(u => u.email === email && u.pass === pass);
-                        if (user) completeLogin(user);
-                        else throw new Error('Credenciales incorrectas');
-                    }
+                    const { data: users } = await supabase.from('app_users').select('*').eq('email', email).eq('password', pass);
+                    if (users && users.length > 0) completeLogin(users[0]);
+                    else throw new Error('Credenciales incorrectas');
                 } else {
                     const name = document.getElementById('reg-name').value;
-                    const avatar = document.getElementById('authAvatarUrl').value;
-                    
-                    if(supabase) {
-                        const { data: existing } = await supabase.from('app_users').select('*').eq('email', email);
-                        if(existing.length > 0) throw new Error('Email ya registrado');
-                        await supabase.from('app_users').insert([{ email, password: pass, name, avatar }]);
-                        completeLogin({ email, name, avatar });
-                    } else {
-                        const newUser = { name, email, pass, avatar };
-                        let users = JSON.parse(localStorage.getItem('alex_users')) || [];
-                        users.push(newUser);
-                        localStorage.setItem('alex_users', JSON.stringify(users));
-                        completeLogin(newUser);
-                    }
+                    const avatar = document.getElementById('reg-avatar-url').value;
+                    const { data: exist } = await supabase.from('app_users').select('*').eq('email', email);
+                    if(exist.length > 0) throw new Error('Email ya registrado');
+                    await supabase.from('app_users').insert([{email, password: pass, name, avatar}]);
+                    completeLogin({email, name, avatar});
                 }
                 closeModal('auth');
-            } catch (err) {
-                const msg = document.getElementById('authErrorMsg');
-                msg.textContent = err.message;
-                msg.style.display = 'block';
+            } catch(err) {
+                document.getElementById('authErrorMsg').textContent = err.message;
+                document.getElementById('authErrorMsg').style.display = 'block';
             } finally {
                 btn.textContent = isLoginMode ? 'Ingresar' : 'Registrarse';
             }
@@ -670,8 +620,8 @@
             currentUser = user;
             localStorage.setItem('alex_session', JSON.stringify(user));
             updateNav();
-            showToast(`Hola, ${user.name}`);
             goToPage('dashboard');
+            showToast(`Hola, ${user.name}`);
         }
 
         function handleLogout() {
@@ -679,65 +629,26 @@
             currentUser = null;
             updateNav();
             goToPage('home');
-            showToast('Sesión cerrada');
         }
 
-        // --- CRUD ---
-        function loadDashboard() {
-            if (!currentUser) return;
-            
-            document.getElementById('dash-name').textContent = currentUser.name;
-            document.getElementById('dash-email').textContent = currentUser.email;
-            document.getElementById('dash-avatar').src = currentUser.avatar || 'https://ui-avatars.com/api/?name=' + currentUser.name;
-            
-            const myProjects = projects.filter(p => p.author_email === currentUser.email);
-            document.getElementById('stat-projects').textContent = myProjects.length;
-            const isPrem = p => p.is_premium || p.isPremium;
-            document.getElementById('stat-premium').textContent = myProjects.filter(isPrem).length;
-
-            const grid = document.getElementById('dashboard-grid');
-            grid.innerHTML = myProjects.map(p => `
-                <div class="project-card ${isPrem(p) ? 'is-premium' : ''}">
-                    ${isPrem(p) ? '<div class="premium-badge">✨</div>' : ''}
-                    <div class="project-image-container">
-                        ${p.image_url ? `<img src="${p.image_url}" class="project-image">` : '<div class="project-image-placeholder"><i class="ph ph-image"></i></div>'}
-                    </div>
-                    <div class="card-content">
-                        <h3 class="card-title">${p.title}</h3>
-                        <div style="margin-top:auto; display:flex; gap:0.5rem; flex-wrap:wrap;">
-                            <button class="btn btn-outline" onclick="editProject(${p.id})" style="flex:1;">Editar</button>
-                            <button class="btn btn-ghost" style="color:#ef4444;" onclick="deleteProject(${p.id})"><i class="ph ph-trash"></i></button>
-                            ${!isPrem(p)
-                                ? `<button class="btn btn-premium" onclick="openPremiumModal(${p.id})" style="width:100%;">Destacar (9€)</button>` 
-                                : `<button class="btn btn-cancel-premium" onclick="cancelPremium(${p.id})" style="width:100%;">Cancelar Destacado</button>`
-                            }
-                        </div>
-                    </div>
-                </div>
-            `).join('');
-        }
-
+        // --- PROYECTOS CRUD (Create/Edit/Delete) ---
         function prepareForm() {
             document.getElementById('projectForm').reset();
             document.getElementById('pId').value = '';
-            document.getElementById('form-title').textContent = 'Publicar Proyecto';
             document.getElementById('pImgPreview').innerHTML = '';
+            document.getElementById('form-title').textContent = 'Nuevo Proyecto';
             goToPage('form');
         }
-
+        
         function checkAuthAndAct(action) {
-            if (currentUser) {
-                if (action === 'create') prepareForm();
-            } else {
-                showToast('Debes iniciar sesión', 'error');
-                openModal('auth', 'signup');
-            }
+            if(currentUser) prepareForm();
+            else openModal('auth', 'signup');
         }
 
         document.getElementById('projectForm').addEventListener('submit', async (e) => {
             e.preventDefault();
             const id = document.getElementById('pId').value;
-            const projectData = {
+            const pData = {
                 title: document.getElementById('pTitle').value,
                 category: document.getElementById('pCat').value,
                 description: document.getElementById('pDesc').value,
@@ -749,16 +660,12 @@
                 author_avatar: currentUser.avatar
             };
 
-            if (id) {
-                if(supabase) await supabase.from('projects').update(projectData).eq('id', id);
-                showToast('Proyecto actualizado');
-            } else {
-                if(supabase) await supabase.from('projects').insert([projectData]);
-                showToast('Proyecto publicado con éxito');
-            }
+            if (id) await supabase.from('projects').update(pData).eq('id', id);
+            else await supabase.from('projects').insert([pData]);
             
             await fetchProjects();
             goToPage('dashboard');
+            showToast('Proyecto guardado');
         });
 
         function editProject(id) {
@@ -771,151 +678,84 @@
             document.getElementById('pImgUrl').value = p.image_url || '';
             document.getElementById('pUrl').value = p.business_url || '';
             document.getElementById('form-title').textContent = 'Editar Proyecto';
-            
-            // Mostrar preview si hay imagen
-            if(p.image_url) {
-                 document.getElementById('pImgPreview').innerHTML = `<img src="${p.image_url}" style="width:100%; border-radius:0.5rem;">`;
-            }
-            
+            if(p.image_url) document.getElementById('pImgPreview').innerHTML = `<img src="${p.image_url}" style="width:100%">`;
             goToPage('form');
         }
 
         async function deleteProject(id) {
-            if(confirm('¿Eliminar proyecto para siempre?')) {
-                if(supabase) await supabase.from('projects').delete().eq('id', id);
+            if(confirm('¿Borrar?')) {
+                await supabase.from('projects').delete().eq('id', id);
                 await fetchProjects();
                 loadDashboard();
-                showToast('Eliminado correctamente');
             }
-        }
-
-        // --- PREMIUM ---
-        function openPremiumModal(id) { selectedProjectId = id; openModal('premium'); document.getElementById('modal-premium').classList.add('active'); }
-        function closePremiumModal() { document.getElementById('modal-premium').classList.remove('active'); }
-
-        async function handlePremiumPurchase() {
-            if (!selectedProjectId) return;
-            const btn = document.querySelector('#modal-premium .btn-premium');
-            btn.innerHTML = 'Procesando...';
-            btn.disabled = true;
-
-            setTimeout(async () => {
-                if(supabase) {
-                    await supabase.from('projects').update({ is_premium: true }).eq('id', selectedProjectId);
-                    await fetchProjects();
-                }
-                alert('¡Pago realizado con éxito!');
-                closePremiumModal();
-                loadDashboard();
-                btn.innerHTML = 'Contratar Video-Análisis';
-                btn.disabled = false;
-            }, 1500);
         }
         
+        // --- PREMIUM ---
+        function openPremiumModal(id) { selectedProjectId = id; document.getElementById('modal-premium').classList.add('active'); }
+        function closePremiumModal() { document.getElementById('modal-premium').classList.remove('active'); }
+        async function handlePremiumPurchase() {
+             await supabase.from('projects').update({ is_premium: true }).eq('id', selectedProjectId);
+             await fetchProjects();
+             closePremiumModal();
+             loadDashboard();
+             showToast('¡Proyecto Destacado!');
+        }
         async function cancelPremium(id) {
-             if(supabase) {
-                await supabase.from('projects').update({ is_premium: false }).eq('id', id);
-                await fetchProjects();
-            }
+            await supabase.from('projects').update({ is_premium: false }).eq('id', id);
+            await fetchProjects();
             loadDashboard();
-            showToast('Destacado cancelado');
         }
 
         // --- UTILS ---
-        function handleImagePreview(input, outputId) {
+        function openModal(type, mode) {
+            document.getElementById(`modal-${type}`).classList.add('active');
+            if(type === 'auth') {
+                isLoginMode = (mode === 'login');
+                document.getElementById('auth-title').textContent = isLoginMode ? 'Bienvenido' : 'Crear cuenta';
+                document.getElementById('signup-fields').className = isLoginMode ? 'hidden' : '';
+                document.getElementById('authSubmitBtn').textContent = isLoginMode ? 'Ingresar' : 'Registrarse';
+            }
+        }
+        function closeModal(type) { document.getElementById(`modal-${type}`).classList.remove('active'); }
+        function toggleAuth() { isLoginMode = !isLoginMode; openModal('auth', isLoginMode ? 'login' : 'signup'); }
+        
+        function handleImagePreview(input, previewId, urlId) {
             const file = input.files[0];
-            if (file) {
+            if(file) {
                 const reader = new FileReader();
                 reader.onload = (e) => {
-                    // Si es form, actualiza el input hidden
-                    if(document.getElementById(outputId)) {
-                         document.getElementById(outputId).value = e.target.result;
-                    }
-                    // Si hay preview visual
-                    if(document.getElementById('pImgPreview')) {
-                        document.getElementById('pImgPreview').innerHTML = `<img src="${e.target.result}" style="width:100%; border-radius:0.5rem;">`;
-                    }
+                    if(previewId) document.getElementById(previewId).innerHTML = `<img src="${e.target.result}" style="width:100%">`;
+                    if(urlId) document.getElementById(urlId).value = e.target.result;
                 };
                 reader.readAsDataURL(file);
             }
         }
-
-        function showToast(msg, type='success') {
-            const t = document.createElement('div');
-            t.className = 'toast';
-            if(type === 'error') t.style.borderLeft = '4px solid #ef4444';
-            else t.style.borderLeft = '4px solid #10b981';
-            t.textContent = msg;
+        function showToast(msg, type) {
+            const t = document.createElement('div'); t.className = 'toast'; t.textContent = msg;
+            if(type === 'error') t.style.background = '#ef4444';
             document.getElementById('toast-container').appendChild(t);
             setTimeout(() => t.remove(), 3000);
         }
-        
         function filterProjects(val, gridId) {
             const term = val.toLowerCase();
-            const filtered = projects.filter(p => 
-                p.title.toLowerCase().includes(term) || 
-                (p.author_name || '').toLowerCase().includes(term) ||
-                (p.category || '').toLowerCase().includes(term)
-            );
+            const filtered = projects.filter(p => p.title.toLowerCase().includes(term) || p.author_name.toLowerCase().includes(term));
             renderProjects(filtered, gridId);
         }
-        
         async function toggleLike(btn, id) {
-            if (!currentUser) { showToast("Inicia sesión para dar like", "error"); openModal('auth', 'login'); return; }
-            
+            if(!currentUser) { openModal('auth','login'); return; }
             const span = btn.querySelector('span');
-            const icon = btn.querySelector('i');
-            let count = parseInt(span.textContent);
             const isLiked = btn.classList.contains('liked');
-
+            let count = parseInt(span.textContent);
             btn.classList.toggle('liked');
-            icon.className = isLiked ? 'ph ph-heart' : 'ph-fill ph-heart';
             span.textContent = isLiked ? count - 1 : count + 1;
-
-            if (supabase) {
-                try {
-                    if (!isLiked) {
-                        await supabase.from('project_likes').insert([{ project_id: id, user_email: currentUser.email }]);
-                        await supabase.rpc('increment_likes', { row_id: id });
-                    } else {
-                        await supabase.from('project_likes').delete().match({ project_id: id, user_email: currentUser.email });
-                        await supabase.rpc('decrement_likes', { row_id: id });
-                    }
-                } catch (e) { console.error(e); }
-            }
-        }
-
-        // --- PERFIL EDIT ---
-        function openEditProfile() {
-            document.getElementById('edit-name').value = currentUser.name;
-            document.getElementById('edit-avatar').value = currentUser.avatar || '';
-            openModal('profile');
-        }
-
-        document.getElementById('profileForm').addEventListener('submit', async (e) => {
-            e.preventDefault();
-            const newName = document.getElementById('edit-name').value;
-            const newAvatar = document.getElementById('edit-avatar').value;
-
-            if(supabase) await supabase.from('app_users').update({ name: newName, avatar: newAvatar }).eq('email', currentUser.email);
             
-            currentUser.name = newName;
-            currentUser.avatar = newAvatar;
-            localStorage.setItem('alex_session', JSON.stringify(currentUser));
-            
-            closeModal('profile');
-            loadDashboard();
-            showToast('Perfil actualizado');
-        });
-        
-        async function deleteAccount() {
-            if(!confirm('¿Seguro?')) return;
-            if(supabase) {
-                await supabase.from('projects').delete().eq('author_email', currentUser.email);
-                await supabase.from('app_users').delete().eq('email', currentUser.email);
+            if(!isLiked) {
+                await supabase.from('project_likes').insert([{ project_id: id, user_email: currentUser.email }]);
+                await supabase.rpc('increment_likes', { row_id: id });
+            } else {
+                await supabase.from('project_likes').delete().match({ project_id: id, user_email: currentUser.email });
+                await supabase.rpc('decrement_likes', { row_id: id });
             }
-            handleLogout();
-            closeModal('profile');
         }
     </script>
 </body>
