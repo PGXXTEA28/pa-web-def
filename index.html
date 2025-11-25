@@ -19,7 +19,7 @@
             --shadow-soft: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
         }
         * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Inter', sans-serif; -webkit-font-smoothing: antialiased; }
-        body { background-color: var(--bg-body); color: var(--text-main); line-height: 1.6; overflow-x: hidden; }
+        body { background-color: var(--bg-body); color: var(--text-main); line-height: 1.6; overflow-x: hidden; padding-bottom: 2rem; }
         h1, h2, h3, h4 { font-family: 'Playfair Display', serif; letter-spacing: -0.02em; color: var(--text-main); }
         input, button, textarea, select { font-family: inherit; outline: none; }
         .container { max-width: 1100px; margin: 0 auto; padding: 0 1.5rem; }
@@ -147,7 +147,6 @@
 <body>
     <div id="toast-container"></div>
 
-    <!-- NAVEGACIÓN -->
     <nav>
         <div class="container">
             <div class="nav-brand" onclick="goToPage('home')">
@@ -168,7 +167,6 @@
         </div>
     </nav>
 
-    <!-- HOME -->
     <div id="page-home" class="page active">
         <header class="hero">
             <div class="container">
@@ -182,7 +180,7 @@
                 <button class="btn btn-primary" style="padding: 0.8rem 2rem; font-size: 1rem;" onclick="checkAuthAndAct('create')">Publicar Proyecto <i class="ph ph-arrow-right"></i></button>
             </div>
         </header>
-        <div class="ad-placeholder">PUBLICIDAD GOOGLE ADSENSE</div>
+        <div class="ad-placeholder">ESPACIO PUBLICITARIO</div>
         <div class="container">
             <h3 style="margin-bottom: 2rem;">Destacados</h3>
             <div id="homeProjectsGrid" class="projects-grid"></div>
@@ -190,11 +188,10 @@
         <div class="ad-placeholder">PUBLICIDAD</div>
     </div>
 
-    <!-- DASHBOARD -->
     <div id="page-dashboard" class="page">
         <div class="dashboard-header">
             <div class="container">
-                <div style="display: flex; justify-content: space-between; align-items: flex-end;">
+                <div style="display: flex; justify-content: space-between; align-items: flex-end; flex-wrap: wrap; gap: 1rem;">
                     <div style="display: flex; gap: 1.5rem; align-items: center;">
                         <div id="dash-avatar-container"></div>
                         <div>
@@ -206,21 +203,18 @@
                     <button class="btn btn-primary" onclick="prepareForm()"><i class="ph ph-plus"></i> Nuevo Proyecto</button>
                 </div>
                 <div class="profile-stats">
-                    <div class="stat-item"><strong id="userProjectCount">0</strong><span>Proyectos</span></div>
-                    <div class="stat-item"><strong id="userPremiumCount">0</strong><span>Destacados</span></div>
+                    <div class="stat-item"><strong id="stat-projects">0</strong><span>Proyectos</span></div>
+                    <div class="stat-item"><strong id="stat-premium">0</strong><span>Destacados</span></div>
                 </div>
             </div>
         </div>
         <div class="container">
             <div class="ad-placeholder">ANUNCIO DASHBOARD</div>
             <h3 style="margin: 3rem 0 2rem; font-size: 1.8rem;">Mis Proyectos</h3>
-            <!-- DEBUG INFO -->
-            <div id="debug-info" style="font-size:0.8rem; color:red; margin-bottom:1rem; display:none;"></div>
             <div id="dashboard-grid" class="projects-grid"></div>
         </div>
     </div>
 
-    <!-- DETALLE -->
     <div id="page-detail" class="page">
         <div class="container" style="padding-top: 3rem;">
             <button class="btn btn-outline" onclick="goToPage('home')" style="margin-bottom: 2rem;"><i class="ph ph-arrow-left"></i> Volver</button>
@@ -240,11 +234,6 @@
                     </div>
                     <div style="width: 1px; height: 40px; background: var(--border);"></div>
                     <div>
-                        <span style="display: block; font-size: 0.8rem; color: var(--text-muted); line-height: 1;">Valoración</span>
-                        <div id="detail-rating" style="color: #FCD34D; font-weight: 700; font-size: 1.2rem;">-</div>
-                    </div>
-                    <div style="width: 1px; height: 40px; background: var(--border);"></div>
-                    <div>
                         <span style="display: block; font-size: 0.8rem; color: var(--text-muted); line-height: 1;">Precio</span>
                         <span id="detail-price" style="color: var(--text-main); font-weight: 700; font-size: 1.5rem;">0€</span>
                     </div>
@@ -254,12 +243,13 @@
             <div style="max-width: 800px; margin: 0 auto; font-size: 1.15rem; color: #374151;">
                 <p id="detail-desc" style="white-space: pre-wrap; line-height: 1.8;">Descripción...</p>
                 <div id="detail-actions" style="margin-top: 4rem; text-align: center; padding-top: 2rem; border-top: 1px solid var(--border);"></div>
+                
                 <div class="reviews-section">
                     <h3 style="margin-bottom: 1.5rem;">Reseñas</h3>
-                    <div id="review-form" style="background: white; padding: 2rem; border-radius: 12px; border: 1px solid var(--border); margin-bottom: 2rem;">
+                    <div id="review-form-container" style="background: white; padding: 2rem; border-radius: 12px; border: 1px solid var(--border); margin-bottom: 2rem;">
                         <h4 style="margin-bottom: 1rem;">Deja tu valoración</h4>
                         <div class="star-input" id="star-input"><span onclick="setRating(1)">★</span><span onclick="setRating(2)">★</span><span onclick="setRating(3)">★</span><span onclick="setRating(4)">★</span><span onclick="setRating(5)">★</span></div>
-                        <textarea id="review-comment" class="form-group" style="width:100%;" rows="3" placeholder="Escribe tu opinión..."></textarea>
+                        <textarea id="review-comment" class="form-group" style="width:100%; border:1px solid var(--border); border-radius:8px; padding:10px;" rows="3" placeholder="Escribe tu opinión..."></textarea>
                         <button onclick="submitReview()" class="btn btn-primary">Enviar Reseña</button>
                     </div>
                     <div id="reviews-list"></div>
@@ -268,7 +258,6 @@
         </div>
     </div>
 
-    <!-- PERFIL PÚBLICO -->
     <div id="page-profile" class="page">
         <div class="dashboard-header" style="text-align: center;">
             <div class="container">
@@ -282,7 +271,6 @@
         </div>
     </div>
 
-    <!-- FORMULARIOS -->
     <div id="page-form" class="page">
         <div class="container" style="padding: 4rem 0;">
             <div class="modal-card" style="max-width: 600px; margin: 0 auto; box-shadow: none; border: 1px solid var(--border);">
@@ -317,13 +305,12 @@
         </div>
     </div>
 
-    <!-- MODALES -->
     <div id="modal-auth" class="modal-overlay">
         <div class="modal-card">
             <button class="close-modal" onclick="closeModal('auth')">✕</button>
             <h2 id="auth-title" style="text-align: center; margin-bottom: 1.5rem;">Iniciar Sesión</h2>
             <div id="authErrorMsg" class="error-message hidden">Error</div>
-            <form id="authForm">
+            <form id="authForm" onsubmit="handleAuthSubmit(event)">
                 <div id="signup-fields" class="hidden">
                     <div class="form-group"><label>Nombre</label><input type="text" id="reg-name"></div>
                     <div class="form-group"><label>Foto (URL opcional)</label><input type="url" id="reg-avatar-url" placeholder="https://..."></div>
@@ -347,7 +334,7 @@
                 <div class="form-group">
                     <label>Foto de Perfil</label>
                     <input type="file" id="editProfileAvatarFile" accept="image/*" onchange="handleImagePreview(this, null, 'edit-avatar')">
-                    <input type="url" id="edit-avatar" style="margin-top:0.5rem;">
+                    <input type="url" id="edit-avatar" style="margin-top:0.5rem;" placeholder="O pega una URL">
                 </div>
                 <div style="margin-top: 2rem; padding-top: 1.5rem; border-top: 1px solid #e2e8f0;">
                     <button type="button" onclick="deleteAccount()" class="btn btn-delete" style="width: 100%;">Borrar Cuenta</button>
@@ -383,7 +370,6 @@
         let currentUser = JSON.parse(localStorage.getItem('alex_session')) || null;
         let isLoginMode = true;
         let selectedProjectId = null;
-        let currentProjectReviews = [];
         let currentRating = 0;
         let currentDetailEmail = null;
 
@@ -424,7 +410,7 @@
                 const authorName = p.author_name || 'Anónimo';
                 const authorAvatar = p.author_avatar;
                 const likes = p.likes_count || 0;
-                const isPrem = p.is_premium || p.isPremium; 
+                const isPrem = p.is_premium || false;
 
                 return `
                 <article class="project-card ${isPrem ? 'is-premium' : ''}">
@@ -458,15 +444,9 @@
             document.getElementById('dash-email').textContent = currentUser.email;
             document.getElementById('dash-avatar-container').innerHTML = getAvatarHTML(currentUser.name, currentUser.avatar, 'large');
             
-            // FIX: Filtro estricto en minúsculas
             const myProjects = projects.filter(p => 
                 (p.author_email || '').trim().toLowerCase() === currentUser.email.trim().toLowerCase()
             );
-            
-            // Debug
-            if (myProjects.length === 0) {
-                 // Opcional: console.log("Buscando proyectos para:", currentUser.email);
-            }
             
             document.getElementById('stat-projects').textContent = myProjects.length;
             document.getElementById('stat-premium').textContent = myProjects.filter(p => p.is_premium).length;
@@ -487,7 +467,7 @@
                         </div>
                     </div>
                 </div>
-            `).join('') : `<p style="color:var(--text-muted);">No tienes proyectos. (Email: ${currentUser.email})</p>`;
+            `).join('') : `<p style="color:var(--text-muted);">No tienes proyectos publicados aún.</p>`;
         }
 
         // --- AUTH ---
@@ -495,9 +475,7 @@
             if(!confirm('¿Estás seguro? Se borrarán TODOS tus proyectos.')) return;
             const email = currentUser.email.trim().toLowerCase();
             
-            // 1. Borrar proyectos
             await supabase.from('projects').delete().eq('author_email', email);
-            // 2. Borrar usuario
             await supabase.from('app_users').delete().eq('email', email);
             
             handleLogout();
@@ -522,7 +500,7 @@
                         const name = document.getElementById('reg-name').value;
                         const avatar = document.getElementById('reg-avatar-url').value;
                         const { data: exist } = await supabase.from('app_users').select('*').eq('email', email);
-                        if(exist.length > 0) throw new Error('Email ya registrado');
+                        if(exist && exist.length > 0) throw new Error('Email ya registrado');
                         await supabase.from('app_users').insert([{email, password: pass, name, avatar}]);
                         completeLogin({email, name, avatar});
                     }
@@ -549,7 +527,7 @@
                 image_url: document.getElementById('pImgUrl').value,
                 business_url: document.getElementById('pUrl').value,
                 author_name: currentUser.name,
-                author_email: currentUser.email.trim().toLowerCase(), // FIX: Asegurar minúsculas
+                author_email: currentUser.email.trim().toLowerCase(),
                 author_avatar: currentUser.avatar
             };
 
@@ -561,10 +539,12 @@
             showToast('Proyecto guardado');
         });
 
-        // --- RESTO FUNCIONES ---
+        // --- DETALLE Y RESEÑAS (CORREGIDO) ---
         function openProject(id) {
             selectedProjectId = id;
             const p = projects.find(x => x.id === id);
+            if (!p) return;
+
             document.getElementById('detail-title').textContent = p.title;
             document.getElementById('detail-category').textContent = p.category;
             document.getElementById('detail-desc').textContent = p.description;
@@ -580,9 +560,69 @@
             const actions = document.getElementById('detail-actions');
             actions.innerHTML = p.business_url ? `<a href="${p.business_url}" target="_blank" class="btn btn-primary">Visitar Web</a>` : '';
             
+            // Cargar Reseñas (La función que faltaba)
             loadReviews(id);
+            
+            // Resetear formulario de reseña
+            document.getElementById('review-comment').value = '';
+            setRating(0);
+            
             goToPage('detail');
         }
+
+        async function loadReviews(projectId) {
+            const list = document.getElementById('reviews-list');
+            list.innerHTML = '<p style="color:#aaa;">Cargando opiniones...</p>';
+            
+            // Asumimos que existe una tabla 'reviews' en Supabase. Si no existe, esto dará error silencioso o vacío.
+            // Estructura ideal: id, project_id, user_name, rating, comment, created_at
+            const { data, error } = await supabase.from('reviews').select('*').eq('project_id', projectId).order('created_at', {ascending: false});
+            
+            if (error || !data || data.length === 0) {
+                list.innerHTML = '<p style="color:var(--text-muted); padding:1rem 0;">Aún no hay reseñas. ¡Sé el primero!</p>';
+                return;
+            }
+
+            list.innerHTML = data.map(r => `
+                <div class="review-card">
+                    <div style="display:flex; justify-content:space-between; margin-bottom:0.5rem;">
+                        <strong style="font-size:0.9rem;">${r.user_name || 'Anónimo'}</strong>
+                        <span style="color:#FCD34D;">${'★'.repeat(r.rating)}</span>
+                    </div>
+                    <p style="color:var(--text-muted); font-size:0.95rem;">${r.comment}</p>
+                </div>
+            `).join('');
+        }
+
+        async function submitReview() {
+            if(!currentUser) { openModal('auth', 'login'); return; }
+            if(currentRating === 0) { showToast('Elige una puntuación', 'error'); return; }
+            
+            const comment = document.getElementById('review-comment').value;
+            
+            const newReview = {
+                project_id: selectedProjectId,
+                user_name: currentUser.name,
+                rating: currentRating,
+                comment: comment,
+                created_at: new Date().toISOString()
+            };
+
+            // Insertar en tabla 'reviews'
+            const { error } = await supabase.from('reviews').insert([newReview]);
+            
+            if(error) {
+                console.error(error);
+                showToast('Error al enviar reseña (¿Existe la tabla reviews?)', 'error');
+            } else {
+                showToast('Reseña enviada');
+                document.getElementById('review-comment').value = '';
+                setRating(0);
+                loadReviews(selectedProjectId);
+            }
+        }
+        
+        // --- RESTO FUNCIONES ---
         
         function goToUserProfileFromDetail() {
             if (currentDetailEmail) openPublicProfile(currentDetailEmail);
@@ -604,8 +644,6 @@
             goToPage('profile');
         }
 
-        // ... (Resto de funciones de UI, Auth Modal, etc. idénticas al anterior) ...
-        
         function goToPage(id) {
             document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
             document.getElementById('page-'+id).classList.add('active');
@@ -627,7 +665,6 @@
         }
         
         function completeLogin(user) {
-            // Normalizar user al guardar
             user.email = user.email.trim().toLowerCase();
             currentUser = user;
             localStorage.setItem('alex_session', JSON.stringify(user));
@@ -643,18 +680,76 @@
         function showToast(msg, type='success') { const t = document.createElement('div'); t.className = 'toast'; if(type === 'error') t.style.borderLeft = '4px solid #ef4444'; else t.style.borderLeft = '4px solid #10b981'; t.textContent = msg; document.getElementById('toast-container').appendChild(t); setTimeout(() => t.remove(), 3000); }
         function prepareForm() { document.getElementById('projectForm').reset(); document.getElementById('pId').value = ''; document.getElementById('pImgPreview').innerHTML = ''; document.getElementById('form-title').textContent = 'Nuevo Proyecto'; goToPage('form'); }
         function checkAuthAndAct(action) { if(currentUser) prepareForm(); else openModal('auth', 'signup'); }
-        function handleImagePreview(input, previewId, urlId) { const file = input.files[0]; if(file) { const reader = new FileReader(); reader.onload = (e) => { if(previewId) document.getElementById(previewId).innerHTML = `<img src="${e.target.result}" style="width:100%">`; if(urlId) document.getElementById(urlId).value = e.target.result; }; reader.readAsDataURL(file); } }
+        
+        function handleImagePreview(input, previewId, urlId) { 
+            const file = input.files[0]; 
+            if(file) { 
+                const reader = new FileReader(); 
+                reader.onload = (e) => { 
+                    if(previewId) document.getElementById(previewId).innerHTML = `<img src="${e.target.result}" style="width:100%">`; 
+                    if(urlId) document.getElementById(urlId).value = e.target.result; 
+                }; 
+                reader.readAsDataURL(file); 
+            } 
+        }
+        
         function editProject(id) { const p = projects.find(x => x.id === id); document.getElementById('pId').value = p.id; document.getElementById('pTitle').value = p.title; document.getElementById('pCat').value = p.category; document.getElementById('pDesc').value = p.description; document.getElementById('pPrice').value = p.price; document.getElementById('pImgUrl').value = p.image_url || ''; document.getElementById('pUrl').value = p.business_url || ''; document.getElementById('form-title').textContent = 'Editar Proyecto'; if(p.image_url) document.getElementById('pImgPreview').innerHTML = `<img src="${p.image_url}" style="width:100%">`; goToPage('form'); }
+        
         async function deleteProject(id) { if(confirm('¿Eliminar?')) { await supabase.from('projects').delete().eq('id', id); await fetchProjects(); loadDashboard(); showToast('Eliminado'); } }
         function openEditProfile() { document.getElementById('edit-name').value = currentUser.name; document.getElementById('edit-avatar').value = currentUser.avatar || ''; openModal('profile'); }
-        document.getElementById('profileForm').addEventListener('submit', async (e) => { e.preventDefault(); const newName = document.getElementById('edit-name').value; const newAvatar = document.getElementById('edit-avatar').value; await supabase.from('app_users').update({ name: newName, avatar: newAvatar }).eq('email', currentUser.email); await supabase.from('projects').update({ author_name: newName, author_avatar: newAvatar }).eq('author_email', currentUser.email); currentUser.name = newName; currentUser.avatar = newAvatar; localStorage.setItem('alex_session', JSON.stringify(currentUser)); closeModal('profile'); loadDashboard(); showToast('Perfil actualizado'); await fetchProjects(); });
+        
+        document.getElementById('profileForm').addEventListener('submit', async (e) => { 
+            e.preventDefault(); 
+            const newName = document.getElementById('edit-name').value; 
+            const newAvatar = document.getElementById('edit-avatar').value; 
+            
+            await supabase.from('app_users').update({ name: newName, avatar: newAvatar }).eq('email', currentUser.email); 
+            // Opcional: actualizar nombre en proyectos antiguos
+            await supabase.from('projects').update({ author_name: newName, author_avatar: newAvatar }).eq('author_email', currentUser.email); 
+            
+            currentUser.name = newName; 
+            currentUser.avatar = newAvatar; 
+            localStorage.setItem('alex_session', JSON.stringify(currentUser)); 
+            closeModal('profile'); 
+            loadDashboard(); 
+            showToast('Perfil actualizado'); 
+            await fetchProjects(); 
+        });
+        
         function openPremiumModal(id) { selectedProjectId = id; openModal('premium'); document.getElementById('modal-premium').classList.add('active'); }
         function closePremiumModal() { document.getElementById('modal-premium').classList.remove('active'); }
         async function handlePremiumPurchase() { await supabase.from('projects').update({ is_premium: true }).eq('id', selectedProjectId); await fetchProjects(); closePremiumModal(); loadDashboard(); showToast('¡Destacado!'); }
         async function cancelPremium(id) { await supabase.from('projects').update({ is_premium: false }).eq('id', id); await fetchProjects(); loadDashboard(); showToast('Cancelado'); }
         function filterProjects(val, gridId) { const term = val.toLowerCase(); const filtered = projects.filter(p => p.title.toLowerCase().includes(term) || p.author_name.toLowerCase().includes(term)); renderProjects(filtered, gridId); }
         function setRating(n) { currentRating = n; const stars = document.querySelectorAll('#star-input span'); stars.forEach((s, i) => { s.classList.toggle('active', i < n); }); }
-        async function toggleLike(btn, id) { if(!currentUser) { openModal('auth','login'); return; } const span = btn.querySelector('span'); const isLiked = btn.classList.contains('liked'); let count = parseInt(span.textContent); btn.classList.toggle('liked'); span.textContent = isLiked ? count - 1 : count + 1; if(!isLiked) { await supabase.from('project_likes').insert([{ project_id: id, user_email: currentUser.email }]); await supabase.rpc('increment_likes', { row_id: id }); } else { await supabase.from('project_likes').delete().match({ project_id: id, user_email: currentUser.email }); await supabase.rpc('decrement_likes', { row_id: id }); } }
+        
+        // --- LOGICA LIKES MEJORADA (Sin RPC) ---
+        async function toggleLike(btn, id) { 
+            if(!currentUser) { openModal('auth','login'); return; } 
+            
+            // UI Optimizada
+            const span = btn.querySelector('span'); 
+            const isLiked = btn.classList.contains('liked'); 
+            let count = parseInt(span.textContent); 
+            
+            btn.classList.toggle('liked'); 
+            span.textContent = isLiked ? (count > 0 ? count - 1 : 0) : count + 1; 
+
+            // Actualización simple en BD (Evitamos RPC para simplificar)
+            // Primero verificamos si ya dio like en 'project_likes'
+            if(!isLiked) { 
+                await supabase.from('project_likes').insert([{ project_id: id, user_email: currentUser.email }]); 
+                // Actualizamos contador en projects manual
+                const { data } = await supabase.from('projects').select('likes_count').eq('id', id).single();
+                const newCount = (data.likes_count || 0) + 1;
+                await supabase.from('projects').update({ likes_count: newCount }).eq('id', id);
+            } else { 
+                await supabase.from('project_likes').delete().match({ project_id: id, user_email: currentUser.email }); 
+                const { data } = await supabase.from('projects').select('likes_count').eq('id', id).single();
+                const newCount = (data.likes_count || 0) - 1;
+                await supabase.from('projects').update({ likes_count: newCount < 0 ? 0 : newCount }).eq('id', id);
+            } 
+        }
     </script>
 </body>
 </html>
