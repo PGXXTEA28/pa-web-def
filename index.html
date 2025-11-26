@@ -53,7 +53,7 @@
         .btn-edit { background-color: #EFF6FF; color: #2563EB; border: 1px solid transparent; }
         .btn-edit:hover { background-color: #DBEAFE; }
 
-        /* --- ANIMACIÓN LIKE (NUEVO) --- */
+        /* --- ANIMACIÓN LIKE --- */
         @keyframes heartPop {
             0% { transform: scale(1); }
             50% { transform: scale(1.35); }
@@ -62,10 +62,9 @@
         .like-btn { background: none; border: none; cursor: pointer; color: var(--text-muted); font-size: 0.9rem; display: flex; align-items: center; gap: 4px; transition: color 0.2s; padding: 4px 8px; border-radius: 8px; }
         .like-btn:hover { color: #EF4444; }
         .like-btn.liked { color: #EF4444; }
-        /* Aplica la animación al icono cuando tiene la clase liked */
         .like-btn.liked i { 
             animation: heartPop 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275); 
-            font-weight: fill; /* Asegura rellenado */
+            font-weight: fill; 
         }
 
         /* --- PAGINAS --- */
@@ -574,10 +573,7 @@
             const actions = document.getElementById('detail-actions');
             actions.innerHTML = p.business_url ? `<a href="${p.business_url}" target="_blank" class="btn btn-primary">Visitar Web</a>` : '';
             
-            // Cargar Reseñas
             loadReviews(id);
-            
-            // Resetear formulario de reseña
             document.getElementById('review-comment').value = '';
             setRating(0);
             
@@ -618,9 +614,11 @@
             
             const comment = document.getElementById('review-comment').value;
             
+            // CORRECCIÓN AQUÍ: Se añade user_email que era el campo obligatorio que faltaba
             const newReview = {
                 project_id: selectedProjectId,
                 user_name: currentUser.name,
+                user_email: currentUser.email,
                 rating: currentRating,
                 comment: comment
             };
@@ -629,7 +627,12 @@
             
             if(error) {
                 console.error(error);
-                showToast('Error al guardar. Revisa permisos (RLS) en Supabase.', 'error');
+                // Si el error es por RLS lo indicamos
+                if (error.code === '42501') {
+                    showToast('Error de permisos. Ejecuta el SQL en Supabase.', 'error');
+                } else {
+                    showToast('Error al enviar. Revisa la consola.', 'error');
+                }
             } else {
                 showToast('Reseña enviada');
                 document.getElementById('review-comment').value = '';
