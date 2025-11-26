@@ -15,37 +15,19 @@
     <style>
         /* --- VARIABLES & TEMAS --- */
         :root {
-            /* TEMA CLARO (Default) */
-            --bg-body: #FAFAFA;
-            --bg-card: #FFFFFF;
-            --text-main: #18181B;
-            --text-muted: #71717A;
-            --primary: #18181B;
-            --primary-text: #FFFFFF;
-            --accent: #6366F1;
-            --border: #E4E4E7;
-            --input-bg: #FAFAFA;
-            --radius: 12px;
-            --shadow-soft: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
+            --bg-body: #FAFAFA; --bg-card: #FFFFFF; --text-main: #18181B; --text-muted: #71717A;
+            --primary: #18181B; --primary-text: #FFFFFF; --accent: #6366F1; --border: #E4E4E7;
+            --input-bg: #FAFAFA; --radius: 12px; --shadow-soft: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
         }
-
-        /* TEMA OSCURO */
         [data-theme="dark"] {
-            --bg-body: #09090B;        /* Zinc 950 */
-            --bg-card: #18181B;        /* Zinc 900 */
-            --text-main: #F4F4F5;      /* Zinc 100 */
-            --text-muted: #A1A1AA;     /* Zinc 400 */
-            --primary: #FAFAFA;        /* Blanco para botones */
-            --primary-text: #09090B;   /* Texto oscuro en botones */
-            --accent: #818CF8;         /* Indigo 400 */
-            --border: #27272A;         /* Zinc 800 */
-            --input-bg: #27272A;
-            --shadow-soft: 0 4px 6px -1px rgba(0, 0, 0, 0.3);
+            --bg-body: #09090B; --bg-card: #18181B; --text-main: #F4F4F5; --text-muted: #A1A1AA;
+            --primary: #FAFAFA; --primary-text: #09090B; --accent: #818CF8; --border: #27272A;
+            --input-bg: #27272A; --shadow-soft: 0 4px 6px -1px rgba(0, 0, 0, 0.3);
         }
 
         /* RESET & BASE */
         * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Inter', sans-serif; -webkit-font-smoothing: antialiased; }
-        body { background-color: var(--bg-body); color: var(--text-main); line-height: 1.6; overflow-x: hidden; padding-bottom: 2rem; transition: background-color 0.3s ease, color 0.3s ease; }
+        body { background-color: var(--bg-body); color: var(--text-main); line-height: 1.6; overflow-x: hidden; padding-bottom: 2rem; transition: background-color 0.3s, color 0.3s; }
         h1, h2, h3, h4 { font-family: 'Playfair Display', serif; letter-spacing: -0.02em; color: var(--text-main); }
         input, button, textarea, select { font-family: inherit; outline: none; }
         .container { max-width: 1100px; margin: 0 auto; padding: 0 1.5rem; }
@@ -58,96 +40,54 @@
             [data-theme="dark"] nav { background: rgba(24, 24, 27, 0.85); }
             [data-theme="light"] nav { background: rgba(255, 255, 255, 0.9); }
         }
-
         nav .container { display: flex; height: 4.5rem; align-items: center; justify-content: space-between; }
         .nav-brand { display: flex; align-items: center; gap: 0.75rem; text-decoration: none; color: inherit; cursor: pointer; }
-        
-        /* LOGO */
-        .logo-badge { 
-            width: 2.8rem; height: 2.8rem; 
-            background: linear-gradient(135deg, #4F46E5 0%, #8B5CF6 100%); 
-            border-radius: 12px; 
-            display: flex; align-items: center; justify-content: center; 
-            box-shadow: 0 4px 10px rgba(79, 70, 229, 0.3);
-            transition: transform 0.2s;
-        }
+        .logo-badge { width: 2.8rem; height: 2.8rem; background: linear-gradient(135deg, #4F46E5 0%, #8B5CF6 100%); border-radius: 12px; display: flex; align-items: center; justify-content: center; box-shadow: 0 4px 10px rgba(79, 70, 229, 0.3); transition: transform 0.2s; }
         .nav-brand:hover .logo-badge { transform: rotate(-5deg) scale(1.05); }
         .logo-text { font-family: 'Inter', sans-serif; font-weight: 800; font-size: 1.1rem; color: white; letter-spacing: -0.5px; }
         .nav-brand span { font-size: 1.2rem; font-weight: 700; letter-spacing: -0.02em; }
         .nav-buttons { display: flex; align-items: center; gap: 0.75rem; }
 
         /* --- BOTONES --- */
-        .btn { padding: 0.6rem 1.2rem; border-radius: 99px; border: 1px solid transparent; cursor: pointer; font-size: 0.9rem; font-weight: 500; transition: all 0.2s ease; display: inline-flex; align-items: center; justify-content: center; gap: 0.5rem; text-decoration: none; line-height: 1; }
+        .btn { padding: 0.6rem 1.2rem; border-radius: 99px; border: 1px solid transparent; cursor: pointer; font-size: 0.9rem; font-weight: 500; transition: all 0.2s; display: inline-flex; align-items: center; justify-content: center; gap: 0.5rem; text-decoration: none; line-height: 1; }
         .btn-primary { background: var(--primary); color: var(--primary-text); box-shadow: var(--shadow-soft); }
         .btn-primary:hover { transform: translateY(-1px); opacity: 0.9; }
         .btn-outline { background: var(--bg-card); border-color: var(--border); color: var(--text-main); }
         .btn-outline:hover { border-color: var(--text-main); background: var(--bg-body); }
         .btn-ghost { background: transparent; color: var(--text-muted); padding: 0.5rem; }
         .btn-ghost:hover { color: var(--text-main); background: rgba(128,128,128,0.1); }
-        
+        .btn-delete { background-color: #FEF2F2 !important; color: #DC2626 !important; border: 1px solid #FECACA !important; transition: all 0.2s; }
+        .btn-delete:hover { background-color: #FEE2E2 !important; border-color: #FCA5A5 !important; transform: translateY(-3px); box-shadow: 0 4px 12px rgba(220, 38, 38, 0.15); }
+        [data-theme="dark"] .btn-delete { background-color: #450a0a !important; border-color: #7f1d1d !important; color: #fca5a5 !important; }
+        [data-theme="dark"] .btn-delete:hover { background-color: #500724 !important; }
         .btn-premium { background: linear-gradient(135deg, #F59E0B 0%, #D97706 100%) !important; color: white !important; border: none; box-shadow: 0 4px 10px rgba(245, 158, 11, 0.2); }
-        .btn-premium:hover { transform: translateY(-1px); filter: brightness(1.1); box-shadow: 0 6px 15px rgba(245, 158, 11, 0.3); }
-        .btn-cancel-premium { background-color: #FFFBEB; color: #B45309; border: 1px solid #FCD34D; }
-        .btn-cancel-premium:hover { background-color: #FEF3C7; }
-        
+        .btn-premium:hover { transform: translateY(-1px); filter: brightness(1.1); }
         .btn-edit { background-color: #EFF6FF; color: #2563EB; border: 1px solid transparent; }
         .btn-edit:hover { background-color: #DBEAFE; }
         [data-theme="dark"] .btn-edit { background-color: #1e3a8a; color: #bfdbfe; }
-        [data-theme="dark"] .btn-edit:hover { background-color: #172554; }
-
-        /* ESTILOS BOTÓN BORRAR */
-        .btn-delete { 
-            background-color: #FEF2F2 !important; 
-            color: #DC2626 !important; 
-            border: 1px solid #FECACA !important; 
-            transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
-        }
-        .btn-delete:hover { 
-            background-color: #FEE2E2 !important; 
-            border-color: #FCA5A5 !important; 
-            transform: translateY(-3px);
-            box-shadow: 0 4px 12px rgba(220, 38, 38, 0.15);
-        }
-        [data-theme="dark"] .btn-delete { background-color: #450a0a !important; border-color: #7f1d1d !important; color: #fca5a5 !important; }
-        [data-theme="dark"] .btn-delete:hover { background-color: #500724 !important; }
-
-        .btn-visit-card {
-            background-color: var(--input-bg); color: var(--text-muted); padding: 0.6rem; width: 40px; height: 38px; border-radius: 50%; display: flex; align-items: center; justify-content: center; transition: all 0.2s; border: 1px solid var(--border);
-        }
+        .btn-visit-card { background-color: var(--input-bg); color: var(--text-muted); padding: 0.6rem; width: 40px; height: 38px; border-radius: 50%; display: flex; align-items: center; justify-content: center; transition: all 0.2s; border: 1px solid var(--border); }
         .btn-visit-card:hover { background-color: var(--border); color: var(--text-main); transform: scale(1.05); }
 
-        /* --- ANIMACIÓN LIKE --- */
-        @keyframes heartPop { 0% { transform: scale(1); } 50% { transform: scale(1.35); } 100% { transform: scale(1); } }
-        .like-btn { background: none; border: none; cursor: pointer; color: var(--text-muted); font-size: 0.9rem; display: flex; align-items: center; gap: 4px; transition: color 0.2s; padding: 4px 8px; border-radius: 8px; }
-        .like-btn:hover { color: #EF4444; }
-        .like-btn.liked { color: #EF4444; }
-        .like-btn.liked i { animation: heartPop 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275); font-weight: fill; }
-
-        /* --- PRICE BADGE --- */
-        .price-badge { position: absolute; top: 10px; left: 10px; background: rgba(0,0,0,0.75); backdrop-filter: blur(4px); color: white; padding: 4px 12px; border-radius: 99px; font-size: 0.75rem; font-weight: 600; z-index: 10; letter-spacing: 0.02em; }
-
-        /* --- PAGINAS --- */
+        /* --- COMPONENTES --- */
         .page { display: none; animation: fadeIn 0.3s ease; padding-bottom: 4rem; }
         .page.active { display: block; }
         @keyframes fadeIn { from { opacity: 0; transform: translateY(5px); } to { opacity: 1; transform: translateY(0); } }
-
-        /* --- HERO --- */
+        
         .hero { padding: 6rem 0 4rem; text-align: center; }
         .hero h1 { font-size: 3.5rem; line-height: 1.1; margin-bottom: 1.5rem; }
         .hero p { font-size: 1.15rem; color: var(--text-muted); max-width: 600px; margin: 0 auto 2.5rem; }
         
-        /* --- SEARCH --- */
         .search-wrapper { max-width: 500px; margin: 0 auto 3rem; position: relative; background: var(--bg-card); border-radius: 99px; box-shadow: var(--shadow-soft); border: 1px solid transparent; transition: all 0.3s; }
         .search-wrapper:focus-within { border-color: var(--border); box-shadow: 0 10px 25px -5px rgba(0,0,0,0.1); transform: translateY(-2px); }
         .search-wrapper i { position: absolute; left: 1.5rem; top: 50%; transform: translateY(-50%); color: var(--text-muted); font-size: 1.2rem; }
         .search-wrapper input { width: 100%; padding: 1rem 1rem 1rem 3.5rem; border: none; background: transparent; font-size: 1rem; border-radius: 99px; color: var(--text-main); }
 
-        /* --- GRID --- */
         .projects-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); gap: 2rem; }
         .project-card { background: var(--bg-card); border-radius: var(--radius); border: 1px solid var(--border); overflow: hidden; transition: all 0.3s ease; display: flex; flex-direction: column; box-shadow: var(--shadow-soft); }
         .project-card:hover { transform: translateY(-5px); box-shadow: 0 15px 30px -10px rgba(0,0,0,0.1); border-color: transparent; }
         .project-card.is-premium { border: 1px solid #FBBF24; position: relative; }
         .premium-badge { position: absolute; top: 10px; right: 10px; background: rgba(255,255,255,0.95); backdrop-filter: blur(4px); padding: 6px 10px; border-radius: 99px; font-size: 0.7rem; font-weight: 700; color: #B45309; border: 1px solid #FDE68A; z-index: 10; display: flex; align-items: center; gap: 4px; box-shadow: 0 2px 4px rgba(0,0,0,0.05); }
+        .price-badge { position: absolute; top: 10px; left: 10px; background: rgba(0,0,0,0.75); backdrop-filter: blur(4px); color: white; padding: 4px 12px; border-radius: 99px; font-size: 0.75rem; font-weight: 600; z-index: 10; letter-spacing: 0.02em; }
         
         .project-image-container { height: 200px; overflow: hidden; position: relative; background: var(--input-bg); cursor: pointer; }
         .project-image { width: 100%; height: 100%; object-fit: cover; transition: transform 0.5s; }
@@ -159,63 +99,63 @@
         .card-title { font-size: 1.2rem; font-weight: 700; line-height: 1.3; margin: 0; cursor: pointer; }
         .card-desc { font-size: 0.95rem; color: var(--text-muted); display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical; overflow: hidden; margin-bottom: 1rem; font-weight: 300; }
         .card-footer { margin-top: auto; padding-top: 1rem; border-top: 1px solid var(--input-bg); display: flex; justify-content: space-between; align-items: center; }
-        .author-row { display: flex; align-items: center; gap: 0.5rem; cursor: pointer; }
-        .avatar-small { width: 28px; height: 28px; border-radius: 50%; object-fit: cover; border: 1px solid var(--border); }
-        .author-name { font-size: 0.85rem; font-weight: 500; color: var(--text-main); }
+        
+        /* ANIMACIÓN LIKE */
+        @keyframes heartPop { 0% { transform: scale(1); } 50% { transform: scale(1.35); } 100% { transform: scale(1); } }
+        .like-btn { background: none; border: none; cursor: pointer; color: var(--text-muted); font-size: 0.9rem; display: flex; align-items: center; gap: 4px; transition: color 0.2s; padding: 4px 8px; border-radius: 8px; }
+        .like-btn:hover, .like-btn.liked { color: #EF4444; }
+        .like-btn.liked i { animation: heartPop 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275); font-weight: fill; }
 
-        /* --- DASHBOARD --- */
+        /* --- DASHBOARD & PERFILES --- */
         .dashboard-header { background: var(--bg-card); border-bottom: 1px solid var(--border); padding: 3rem 0; margin-bottom: 2rem; }
         .profile-stats { display: flex; gap: 2rem; margin-top: 1rem; }
         .stat-item strong { font-size: 1.5rem; display: block; color: var(--text-main); }
         .stat-item span { font-size: 0.85rem; color: var(--text-muted); font-weight: 500; }
         .profile-avatar-large { width: 90px; height: 90px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 2.5rem; font-weight: 700; color: white; border: 4px solid var(--bg-card); box-shadow: 0 10px 20px -5px rgba(0,0,0,0.1); flex-shrink: 0; object-fit: cover; }
+        .profile-bio { max-width: 600px; margin-top: 1rem; color: var(--text-main); font-size: 1rem; line-height: 1.6; white-space: pre-wrap; }
 
         /* --- FORMULARIOS --- */
         .form-container { max-width: 600px; margin: 3rem auto; background: var(--bg-card); padding: 2.5rem; border-radius: var(--radius); border: 1px solid var(--border); box-shadow: var(--shadow-soft); }
         .form-group { margin-bottom: 1.5rem; }
         .form-group label { display: block; margin-bottom: 0.5rem; font-size: 0.9rem; font-weight: 600; color: var(--text-main); }
         .form-group input, .form-group textarea, .form-group select { width: 100%; padding: 0.85rem 1rem; border: 1px solid var(--border); border-radius: 0.6rem; background: var(--input-bg); font-size: 0.95rem; transition: all 0.2s; color: var(--text-main); }
-        .form-group input:focus, .form-group textarea:focus, .form-group select:focus { background: var(--bg-card); border-color: var(--primary); box-shadow: 0 0 0 2px rgba(100, 100, 100, 0.1); }
+        .form-group input:focus { background: var(--bg-card); border-color: var(--primary); box-shadow: 0 0 0 2px rgba(100, 100, 100, 0.1); }
         .upload-separator { display: flex; align-items: center; margin: 1rem 0; color: var(--text-muted); font-size: 0.8rem; }
         .upload-separator::before, .upload-separator::after { content: ""; flex: 1; height: 1px; background: var(--border); }
         .upload-separator span { padding: 0 0.8rem; }
 
-        /* --- TOAST & ADS --- */
+        /* --- MENSAJERÍA (NUEVO) --- */
+        .message-card { background: var(--bg-card); border: 1px solid var(--border); padding: 1.5rem; border-radius: var(--radius); margin-bottom: 1rem; transition: transform 0.2s; }
+        .message-card:hover { transform: translateX(5px); border-color: var(--accent); }
+        .message-header { display: flex; justify-content: space-between; margin-bottom: 0.8rem; font-size: 0.85rem; color: var(--text-muted); }
+        .message-sender { display: flex; align-items: center; gap: 0.8rem; font-weight: 600; color: var(--text-main); }
+        .message-body { color: var(--text-main); font-size: 1rem; white-space: pre-wrap; }
+        .empty-state { text-align: center; padding: 4rem 1rem; color: var(--text-muted); }
+
+        /* --- TOAST & MODALS --- */
         #toast-container { position: fixed; bottom: 24px; right: 24px; z-index: 9999; display: flex; flex-direction: column; gap: 10px; }
-        .toast { background: #18181B; color: white; padding: 1rem 1.5rem; border-radius: 8px; font-size: 0.9rem; box-shadow: 0 10px 25px -5px rgba(0,0,0,0.2); animation: slideUp 0.3s ease-out; display: flex; align-items: center; gap: 0.5rem; }
+        .toast { background: #18181B; color: white; padding: 1rem 1.5rem; border-radius: 8px; font-size: 0.9rem; box-shadow: 0 10px 25px -5px rgba(0,0,0,0.2); animation: slideUp 0.3s ease-out; }
         [data-theme="dark"] .toast { background: #F4F4F5; color: #18181B; }
         .toast.error { border-left: 4px solid #EF4444; }
-        .toast.success { border-left: 4px solid #10B981; }
         @keyframes slideUp { from { transform: translateY(20px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
-        .ad-placeholder { width: 100%; max-width: 728px; height: 90px; background: var(--input-bg); margin: 3rem auto; display: flex; align-items: center; justify-content: center; color: var(--text-muted); font-size: 0.8rem; letter-spacing: 1px; border-radius: 8px; border: 1px dashed var(--border); text-transform: uppercase; }
-
-        /* --- MODAL --- */
+        
         .modal-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.5); backdrop-filter: blur(4px); z-index: 2000; display: flex; align-items: center; justify-content: center; opacity: 0; visibility: hidden; transition: all 0.3s; }
         .modal-overlay.active { opacity: 1; visibility: visible; }
         .modal-card { background: var(--bg-card); width: 100%; max-width: 420px; padding: 2.5rem; border-radius: 1.5rem; box-shadow: 0 25px 50px -12px rgba(0,0,0,0.15); border: 1px solid var(--border); transform: translateY(20px); transition: all 0.3s; position: relative; }
         .modal-overlay.active .modal-card { transform: translateY(0); }
-        .close-modal { position: absolute; top: 1.2rem; right: 1.2rem; background: none; border: none; font-size: 1.4rem; cursor: pointer; color: var(--text-muted); transition: color 0.2s; }
+        .close-modal { position: absolute; top: 1.2rem; right: 1.2rem; background: none; border: none; font-size: 1.4rem; cursor: pointer; color: var(--text-muted); }
         .close-modal:hover { color: var(--text-main); }
-        .login-btn { width: 100%; padding: 0.9rem; background: var(--primary); color: var(--primary-text); font-weight: 600; border-radius: 0.6rem; margin-top: 1rem; }
-        .toggle-auth { text-align: center; margin-top: 1.5rem; font-size: 0.875rem; color: var(--text-muted); cursor: pointer; }
-        .error-message { color: #DC2626; background-color: #FEF2F2; padding: 0.8rem; border-radius: 0.5rem; border: 1px solid #FECACA; font-size: 0.9rem; text-align: center; margin-bottom: 1.5rem; }
 
-        /* --- DETALLE --- */
+        /* --- DETALLE & RESEÑAS --- */
         .detail-header { padding: 2rem 0; border-bottom: 1px solid var(--border); margin-bottom: 2rem; }
         .detail-img { width: 100%; height: 450px; object-fit: cover; border-radius: var(--radius); margin-bottom: 3rem; background: var(--input-bg); box-shadow: var(--shadow-soft); }
-        .reviews-section { margin-top: 4rem; padding-top: 2rem; border-top: 1px solid var(--border); }
         .review-card { background: var(--input-bg); padding: 1.5rem; border-radius: 12px; margin-bottom: 1rem; border: 1px solid var(--border); position: relative; }
         .btn-delete-review { position: absolute; top: 10px; right: 10px; background: none; border: none; color: #ef4444; font-size: 1.2rem; cursor: pointer; opacity: 0.6; transition: all 0.2s; }
         .btn-delete-review:hover { opacity: 1; transform: scale(1.1); }
         .star-input { display: flex; gap: 0.5rem; font-size: 1.5rem; color: var(--border); cursor: pointer; margin-bottom: 1rem; }
         .star-input span.active { color: #FCD34D; }
 
-        @media (max-width: 768px) { 
-            .hero h1 { font-size: 2.5rem; } 
-            .projects-grid { grid-template-columns: 1fr; } 
-            .nav-brand span { display: none; }
-            .detail-img { height: 250px; }
-        }
+        @media (max-width: 768px) { .hero h1 { font-size: 2.5rem; } .projects-grid { grid-template-columns: 1fr; } .nav-brand span { display: none; } .detail-img { height: 250px; } }
     </style>
 </head>
 <body>
@@ -229,16 +169,14 @@
             </div>
             <div class="nav-buttons">
                 <button class="btn btn-ghost hidden" id="navHomeBtn" onclick="goToPage('home')"><i class="ph ph-house"></i> Inicio</button>
-                
-                <button class="btn btn-ghost" onclick="toggleTheme()" title="Cambiar tema">
-                    <i class="ph ph-moon" id="themeIcon"></i>
-                </button>
+                <button class="btn btn-ghost" onclick="toggleTheme()" title="Cambiar tema"><i class="ph ph-moon" id="themeIcon"></i></button>
 
                 <div id="authBtns">
                     <button class="btn btn-outline" onclick="openModal('auth', 'login')">Ingresar</button>
                     <button class="btn btn-primary" onclick="openModal('auth', 'signup')">Registrarse</button>
                 </div>
                 <div id="userBtns" class="hidden" style="display: flex; align-items: center; gap: 0.5rem;">
+                     <button class="btn btn-ghost" onclick="goToPage('messages')" title="Mensajes"><i class="ph ph-envelope-simple" style="font-size: 1.2rem;"></i></button>
                      <button class="btn btn-outline" onclick="goToPage('dashboard')"><i class="ph ph-user"></i> Mi Cuenta</button>
                      <button class="btn btn-ghost" onclick="handleLogout()" title="Salir"><i class="ph ph-sign-out" style="font-size: 1.2rem;"></i></button>
                 </div>
@@ -258,12 +196,10 @@
                 <button class="btn btn-primary" style="padding: 0.8rem 2rem; font-size: 1rem;" onclick="checkAuthAndAct('create')">Publicar Proyecto <i class="ph ph-arrow-right"></i></button>
             </div>
         </header>
-        <div class="ad-placeholder">ESPACIO PUBLICITARIO</div>
         <div class="container">
             <h3 style="margin-bottom: 2rem;">Destacados</h3>
             <div id="homeProjectsGrid" class="projects-grid"></div>
         </div>
-        <div class="ad-placeholder">PUBLICIDAD</div>
     </div>
 
     <div id="page-dashboard" class="page">
@@ -280,6 +216,8 @@
                     </div>
                     <button class="btn btn-primary" onclick="prepareForm()"><i class="ph ph-plus"></i> Nuevo Proyecto</button>
                 </div>
+                <div id="dash-description" class="profile-bio"></div>
+                
                 <div class="profile-stats">
                     <div class="stat-item"><strong id="stat-projects">0</strong><span>Proyectos</span></div>
                     <div class="stat-item"><strong id="stat-premium">0</strong><span>Destacados</span></div>
@@ -287,9 +225,15 @@
             </div>
         </div>
         <div class="container">
-            <div class="ad-placeholder">ANUNCIO DASHBOARD</div>
             <h3 style="margin: 3rem 0 2rem; font-size: 1.8rem;">Mis Proyectos</h3>
             <div id="dashboard-grid" class="projects-grid"></div>
+        </div>
+    </div>
+
+    <div id="page-messages" class="page">
+        <div class="container" style="padding-top: 3rem;">
+            <h2 style="margin-bottom: 2rem;">Buzón de Mensajes</h2>
+            <div id="messages-list"></div>
         </div>
     </div>
 
@@ -321,7 +265,6 @@
             <div style="max-width: 800px; margin: 0 auto; font-size: 1.15rem; color: var(--text-main);">
                 <p id="detail-desc" style="white-space: pre-wrap; line-height: 1.8;">Descripción...</p>
                 <div id="detail-actions" style="margin-top: 4rem; text-align: center; padding-top: 2rem; border-top: 1px solid var(--border);"></div>
-                
                 <div class="reviews-section">
                     <h3 style="margin-bottom: 1.5rem;">Reseñas</h3>
                     <div id="review-form-container" style="background: var(--bg-card); padding: 2rem; border-radius: 12px; border: 1px solid var(--border); margin-bottom: 2rem;">
@@ -341,7 +284,12 @@
             <div class="container">
                 <div id="pub-avatar-container" style="display:flex; justify-content:center; margin-bottom:1.5rem;"></div>
                 <h2 id="pub-name" style="font-size: 2.5rem; margin-bottom: 0.5rem;">Nombre</h2>
+                <p id="pub-description" class="profile-bio" style="margin: 0 auto 1.5rem;"></p>
                 <p id="pub-stats" style="color: var(--text-muted); font-size: 1.1rem;">0 proyectos publicados</p>
+                
+                <button id="btn-send-msg" class="btn btn-primary" style="margin-top: 1rem;" onclick="openMessageModal()">
+                    <i class="ph ph-paper-plane-right"></i> Enviar Mensaje
+                </button>
             </div>
         </div>
         <div class="container">
@@ -362,20 +310,10 @@
                     <div class="form-group"><label>Categoría *</label>
                         <select id="pCat" required>
                             <option value="" disabled selected>Selecciona una categoría...</option>
-                            <option>Arte</option>
-                            <option>Deportes</option>
-                            <option>Diseño</option>
-                            <option>Educación</option>
-                            <option>Escritura</option>
-                            <option>Finanzas</option>
-                            <option>Fotografía</option>
-                            <option>Marketing</option>
-                            <option>Música</option>
-                            <option>Negocios</option>
-                            <option>Otros</option>
-                            <option>Salud</option>
-                            <option>Social</option>
-                            <option>Tecnología</option>
+                            <option>Arte</option><option>Deportes</option><option>Diseño</option><option>Educación</option>
+                            <option>Escritura</option><option>Finanzas</option><option>Fotografía</option><option>Marketing</option>
+                            <option>Música</option><option>Negocios</option><option>Otros</option><option>Salud</option>
+                            <option>Social</option><option>Tecnología</option>
                         </select>
                     </div>
                     <div class="form-group"><label>Descripción *</label><textarea id="pDesc" rows="6" required></textarea></div>
@@ -422,6 +360,7 @@
             <h2 style="text-align: center; margin-bottom: 1.5rem;">Editar Perfil</h2>
             <form id="profileForm">
                 <div class="form-group"><label>Nombre</label><input type="text" id="edit-name" required></div>
+                <div class="form-group"><label>Biografía / Descripción</label><textarea id="edit-desc" rows="3" placeholder="Cuéntanos sobre ti..."></textarea></div>
                 <div class="form-group">
                     <label>Foto de Perfil</label>
                     <div class="upload-separator"><span>Subir archivo</span></div>
@@ -435,6 +374,22 @@
                     <span onclick="deleteAccount()" style="color: #ef4444; font-size: 0.85rem; cursor: pointer; text-decoration: underline;">Eliminar cuenta permanentemente</span>
                 </div>
             </form>
+        </div>
+    </div>
+
+    <div id="modal-send-msg" class="modal-overlay">
+        <div class="modal-card">
+            <button class="close-modal" onclick="closeModal('send-msg')">✕</button>
+            <h2 style="text-align: center; margin-bottom: 1.5rem;">Nuevo Mensaje</h2>
+            <div class="form-group">
+                <label>Para:</label>
+                <input type="text" id="msg-receiver-name" disabled style="background: var(--input-bg); opacity: 0.7;">
+            </div>
+            <div class="form-group">
+                <label>Mensaje</label>
+                <textarea id="msg-content" rows="5" placeholder="Escribe tu mensaje aquí..." required></textarea>
+            </div>
+            <button onclick="sendMessage()" class="btn btn-primary" style="width: 100%;">Enviar</button>
         </div>
     </div>
 
@@ -465,6 +420,7 @@
         let selectedProjectId = null;
         let currentRating = 0;
         let currentDetailEmail = null;
+        let currentProfileEmail = null; // Email del perfil público que estamos viendo
 
         document.addEventListener('DOMContentLoaded', async () => {
             initTheme();
@@ -476,15 +432,9 @@
         // --- MODO OSCURO ---
         function initTheme() {
             const saved = localStorage.getItem('theme');
-            if (saved) {
-                document.documentElement.setAttribute('data-theme', saved);
-                updateThemeIcon(saved);
-            } else if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
-                document.documentElement.setAttribute('data-theme', 'dark');
-                updateThemeIcon('dark');
-            }
+            if (saved) { document.documentElement.setAttribute('data-theme', saved); updateThemeIcon(saved); }
+            else if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) { document.documentElement.setAttribute('data-theme', 'dark'); updateThemeIcon('dark'); }
         }
-
         function toggleTheme() {
             const current = document.documentElement.getAttribute('data-theme');
             const newTheme = current === 'dark' ? 'light' : 'dark';
@@ -492,15 +442,11 @@
             localStorage.setItem('theme', newTheme);
             updateThemeIcon(newTheme);
         }
-
         function updateThemeIcon(theme) {
             const icon = document.getElementById('themeIcon');
-            if (icon) {
-                icon.className = theme === 'dark' ? 'ph ph-sun' : 'ph ph-moon';
-            }
+            if (icon) icon.className = theme === 'dark' ? 'ph ph-sun' : 'ph ph-moon';
         }
 
-        // --- AVATAR GENERATOR ---
         function getAvatarHTML(name, url, size = 'medium') {
             const sizePx = size === 'large' ? '90px' : (size === 'small' ? '28px' : '32px');
             const fontSize = size === 'large' ? '2.5rem' : (size === 'small' ? '0.75rem' : '0.9rem');
@@ -508,14 +454,10 @@
             const colors = ['#FCA5A5', '#FCD34D', '#86EFAC', '#93C5FD', '#C4B5FD', '#FDBA74'];
             const initial = name ? name.charAt(0).toUpperCase() : '?';
             const bgColor = colors[(name ? name.charCodeAt(0) : 0) % colors.length];
-            
-            if (url && url.trim() !== '') {
-                return `<img src="${url}" style="width:${sizePx}; height:${sizePx}; border-radius:50%; object-fit:cover; border:${border}; box-shadow:0 2px 5px rgba(0,0,0,0.1);">`;
-            }
+            if (url && url.trim() !== '') return `<img src="${url}" style="width:${sizePx}; height:${sizePx}; border-radius:50%; object-fit:cover; border:${border}; box-shadow:0 2px 5px rgba(0,0,0,0.1);">`;
             return `<div style="width:${sizePx}; height:${sizePx}; border-radius:50%; background:${bgColor}; color:#18181B; display:flex; align-items:center; justify-content:center; font-weight:700; font-size:${fontSize}; border:${border}; text-transform:uppercase;">${initial}</div>`;
         }
 
-        // --- CORE ---
         async function fetchProjects() {
             const { data, error } = await supabase.from('projects').select('*').order('created_at', { ascending: false });
             if (!error) { projects = data; renderProjects(projects, 'homeProjectsGrid'); }
@@ -525,20 +467,14 @@
             const container = document.getElementById(containerId);
             if (!container) return;
             if (!list || list.length === 0) { container.innerHTML = '<div style="grid-column:1/-1;text-align:center;padding:3rem;color:var(--text-muted);">Sin proyectos.</div>'; return; }
-
             container.innerHTML = list.map(p => {
                 const img = p.image_url || null;
                 const authorName = p.author_name || 'Anónimo';
                 const authorAvatar = p.author_avatar;
                 const likes = p.likes_count || 0;
                 const isPrem = p.is_premium || false;
-
                 const priceText = Number(p.price) === 0 ? 'Gratuito' : p.price + '€';
-                
-                const webBtn = p.business_url 
-                    ? `<a href="${p.business_url}" target="_blank" class="btn-visit-card" onclick="event.stopPropagation();" title="Ir a la web"><i class="ph ph-arrow-square-out"></i></a>` 
-                    : '';
-
+                const webBtn = p.business_url ? `<a href="${p.business_url}" target="_blank" class="btn-visit-card" onclick="event.stopPropagation();" title="Ir a la web"><i class="ph ph-arrow-square-out"></i></a>` : '';
                 return `
                 <article class="project-card ${isPrem ? 'is-premium' : ''}">
                     ${isPrem ? '<div class="premium-badge">✨ Destacado</div>' : ''}
@@ -568,20 +504,17 @@
             }).join('');
         }
 
-        // --- DASHBOARD ---
         function loadDashboard() {
             if (!currentUser) return;
             document.getElementById('dash-name').textContent = currentUser.name;
             document.getElementById('dash-email').textContent = currentUser.email;
             document.getElementById('dash-avatar-container').innerHTML = getAvatarHTML(currentUser.name, currentUser.avatar, 'large');
-            
-            const myProjects = projects.filter(p => 
-                (p.author_email || '').trim().toLowerCase() === currentUser.email.trim().toLowerCase()
-            );
-            
+            // MOSTRAR DESCRIPCIÓN EN DASHBOARD
+            document.getElementById('dash-description').textContent = currentUser.description || "Sin biografía aún.";
+
+            const myProjects = projects.filter(p => (p.author_email || '').trim().toLowerCase() === currentUser.email.trim().toLowerCase());
             document.getElementById('stat-projects').textContent = myProjects.length;
             document.getElementById('stat-premium').textContent = myProjects.filter(p => p.is_premium).length;
-            
             const grid = document.getElementById('dashboard-grid');
             grid.innerHTML = myProjects.length > 0 ? myProjects.map(p => `
                 <div class="project-card ${p.is_premium ? 'is-premium' : ''}">
@@ -591,42 +524,90 @@
                         <div style="margin-top:auto; display:flex; gap:0.5rem; flex-wrap:wrap;">
                             <button class="btn btn-edit" onclick="editProject(${p.id})" style="flex:1;">Editar</button>
                             <button class="btn btn-delete" onclick="deleteProject(${p.id})"><i class="ph ph-trash"></i></button>
-                            ${!p.is_premium 
-                                ? `<button class="btn btn-premium" onclick="openPremiumModal(${p.id})" style="width:100%;">Destacar (9€)</button>` 
-                                : `<button class="btn btn-cancel-premium" onclick="cancelPremium(${p.id})" style="width:100%;">Cancelar Destacado</button>`
-                            }
+                            ${!p.is_premium ? `<button class="btn btn-premium" onclick="openPremiumModal(${p.id})" style="width:100%;">Destacar (9€)</button>` : `<button class="btn btn-cancel-premium" onclick="cancelPremium(${p.id})" style="width:100%;">Cancelar Destacado</button>`}
                         </div>
                     </div>
                 </div>
             `).join('') : `<p style="color:var(--text-muted);">No tienes proyectos publicados aún.</p>`;
         }
 
+        // --- MENSAJERÍA ---
+        function openMessageModal() {
+            if(!currentUser) { openModal('auth', 'login'); return; }
+            document.getElementById('msg-receiver-name').value = document.getElementById('pub-name').textContent;
+            document.getElementById('msg-content').value = '';
+            openModal('send-msg');
+        }
+
+        async function sendMessage() {
+            const content = document.getElementById('msg-content').value;
+            if (!content.trim()) return;
+            
+            const { error } = await supabase.from('messages').insert([{
+                sender_email: currentUser.email,
+                sender_name: currentUser.name,
+                sender_avatar: currentUser.avatar,
+                receiver_email: currentProfileEmail,
+                content: content
+            }]);
+
+            if (error) {
+                showToast('Error enviando mensaje. Verifica la DB.', 'error');
+                console.error(error);
+            } else {
+                closeModal('send-msg');
+                showToast('Mensaje enviado correctamente');
+            }
+        }
+
+        async function loadMessages() {
+            const list = document.getElementById('messages-list');
+            list.innerHTML = '<p>Cargando...</p>';
+            const { data, error } = await supabase.from('messages').select('*').eq('receiver_email', currentUser.email).order('created_at', {ascending: false});
+            
+            if (error) { list.innerHTML = '<p>Error cargando mensajes.</p>'; return; }
+            if (!data || data.length === 0) { list.innerHTML = '<div class="empty-state"><i class="ph ph-tray" style="font-size:2rem; margin-bottom:1rem;"></i><p>No tienes mensajes nuevos.</p></div>'; return; }
+
+            list.innerHTML = data.map(m => `
+                <div class="message-card">
+                    <div class="message-header">
+                        <div class="message-sender">
+                            ${getAvatarHTML(m.sender_name, m.sender_avatar, 'small')}
+                            <span>${m.sender_name || 'Usuario'}</span>
+                        </div>
+                        <span>${new Date(m.created_at).toLocaleDateString()}</span>
+                    </div>
+                    <div class="message-body">${m.content}</div>
+                    <button class="btn btn-ghost" style="font-size:0.8rem; padding:0; margin-top:0.5rem; color:var(--accent);" onclick="replyMessage('${m.sender_email}', '${m.sender_name}')">Responder</button>
+                </div>
+            `).join('');
+        }
+
+        function replyMessage(email, name) {
+            currentProfileEmail = email;
+            document.getElementById('msg-receiver-name').value = name;
+            document.getElementById('msg-content').value = '';
+            openModal('send-msg');
+        }
+
         // --- AUTH ---
         async function deleteAccount() {
             if(!confirm('¿Estás seguro? Se borrarán TODOS tus proyectos.')) return;
             const email = currentUser.email.trim().toLowerCase();
-            
             await supabase.from('projects').delete().eq('author_email', email);
             await supabase.from('app_users').delete().eq('email', email);
-            
-            handleLogout();
-            closeModal('profile');
-            showToast('Cuenta eliminada permanentemente');
+            handleLogout(); closeModal('profile'); showToast('Cuenta eliminada permanentemente');
         }
-
         function handleAuthSubmit(e) {
             e.preventDefault();
-            const btn = document.getElementById('authSubmitBtn');
-            btn.textContent = 'Procesando...';
+            const btn = document.getElementById('authSubmitBtn'); btn.textContent = 'Procesando...';
             const email = document.getElementById('login-email').value.trim().toLowerCase();
             const pass = document.getElementById('login-pass').value.trim();
-
             setTimeout(async () => {
                 try {
                     if (isLoginMode) {
                         const { data: users } = await supabase.from('app_users').select('*').eq('email', email).eq('password', pass);
-                        if(users && users.length > 0) completeLogin(users[0]);
-                        else throw new Error('Credenciales incorrectas');
+                        if(users && users.length > 0) completeLogin(users[0]); else throw new Error('Credenciales incorrectas');
                     } else {
                         const name = document.getElementById('reg-name').value;
                         const avatar = document.getElementById('reg-avatar-url').value;
@@ -636,17 +617,61 @@
                         completeLogin({email, name, avatar});
                     }
                     closeModal('auth');
-                } catch(err) {
-                    const msg = document.getElementById('authErrorMsg');
-                    msg.textContent = err.message;
-                    msg.style.display = 'block';
-                } finally {
-                    btn.textContent = isLoginMode ? 'Ingresar' : 'Registrarse';
-                }
+                } catch(err) { document.getElementById('authErrorMsg').textContent = err.message; document.getElementById('authErrorMsg').style.display = 'block'; } 
+                finally { btn.textContent = isLoginMode ? 'Ingresar' : 'Registrarse'; }
             }, 800);
         }
 
-        // --- CRUD PROYECTOS ---
+        // --- PERFIL PÚBLICO ---
+        async function openPublicProfile(email) {
+            const safeEmail = (email || '').trim().toLowerCase();
+            if (currentUser && currentUser.email.trim().toLowerCase() === safeEmail) { goToPage('dashboard'); return; }
+            
+            currentProfileEmail = safeEmail; // Guardar para mensajes
+            
+            // Obtener datos completos del usuario (incluida descripción)
+            const { data: user } = await supabase.from('app_users').select('*').eq('email', safeEmail).single();
+            
+            const userProjects = projects.filter(p => (p.author_email || '').trim().toLowerCase() === safeEmail);
+            if(userProjects.length === 0 && !user) return; // Si no hay proyectos ni usuario, salir
+            
+            // Usar datos del usuario si existen, si no, usar datos del primer proyecto
+            const authName = user ? user.name : userProjects[0].author_name;
+            const authAvatar = user ? user.avatar : userProjects[0].author_avatar;
+            const authDesc = user ? user.description : '';
+
+            document.getElementById('pub-name').textContent = authName;
+            document.getElementById('pub-avatar-container').innerHTML = getAvatarHTML(authName, authAvatar, 'large');
+            document.getElementById('pub-description').textContent = authDesc || "Sin descripción.";
+            document.getElementById('pub-stats').textContent = userProjects.length + ' Proyectos publicados';
+            
+            renderProjects(userProjects, 'pub-grid');
+            goToPage('profile');
+        }
+
+        // --- EDITAR PERFIL ---
+        function openEditProfile() { 
+            document.getElementById('edit-name').value = currentUser.name; 
+            document.getElementById('edit-avatar').value = currentUser.avatar || ''; 
+            document.getElementById('edit-desc').value = currentUser.description || ''; // Cargar descripción
+            openModal('profile'); 
+        }
+        
+        document.getElementById('profileForm').addEventListener('submit', async (e) => { 
+            e.preventDefault(); 
+            const newName = document.getElementById('edit-name').value; 
+            const newAvatar = document.getElementById('edit-avatar').value; 
+            const newDesc = document.getElementById('edit-desc').value; // Nueva descripción
+            
+            await supabase.from('app_users').update({ name: newName, avatar: newAvatar, description: newDesc }).eq('email', currentUser.email); 
+            await supabase.from('projects').update({ author_name: newName, author_avatar: newAvatar }).eq('author_email', currentUser.email); 
+            
+            currentUser.name = newName; currentUser.avatar = newAvatar; currentUser.description = newDesc;
+            localStorage.setItem('alex_session', JSON.stringify(currentUser)); 
+            closeModal('profile'); loadDashboard(); showToast('Perfil actualizado'); await fetchProjects(); 
+        });
+
+        // --- RESTO DE FUNCIONES ---
         document.getElementById('projectForm').addEventListener('submit', async (e) => {
             e.preventDefault();
             const id = document.getElementById('pId').value;
@@ -661,141 +686,27 @@
                 author_email: currentUser.email.trim().toLowerCase(),
                 author_avatar: currentUser.avatar
             };
-
-            if (id) await supabase.from('projects').update(pData).eq('id', id);
-            else await supabase.from('projects').insert([pData]);
-            
-            await fetchProjects();
-            goToPage('dashboard');
-            showToast('Proyecto guardado');
+            if (id) await supabase.from('projects').update(pData).eq('id', id); else await supabase.from('projects').insert([pData]);
+            await fetchProjects(); goToPage('dashboard'); showToast('Proyecto guardado');
         });
 
-        // --- DETALLE Y RESEÑAS ---
         function openProject(id) {
-            selectedProjectId = id;
-            const p = projects.find(x => x.id === id);
-            if (!p) return;
-
+            selectedProjectId = id; const p = projects.find(x => x.id === id); if (!p) return;
             document.getElementById('detail-title').textContent = p.title;
             document.getElementById('detail-category').textContent = p.category;
             document.getElementById('detail-desc').textContent = p.description;
-            
-            const priceText = Number(p.price) === 0 ? 'Gratuito' : p.price + '€';
-            document.getElementById('detail-price').textContent = priceText;
-            
+            document.getElementById('detail-price').textContent = Number(p.price) === 0 ? 'Gratuito' : p.price + '€';
             document.getElementById('detail-date').textContent = new Date(p.created_at).toLocaleDateString();
             document.getElementById('detail-author-name').textContent = p.author_name;
             currentDetailEmail = p.author_email;
             document.getElementById('detail-author-avatar').innerHTML = getAvatarHTML(p.author_name, p.author_avatar, 'medium');
-            
-            const imgEl = document.getElementById('detail-img');
-            if(p.image_url) { imgEl.src = p.image_url; imgEl.style.display = 'block'; } else { imgEl.style.display = 'none'; }
-            
-            const actions = document.getElementById('detail-actions');
-            actions.innerHTML = p.business_url 
-                ? `<a href="${p.business_url}" target="_blank" class="btn btn-primary" style="width:100%; padding:1.2rem; font-size:1.1rem;">Visitar Sitio Web <i class="ph ph-arrow-right"></i></a>` 
-                : '';
-            
-            loadReviews(id);
-            document.getElementById('review-comment').value = '';
-            setRating(0);
-            
-            goToPage('detail');
+            const imgEl = document.getElementById('detail-img'); if(p.image_url) { imgEl.src = p.image_url; imgEl.style.display = 'block'; } else { imgEl.style.display = 'none'; }
+            const actions = document.getElementById('detail-actions'); actions.innerHTML = p.business_url ? `<a href="${p.business_url}" target="_blank" class="btn btn-primary" style="width:100%; padding:1.2rem; font-size:1.1rem;">Visitar Sitio Web <i class="ph ph-arrow-right"></i></a>` : '';
+            loadReviews(id); document.getElementById('review-comment').value = ''; setRating(0); goToPage('detail');
         }
 
-        async function loadReviews(projectId) {
-            const list = document.getElementById('reviews-list');
-            list.innerHTML = '<p style="color:#aaa;">Cargando opiniones...</p>';
-            
-            const { data, error } = await supabase.from('reviews').select('*').eq('project_id', projectId).order('created_at', {ascending: false});
-            
-            if (error) {
-                console.error("Error reviews:", error);
-                list.innerHTML = '<p style="color:red; font-size:0.8rem;">Error cargando reseñas. Revisa la consola.</p>';
-                return;
-            }
-
-            if (!data || data.length === 0) {
-                list.innerHTML = '<p style="color:var(--text-muted); padding:1rem 0;">Aún no hay reseñas. ¡Sé el primero!</p>';
-                return;
-            }
-
-            list.innerHTML = data.map(r => {
-                const isMyReview = currentUser && (r.user_email === currentUser.email);
-                const deleteBtn = isMyReview ? `<button onclick="deleteReview(${r.id})" class="btn-delete-review" title="Borrar reseña">✕</button>` : '';
-
-                return `
-                <div class="review-card">
-                    ${deleteBtn}
-                    <div style="display:flex; justify-content:space-between; margin-bottom:0.5rem;">
-                        <strong style="font-size:0.9rem;">${r.user_name || 'Anónimo'}</strong>
-                        <span style="color:#FCD34D;">${'★'.repeat(r.rating)}</span>
-                    </div>
-                    <p style="color:var(--text-muted); font-size:0.95rem;">${r.comment}</p>
-                </div>
-            `}).join('');
-        }
-
-        async function deleteReview(id) {
-            if(!confirm('¿Estás seguro de borrar esta reseña?')) return;
-            const { error } = await supabase.from('reviews').delete().eq('id', id);
-            if(error) { showToast('Error al borrar. Revisa permisos.', 'error'); } 
-            else { showToast('Reseña eliminada'); loadReviews(selectedProjectId); }
-        }
-
-        async function submitReview() {
-            if(!currentUser) { openModal('auth', 'login'); return; }
-            if(currentRating === 0) { showToast('Elige una puntuación', 'error'); return; }
-            
-            const comment = document.getElementById('review-comment').value;
-            
-            const newReview = {
-                project_id: selectedProjectId,
-                user_name: currentUser.name,
-                user_email: currentUser.email,
-                rating: currentRating,
-                comment: comment
-            };
-
-            const { error } = await supabase.from('reviews').insert([newReview]);
-            
-            if(error) {
-                console.error(error);
-                if (error.code === '42501') {
-                    showToast('Error de permisos. Ejecuta el SQL en Supabase.', 'error');
-                } else {
-                    showToast('Error al enviar. Revisa la consola.', 'error');
-                }
-            } else {
-                showToast('Reseña enviada');
-                document.getElementById('review-comment').value = '';
-                setRating(0);
-                loadReviews(selectedProjectId);
-            }
-        }
+        function goToUserProfileFromDetail() { if (currentDetailEmail) openPublicProfile(currentDetailEmail); }
         
-        // --- RESTO FUNCIONES ---
-        
-        function goToUserProfileFromDetail() {
-            if (currentDetailEmail) openPublicProfile(currentDetailEmail);
-        }
-        
-        function openPublicProfile(email) {
-            const safeEmail = (email || '').trim().toLowerCase();
-            if (currentUser && currentUser.email.trim().toLowerCase() === safeEmail) { goToPage('dashboard'); return; }
-            
-            const userProjects = projects.filter(p => (p.author_email || '').trim().toLowerCase() === safeEmail);
-            if(userProjects.length === 0) return;
-            
-            const author = userProjects[0];
-            document.getElementById('pub-name').textContent = author.author_name;
-            document.getElementById('pub-avatar-container').innerHTML = getAvatarHTML(author.author_name, author.author_avatar, 'large');
-            document.getElementById('pub-stats').textContent = userProjects.length + ' Proyectos publicados';
-            
-            renderProjects(userProjects, 'pub-grid');
-            goToPage('profile');
-        }
-
         function goToPage(id) {
             document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
             document.getElementById('page-'+id).classList.add('active');
@@ -803,28 +714,16 @@
             if (id === 'home') { document.getElementById('navHomeBtn').classList.add('hidden'); renderProjects(projects, 'homeProjectsGrid'); }
             else document.getElementById('navHomeBtn').classList.remove('hidden');
             if (id === 'dashboard') loadDashboard();
+            if (id === 'messages') loadMessages();
             updateNav();
         }
         
         function updateNav() {
-            if (currentUser) {
-                document.getElementById('authBtns').classList.add('hidden');
-                document.getElementById('userBtns').classList.remove('hidden');
-            } else {
-                document.getElementById('authBtns').classList.remove('hidden');
-                document.getElementById('userBtns').classList.add('hidden');
-            }
+            if (currentUser) { document.getElementById('authBtns').classList.add('hidden'); document.getElementById('userBtns').classList.remove('hidden'); } 
+            else { document.getElementById('authBtns').classList.remove('hidden'); document.getElementById('userBtns').classList.add('hidden'); }
         }
         
-        function completeLogin(user) {
-            user.email = user.email.trim().toLowerCase();
-            currentUser = user;
-            localStorage.setItem('alex_session', JSON.stringify(user));
-            updateNav();
-            goToPage('dashboard');
-            showToast(`Hola, ${user.name}`);
-        }
-
+        function completeLogin(user) { currentUser = user; localStorage.setItem('alex_session', JSON.stringify(user)); updateNav(); goToPage('dashboard'); showToast(`Hola, ${user.name}`); }
         function handleLogout() { localStorage.removeItem('alex_session'); currentUser = null; updateNav(); goToPage('home'); showToast('Sesión cerrada'); }
         function openModal(type, mode) { document.getElementById(`modal-${type}`).classList.add('active'); if(type === 'auth') { isLoginMode = (mode === 'login'); document.getElementById('auth-title').textContent = isLoginMode ? 'Bienvenido' : 'Crear cuenta'; document.getElementById('signup-fields').className = isLoginMode ? 'hidden' : ''; document.getElementById('authSubmitBtn').textContent = isLoginMode ? 'Ingresar' : 'Registrarse'; document.getElementById('authErrorMsg').style.display = 'none'; } }
         function closeModal(type) { document.getElementById(`modal-${type}`).classList.remove('active'); }
@@ -832,108 +731,20 @@
         function showToast(msg, type='success') { const t = document.createElement('div'); t.className = 'toast'; if(type === 'error') t.style.borderLeft = '4px solid #ef4444'; else t.style.borderLeft = '4px solid #10b981'; t.textContent = msg; document.getElementById('toast-container').appendChild(t); setTimeout(() => t.remove(), 3000); }
         function prepareForm() { document.getElementById('projectForm').reset(); document.getElementById('pId').value = ''; document.getElementById('pImgPreview').innerHTML = ''; document.getElementById('form-title').textContent = 'Nuevo Proyecto'; goToPage('form'); }
         function checkAuthAndAct(action) { if(currentUser) prepareForm(); else openModal('auth', 'signup'); }
-        
-        function handleImagePreview(input, previewId, urlId) { 
-            const file = input.files[0]; 
-            if(file) { 
-                const reader = new FileReader(); 
-                reader.onload = (e) => { 
-                    if(previewId) document.getElementById(previewId).innerHTML = `<img src="${e.target.result}" style="width:100%">`; 
-                    if(urlId) document.getElementById(urlId).value = e.target.result; 
-                }; 
-                reader.readAsDataURL(file); 
-                // Limpiar el input de URL si se usa archivo
-                const urlInput = document.getElementById(urlId.replace('Url', 'InputUrl'));
-                if(urlInput) urlInput.value = '';
-            } 
-        }
-
-        // NUEVA FUNCIÓN PARA PREVISUALIZAR URLS
-        function handleUrlPreview(url, previewId, urlId) {
-            if(url) {
-                document.getElementById(urlId).value = url;
-                document.getElementById(previewId).innerHTML = `<img src="${url}" style="width:100%">`;
-                // Limpiar el input file
-                const fileInput = document.getElementById('pImgFile');
-                if(fileInput) fileInput.value = '';
-            }
-        }
-        
-        function editProject(id) { 
-            const p = projects.find(x => x.id === id); 
-            document.getElementById('pId').value = p.id; 
-            document.getElementById('pTitle').value = p.title; 
-            document.getElementById('pCat').value = p.category; 
-            document.getElementById('pDesc').value = p.description; 
-            document.getElementById('pPrice').value = p.price; 
-            document.getElementById('pImgUrl').value = p.image_url || ''; 
-            document.getElementById('pImgInputUrl').value = p.image_url && p.image_url.startsWith('http') ? p.image_url : '';
-            document.getElementById('pUrl').value = p.business_url || ''; 
-            document.getElementById('form-title').textContent = 'Editar Proyecto'; 
-            if(p.image_url) document.getElementById('pImgPreview').innerHTML = `<img src="${p.image_url}" style="width:100%">`; 
-            goToPage('form'); 
-        }
-        
+        function handleImagePreview(input, previewId, urlId) { const file = input.files[0]; if(file) { const reader = new FileReader(); reader.onload = (e) => { if(previewId) document.getElementById(previewId).innerHTML = `<img src="${e.target.result}" style="width:100%">`; if(urlId) document.getElementById(urlId).value = e.target.result; const urlInput = document.getElementById(urlId.replace('Url', 'InputUrl')); if(urlInput) urlInput.value = ''; }; reader.readAsDataURL(file); } }
+        function handleUrlPreview(url, previewId, urlId) { if(url) { document.getElementById(urlId).value = url; document.getElementById(previewId).innerHTML = `<img src="${url}" style="width:100%">`; const fileInput = document.getElementById('pImgFile'); if(fileInput) fileInput.value = ''; } }
+        function editProject(id) { const p = projects.find(x => x.id === id); document.getElementById('pId').value = p.id; document.getElementById('pTitle').value = p.title; document.getElementById('pCat').value = p.category; document.getElementById('pDesc').value = p.description; document.getElementById('pPrice').value = p.price; document.getElementById('pImgUrl').value = p.image_url || ''; document.getElementById('pImgInputUrl').value = p.image_url && p.image_url.startsWith('http') ? p.image_url : ''; document.getElementById('pUrl').value = p.business_url || ''; document.getElementById('form-title').textContent = 'Editar Proyecto'; if(p.image_url) document.getElementById('pImgPreview').innerHTML = `<img src="${p.image_url}" style="width:100%">`; goToPage('form'); }
         async function deleteProject(id) { if(confirm('¿Eliminar?')) { await supabase.from('projects').delete().eq('id', id); await fetchProjects(); loadDashboard(); showToast('Eliminado'); } }
-        function openEditProfile() { document.getElementById('edit-name').value = currentUser.name; document.getElementById('edit-avatar').value = currentUser.avatar || ''; openModal('profile'); }
-        
-        document.getElementById('profileForm').addEventListener('submit', async (e) => { 
-            e.preventDefault(); 
-            const newName = document.getElementById('edit-name').value; 
-            const newAvatar = document.getElementById('edit-avatar').value; 
-            
-            await supabase.from('app_users').update({ name: newName, avatar: newAvatar }).eq('email', currentUser.email); 
-            await supabase.from('projects').update({ author_name: newName, author_avatar: newAvatar }).eq('author_email', currentUser.email); 
-            
-            currentUser.name = newName; 
-            currentUser.avatar = newAvatar; 
-            localStorage.setItem('alex_session', JSON.stringify(currentUser)); 
-            closeModal('profile'); 
-            loadDashboard(); 
-            showToast('Perfil actualizado'); 
-            await fetchProjects(); 
-        });
-        
-        function openPremiumModal(id) { selectedProjectId = id; openModal('premium'); document.getElementById('modal-premium').classList.add('active'); }
-        function closePremiumModal() { document.getElementById('modal-premium').classList.remove('active'); }
+        function openPremiumModal(id) { selectedProjectId = id; openModal('premium'); }
+        function closePremiumModal() { closeModal('premium'); }
         async function handlePremiumPurchase() { await supabase.from('projects').update({ is_premium: true }).eq('id', selectedProjectId); await fetchProjects(); closePremiumModal(); loadDashboard(); showToast('¡Destacado!'); }
         async function cancelPremium(id) { await supabase.from('projects').update({ is_premium: false }).eq('id', id); await fetchProjects(); loadDashboard(); showToast('Cancelado'); }
         function filterProjects(val, gridId) { const term = val.toLowerCase(); const filtered = projects.filter(p => p.title.toLowerCase().includes(term) || p.author_name.toLowerCase().includes(term)); renderProjects(filtered, gridId); }
         function setRating(n) { currentRating = n; const stars = document.querySelectorAll('#star-input span'); stars.forEach((s, i) => { s.classList.toggle('active', i < n); }); }
-        
-        // --- LOGICA LIKES MEJORADA ---
-        async function toggleLike(btn, id) { 
-            if(!currentUser) { openModal('auth','login'); return; } 
-            
-            const icon = btn.querySelector('i');
-            const span = btn.querySelector('span'); 
-            const isLiked = btn.classList.contains('liked'); 
-            let count = parseInt(span.textContent); 
-            
-            btn.classList.toggle('liked'); 
-            
-            if (!isLiked) {
-                icon.classList.remove('ph');
-                icon.classList.add('ph-fill');
-                span.textContent = count + 1;
-            } else {
-                icon.classList.remove('ph-fill');
-                icon.classList.add('ph');
-                span.textContent = count > 0 ? count - 1 : 0;
-            }
-
-            if(!isLiked) { 
-                await supabase.from('project_likes').insert([{ project_id: id, user_email: currentUser.email }]); 
-                const { data } = await supabase.from('projects').select('likes_count').eq('id', id).single();
-                const newCount = (data?.likes_count || 0) + 1;
-                await supabase.from('projects').update({ likes_count: newCount }).eq('id', id);
-            } else { 
-                await supabase.from('project_likes').delete().match({ project_id: id, user_email: currentUser.email }); 
-                const { data } = await supabase.from('projects').select('likes_count').eq('id', id).single();
-                const newCount = (data?.likes_count || 0) - 1;
-                await supabase.from('projects').update({ likes_count: newCount < 0 ? 0 : newCount }).eq('id', id);
-            } 
-        }
+        async function toggleLike(btn, id) { if(!currentUser) { openModal('auth','login'); return; } const icon = btn.querySelector('i'); const span = btn.querySelector('span'); const isLiked = btn.classList.contains('liked'); let count = parseInt(span.textContent); btn.classList.toggle('liked'); if (!isLiked) { icon.classList.remove('ph'); icon.classList.add('ph-fill'); span.textContent = count + 1; } else { icon.classList.remove('ph-fill'); icon.classList.add('ph'); span.textContent = count > 0 ? count - 1 : 0; } if(!isLiked) { await supabase.from('project_likes').insert([{ project_id: id, user_email: currentUser.email }]); const { data } = await supabase.from('projects').select('likes_count').eq('id', id).single(); const newCount = (data?.likes_count || 0) + 1; await supabase.from('projects').update({ likes_count: newCount }).eq('id', id); } else { await supabase.from('project_likes').delete().match({ project_id: id, user_email: currentUser.email }); const { data } = await supabase.from('projects').select('likes_count').eq('id', id).single(); const newCount = (data?.likes_count || 0) - 1; await supabase.from('projects').update({ likes_count: newCount < 0 ? 0 : newCount }).eq('id', id); } }
+        async function loadReviews(projectId) { const list = document.getElementById('reviews-list'); list.innerHTML = '<p>Cargando...</p>'; const { data, error } = await supabase.from('reviews').select('*').eq('project_id', projectId).order('created_at', {ascending: false}); if (error) { list.innerHTML = '<p>Error.</p>'; return; } if (!data || data.length === 0) { list.innerHTML = '<p>Sé el primero.</p>'; return; } list.innerHTML = data.map(r => { const isMyReview = currentUser && (r.user_email === currentUser.email); const deleteBtn = isMyReview ? `<button onclick="deleteReview(${r.id})" class="btn-delete-review">✕</button>` : ''; return `<div class="review-card">${deleteBtn}<div style="display:flex; justify-content:space-between; margin-bottom:0.5rem;"><strong style="font-size:0.9rem;">${r.user_name || 'Anónimo'}</strong><span style="color:#FCD34D;">${'★'.repeat(r.rating)}</span></div><p style="color:var(--text-muted); font-size:0.95rem;">${r.comment}</p></div>`}).join(''); }
+        async function deleteReview(id) { if(!confirm('¿Borrar?')) return; const { error } = await supabase.from('reviews').delete().eq('id', id); if(error) showToast('Error', 'error'); else { showToast('Eliminada'); loadReviews(selectedProjectId); } }
+        async function submitReview() { if(!currentUser) { openModal('auth', 'login'); return; } if(currentRating === 0) { showToast('Elige estrellas', 'error'); return; } const comment = document.getElementById('review-comment').value; const newReview = { project_id: selectedProjectId, user_name: currentUser.name, user_email: currentUser.email, rating: currentRating, comment: comment }; const { error } = await supabase.from('reviews').insert([newReview]); if(error) showToast('Error', 'error'); else { showToast('Enviada'); document.getElementById('review-comment').value = ''; setRating(0); loadReviews(selectedProjectId); } }
     </script>
 </body>
 </html>
