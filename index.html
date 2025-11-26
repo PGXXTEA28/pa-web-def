@@ -67,6 +67,9 @@
             font-weight: fill; 
         }
 
+        /* --- PRICE BADGE (NUEVO) --- */
+        .price-badge { position: absolute; top: 10px; left: 10px; background: rgba(0,0,0,0.75); backdrop-filter: blur(4px); color: white; padding: 4px 12px; border-radius: 99px; font-size: 0.75rem; font-weight: 600; z-index: 10; letter-spacing: 0.02em; }
+
         /* --- PAGINAS --- */
         .page { display: none; animation: fadeIn 0.3s ease; padding-bottom: 4rem; }
         .page.active { display: block; }
@@ -144,7 +147,12 @@
         .detail-header { padding: 2rem 0; border-bottom: 1px solid var(--border); margin-bottom: 2rem; }
         .detail-img { width: 100%; height: 450px; object-fit: cover; border-radius: var(--radius); margin-bottom: 3rem; background: #F4F4F5; box-shadow: var(--shadow-soft); }
         .reviews-section { margin-top: 4rem; padding-top: 2rem; border-top: 1px solid var(--border); }
-        .review-card { background: #F9FAFB; padding: 1.5rem; border-radius: 12px; margin-bottom: 1rem; border: 1px solid #F3F4F6; }
+        .review-card { background: #F9FAFB; padding: 1.5rem; border-radius: 12px; margin-bottom: 1rem; border: 1px solid #F3F4F6; position: relative; }
+        
+        /* Botón borrar reseña (NUEVO) */
+        .btn-delete-review { position: absolute; top: 10px; right: 10px; background: none; border: none; color: #ef4444; font-size: 1.2rem; cursor: pointer; opacity: 0.6; transition: all 0.2s; }
+        .btn-delete-review:hover { opacity: 1; transform: scale(1.1); }
+
         .star-input { display: flex; gap: 0.5rem; font-size: 1.5rem; color: #D4D4D8; cursor: pointer; margin-bottom: 1rem; }
         .star-input span.active { color: #FCD34D; }
 
@@ -296,6 +304,7 @@
                     <div class="form-group"><label>Categoría *</label>
                         <select id="pCat" required>
                             <option value="" disabled selected>Selecciona una categoría...</option>
+                            <option>Social</option>
                             <option>Tecnología</option><option>Diseño</option><option>Arte</option><option>Negocios</option>
                             <option>Educación</option><option>Marketing</option><option>Música</option>
                             <option>Fotografía</option><option>Escritura</option><option>Salud</option>
@@ -425,10 +434,14 @@
                 const likes = p.likes_count || 0;
                 const isPrem = p.is_premium || false;
 
+                // LÓGICA DE PRECIO (CAMBIO 1 y 2)
+                const priceText = Number(p.price) === 0 ? 'Gratuito' : p.price + '€';
+
                 return `
                 <article class="project-card ${isPrem ? 'is-premium' : ''}">
                     ${isPrem ? '<div class="premium-badge">✨ Destacado</div>' : ''}
                     <div class="project-image-container" onclick="openProject(${p.id})">
+                        <div class="price-badge">${priceText}</div>
                         ${img ? `<img src="${img}" class="project-image">` : `<div class="project-image-placeholder"><i class="ph ph-image"></i></div>`}
                     </div>
                     <div class="card-content">
@@ -561,7 +574,11 @@
             document.getElementById('detail-title').textContent = p.title;
             document.getElementById('detail-category').textContent = p.category;
             document.getElementById('detail-desc').textContent = p.description;
-            document.getElementById('detail-price').textContent = p.price + '€';
+            
+            // LOGICA PRECIO DETALLE (Gratuito)
+            const priceText = Number(p.price) === 0 ? 'Gratuito' : p.price + '€';
+            document.getElementById('detail-price').textContent = priceText;
+            
             document.getElementById('detail-date').textContent = new Date(p.created_at).toLocaleDateString();
             document.getElementById('detail-author-name').textContent = p.author_name;
             currentDetailEmail = p.author_email;
@@ -597,15 +614,36 @@
                 return;
             }
 
-            list.innerHTML = data.map(r => `
+            list.innerHTML = data.map(r => {
+                // LOGICA BORRAR RESEÑA (CAMBIO 4)
+                // Comprobamos si el email de la reseña coincide con el usuario actual
+                const isMyReview = currentUser && (r.user_email === currentUser.email);
+                const deleteBtn = isMyReview ? `<button onclick="deleteReview(${r.id})" class="btn-delete-review" title="Borrar reseña">✕</button>` : '';
+
+                return `
                 <div class="review-card">
+                    ${deleteBtn}
                     <div style="display:flex; justify-content:space-between; margin-bottom:0.5rem;">
                         <strong style="font-size:0.9rem;">${r.user_name || 'Anónimo'}</strong>
                         <span style="color:#FCD34D;">${'★'.repeat(r.rating)}</span>
                     </div>
                     <p style="color:var(--text-muted); font-size:0.95rem;">${r.comment}</p>
                 </div>
-            `).join('');
+            `}).join('');
+        }
+
+        // FUNCION PARA BORRAR RESEÑA (NUEVO)
+        async function deleteReview(id) {
+            if(!confirm('¿Estás seguro de borrar esta reseña?')) return;
+            
+            const { error } = await supabase.from('reviews').delete().eq('id', id);
+            
+            if(error) {
+                showToast('Error al borrar. Revisa permisos.', 'error');
+            } else {
+                showToast('Reseña eliminada');
+                loadReviews(selectedProjectId); // Recargar lista
+            }
         }
 
         async function submitReview() {
@@ -614,7 +652,6 @@
             
             const comment = document.getElementById('review-comment').value;
             
-            // CORRECCIÓN AQUÍ: Se añade user_email que era el campo obligatorio que faltaba
             const newReview = {
                 project_id: selectedProjectId,
                 user_name: currentUser.name,
@@ -627,7 +664,6 @@
             
             if(error) {
                 console.error(error);
-                // Si el error es por RLS lo indicamos
                 if (error.code === '42501') {
                     showToast('Error de permisos. Ejecuta el SQL en Supabase.', 'error');
                 } else {
