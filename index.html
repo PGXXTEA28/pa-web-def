@@ -37,7 +37,7 @@
             --text-muted: #A1A1AA;     /* Zinc 400 */
             --primary: #FAFAFA;        /* Blanco para botones */
             --primary-text: #09090B;   /* Texto oscuro en botones */
-            --accent: #818CF8;         /* Indigo 400 (más suave) */
+            --accent: #818CF8;         /* Indigo 400 */
             --border: #27272A;         /* Zinc 800 */
             --input-bg: #27272A;
             --shadow-soft: 0 4px 6px -1px rgba(0, 0, 0, 0.3);
@@ -53,7 +53,6 @@
 
         /* --- NAVEGACIÓN --- */
         nav { position: sticky; top: 0; z-index: 100; background: var(--bg-card); border-bottom: 1px solid var(--border); transition: background 0.3s, border 0.3s; }
-        /* Efecto blur solo si el navegador lo soporta bien */
         @supports (backdrop-filter: blur(12px)) {
             nav { background: rgba(var(--bg-card), 0.8); backdrop-filter: blur(12px); }
             [data-theme="dark"] nav { background: rgba(24, 24, 27, 0.85); }
@@ -93,7 +92,6 @@
         
         .btn-edit { background-color: #EFF6FF; color: #2563EB; border: 1px solid transparent; }
         .btn-edit:hover { background-color: #DBEAFE; }
-        /* Ajuste oscuro para btn-edit */
         [data-theme="dark"] .btn-edit { background-color: #1e3a8a; color: #bfdbfe; }
         [data-theme="dark"] .btn-edit:hover { background-color: #172554; }
 
@@ -110,7 +108,6 @@
             transform: translateY(-3px);
             box-shadow: 0 4px 12px rgba(220, 38, 38, 0.15);
         }
-        /* Ajuste oscuro para delete */
         [data-theme="dark"] .btn-delete { background-color: #450a0a !important; border-color: #7f1d1d !important; color: #fca5a5 !important; }
         [data-theme="dark"] .btn-delete:hover { background-color: #500724 !important; }
 
@@ -252,7 +249,6 @@
     <div id="page-home" class="page active">
         <header class="hero">
             <div class="container">
-                <div style="display: inline-block; padding: 6px 16px; background: var(--bg-card); color: var(--text-main); border-radius: 99px; font-size: 0.85rem; font-weight: 600; margin-bottom: 1.5rem; border: 1px solid var(--border);">✨ Plataforma de Proyectos Digitales</div>
                 <h1>Dale Vida a Tus <br> <span style="background: linear-gradient(90deg, #6366F1, #8B5CF6); -webkit-background-clip: text; -webkit-text-fill-color: transparent;">Grandes Ideas</span></h1>
                 <p>La plataforma premium para creadores. Comparte, inspira y crece.</p>
                 <div class="search-wrapper">
