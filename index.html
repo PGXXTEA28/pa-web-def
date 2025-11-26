@@ -45,7 +45,7 @@
         .nav-brand span { font-size: 1.2rem; font-weight: 700; letter-spacing: -0.02em; }
         .nav-buttons { display: flex; align-items: center; gap: 0.75rem; }
 
-        /* --- BOTONES GENERALES --- */
+        /* --- BOTONES --- */
         .btn { padding: 0.6rem 1.2rem; border-radius: 99px; border: 1px solid transparent; cursor: pointer; font-size: 0.9rem; font-weight: 500; transition: all 0.2s ease; display: inline-flex; align-items: center; justify-content: center; gap: 0.5rem; text-decoration: none; line-height: 1; }
         .btn-primary { background: var(--primary); color: white; box-shadow: var(--shadow-soft); }
         .btn-primary:hover { transform: translateY(-1px); background: #27272A; }
@@ -60,6 +60,12 @@
         .btn-cancel-premium:hover { background-color: #FEF3C7; }
         .btn-edit { background-color: #EFF6FF; color: #2563EB; border: 1px solid transparent; }
         .btn-edit:hover { background-color: #DBEAFE; }
+        
+        /* Botón pequeño para visitar web en tarjeta */
+        .btn-visit-card {
+            background-color: #F3F4F6; color: #4B5563; padding: 0.6rem; width: 40px; height: 38px; border-radius: 50%; display: flex; align-items: center; justify-content: center; transition: all 0.2s;
+        }
+        .btn-visit-card:hover { background-color: #E5E7EB; color: #111827; transform: scale(1.05); }
 
         /* --- ANIMACIÓN LIKE --- */
         @keyframes heartPop {
@@ -435,7 +441,8 @@
         document.addEventListener('DOMContentLoaded', async () => {
             updateNav();
             await fetchProjects();
-            if (currentUser) goToPage('dashboard'); else goToPage('home');
+            // NAVEGACIÓN INICIAL: SIEMPRE HOME (SOLICITUD 3 ANTERIOR)
+            goToPage('home'); 
         });
 
         // --- AVATAR GENERATOR ---
@@ -472,6 +479,11 @@
                 const isPrem = p.is_premium || false;
 
                 const priceText = Number(p.price) === 0 ? 'Gratuito' : p.price + '€';
+                
+                // BOTÓN WEB EN PORTADA (SOLICITUD ANTERIOR)
+                const webBtn = p.business_url 
+                    ? `<a href="${p.business_url}" target="_blank" class="btn-visit-card" onclick="event.stopPropagation();" title="Ir a la web"><i class="ph ph-arrow-square-out"></i></a>` 
+                    : '';
 
                 return `
                 <article class="project-card ${isPrem ? 'is-premium' : ''}">
@@ -485,7 +497,10 @@
                         <h3 class="card-title" onclick="openProject(${p.id})">${p.title}</h3>
                         <p class="card-desc">${p.description}</p>
                         <div style="margin-top:auto;">
-                            <button class="btn btn-outline" style="width:100%;justify-content:center;margin-bottom:1rem;" onclick="openProject(${p.id})">Ver Detalles</button>
+                            <div style="display:flex; gap:0.5rem; margin-bottom:1rem;">
+                                <button class="btn btn-outline" style="flex:1; justify-content:center;" onclick="openProject(${p.id})">Ver Detalles</button>
+                                ${webBtn}
+                            </div>
                             <div class="card-footer">
                                 <div class="author-row" onclick="openPublicProfile('${p.author_email}')">
                                     ${getAvatarHTML(authorName, authorAvatar, 'small')}
@@ -622,8 +637,11 @@
             const imgEl = document.getElementById('detail-img');
             if(p.image_url) { imgEl.src = p.image_url; imgEl.style.display = 'block'; } else { imgEl.style.display = 'none'; }
             
+            // BOTÓN WEB GRANDE EN DETALLE (SOLICITUD ANTERIOR)
             const actions = document.getElementById('detail-actions');
-            actions.innerHTML = p.business_url ? `<a href="${p.business_url}" target="_blank" class="btn btn-primary">Visitar Web</a>` : '';
+            actions.innerHTML = p.business_url 
+                ? `<a href="${p.business_url}" target="_blank" class="btn btn-primary" style="width:100%; padding:1.2rem; font-size:1.1rem;">Visitar Sitio Web <i class="ph ph-arrow-right"></i></a>` 
+                : '';
             
             loadReviews(id);
             document.getElementById('review-comment').value = '';
