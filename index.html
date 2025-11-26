@@ -100,6 +100,9 @@
         .card-desc { font-size: 0.95rem; color: var(--text-muted); display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical; overflow: hidden; margin-bottom: 1rem; font-weight: 300; }
         .card-footer { margin-top: auto; padding-top: 1rem; border-top: 1px solid var(--input-bg); display: flex; justify-content: space-between; align-items: center; }
         
+        /* CAMBIO: Cursor Pointer en Elementos de Usuario */
+        .author-row, .message-sender, .detail-author-box, #dash-avatar-container { cursor: pointer !important; }
+
         /* ANIMACIÓN LIKE */
         @keyframes heartPop { 0% { transform: scale(1); } 50% { transform: scale(1.35); } 100% { transform: scale(1); } }
         .like-btn { background: none; border: none; cursor: pointer; color: var(--text-muted); font-size: 0.9rem; display: flex; align-items: center; gap: 4px; transition: color 0.2s; padding: 4px 8px; border-radius: 8px; }
@@ -142,7 +145,6 @@
         .modal-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.5); backdrop-filter: blur(4px); z-index: 2000; display: flex; align-items: center; justify-content: center; opacity: 0; visibility: hidden; transition: all 0.3s; }
         .modal-overlay.active { opacity: 1; visibility: visible; }
         
-        /* FIX: Añadido max-height y overflow-y para que se pueda hacer scroll si el contenido es muy largo */
         .modal-card { 
             background: var(--bg-card); 
             width: 100%; 
@@ -154,8 +156,8 @@
             transform: translateY(20px); 
             transition: all 0.3s; 
             position: relative; 
-            max-height: 90vh; /* IMPORTANTE */
-            overflow-y: auto; /* IMPORTANTE */
+            max-height: 90vh; /* Scrollable si es muy alto */
+            overflow-y: auto; 
         }
         
         .modal-overlay.active .modal-card { transform: translateY(0); }
@@ -361,7 +363,17 @@
                     <div class="form-group"><label>Foto (URL opcional)</label><input type="url" id="reg-avatar-url" placeholder="https://..."></div>
                 </div>
                 <div class="form-group"><label>Email</label><input type="email" id="login-email" required></div>
-                <div class="form-group"><label>Contraseña</label><input type="password" id="login-pass" required></div>
+                
+                <div class="form-group">
+                    <label>Contraseña</label>
+                    <div style="position: relative;">
+                        <input type="password" id="login-pass" required style="padding-right: 40px;">
+                        <button type="button" onclick="togglePassword()" style="position: absolute; right: 10px; top: 50%; transform: translateY(-50%); background: none; border: none; cursor: pointer; color: var(--text-muted);">
+                            <i class="ph ph-eye" id="eye-icon"></i>
+                        </button>
+                    </div>
+                </div>
+
                 <button type="submit" class="btn btn-primary" style="width: 100%; margin-top: 1rem;" id="authSubmitBtn">Continuar</button>
             </form>
             <p style="text-align: center; margin-top: 1.5rem; font-size: 0.9rem; cursor: pointer; color: var(--text-muted);" onclick="toggleAuth()">
@@ -444,6 +456,19 @@
             await fetchProjects();
             goToPage('home'); 
         });
+
+        // --- FUNCIÓN TOGGLE PASSWORD (NUEVO) ---
+        function togglePassword() {
+            const input = document.getElementById('login-pass');
+            const icon = document.getElementById('eye-icon');
+            if (input.type === 'password') {
+                input.type = 'text';
+                icon.classList.replace('ph-eye', 'ph-eye-slash');
+            } else {
+                input.type = 'password';
+                icon.classList.replace('ph-eye-slash', 'ph-eye');
+            }
+        }
 
         // --- MODO OSCURO ---
         function initTheme() {
