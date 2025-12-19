@@ -62,6 +62,7 @@
         [data-theme="dark"] .btn-delete:hover { background-color: #500724 !important; }
         .btn-premium { background: linear-gradient(135deg, #F59E0B 0%, #D97706 100%) !important; color: white !important; border: none; box-shadow: 0 4px 10px rgba(245, 158, 11, 0.2); }
         .btn-premium:hover { transform: translateY(-1px); filter: brightness(1.1); }
+        .btn-cancel-premium { background-color: #FEF2F2; color: #DC2626; border: 1px solid #FECACA; }
         .btn-edit { background-color: #EFF6FF; color: #2563EB; border: 1px solid transparent; }
         .btn-edit:hover { background-color: #DBEAFE; }
         [data-theme="dark"] .btn-edit { background-color: #1e3a8a; color: #bfdbfe; }
@@ -101,13 +102,13 @@
         .card-footer { margin-top: auto; padding-top: 1rem; border-top: 1px solid var(--input-bg); display: flex; justify-content: space-between; align-items: center; }
         
         /* CURSOR POINTER */
-        .author-row, .message-sender, .detail-author-box, #dash-avatar-container { cursor: pointer !important; }
+        .author-row, .message-sender, .detail-author-box, #dash-avatar-container { cursor: pointer !important; display: flex; align-items: center; gap: 0.5rem; }
 
         /* ANIMACIÓN LIKE */
         @keyframes heartPop { 0% { transform: scale(1); } 50% { transform: scale(1.35); } 100% { transform: scale(1); } }
         .like-btn { background: none; border: none; cursor: pointer; color: var(--text-muted); font-size: 0.9rem; display: flex; align-items: center; gap: 4px; transition: color 0.2s; padding: 4px 8px; border-radius: 8px; }
         .like-btn:hover, .like-btn.liked { color: #EF4444; }
-        .like-btn.liked i { animation: heartPop 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275); font-weight: fill; }
+        .like-btn.liked i { animation: heartPop 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275); }
 
         /* --- DASHBOARD & PERFILES --- */
         .dashboard-header { background: var(--bg-card); border-bottom: 1px solid var(--border); padding: 3rem 0; margin-bottom: 2rem; }
@@ -267,7 +268,7 @@
                 </div>
                 <h1 id="detail-title" style="font-size: 3.5rem; line-height: 1.1; margin-bottom: 1.5rem;">Título</h1>
                 <div style="display: flex; gap: 3rem; align-items: center; border-top: 1px solid var(--border); padding-top: 1.5rem;">
-                    <div id="detail-author-box" style="display: flex; align-items: center; gap: 0.8rem; cursor: pointer;" onclick="goToUserProfileFromDetail()">
+                    <div id="detail-author-box" class="detail-author-box" onclick="goToUserProfileFromDetail()">
                         <div id="detail-author-avatar"></div>
                         <div>
                             <span style="display: block; font-size: 0.8rem; color: var(--text-muted); line-height: 1;">Creado por</span>
@@ -454,7 +455,11 @@
         document.addEventListener('DOMContentLoaded', async () => {
             initTheme();
             updateNav();
-            await fetchProjects();
+            try {
+                await fetchProjects();
+            } catch (e) {
+                console.error("Error cargando proyectos iniciales", e);
+            }
             goToPage('home'); 
         });
 
