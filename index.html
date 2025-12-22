@@ -440,9 +440,12 @@
     </div>
 
     <script>
+        // CONFIGURACIÓN DE SUPABASE (Renombrada a supabaseApp para evitar errores de duplicado)
         const supabaseUrl = 'https://ocepzmbdzoohbdxbuyvq.supabase.co';
         const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im9jZXB6bWJkem9vaGJkeGJ1eXZxIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjY0MTIzMzMsImV4cCI6MjA4MTk4ODMzM30.HVAiGwwmyBaCC8f8LYxNSML1HUhND3nCuApM-oEFWAk';
-        const supabase = window.supabase.createClient(supabaseUrl, supabaseKey);
+        
+        // Usamos 'supabaseApp' en lugar de 'supabase' para evitar conflictos con la librería
+        const supabaseApp = window.supabase.createClient(supabaseUrl, supabaseKey);
 
         let projects = [];
         let currentUser = JSON.parse(localStorage.getItem('alex_session')) || null;
@@ -505,7 +508,7 @@
         }
 
         async function fetchProjects() {
-            const { data, error } = await supabase.from('projects').select('*').order('created_at', { ascending: false });
+            const { data, error } = await supabaseApp.from('projects').select('*').order('created_at', { ascending: false });
             if (!error) { projects = data; renderProjects(projects, 'homeProjectsGrid'); }
         }
 
@@ -587,14 +590,14 @@
         async function sendMessage() {
             const content = document.getElementById('msg-content').value;
             if (!content.trim()) return;
-            const { error } = await supabase.from('messages').insert([{ sender_email: currentUser.email, sender_name: currentUser.name, sender_avatar: currentUser.avatar, receiver_email: currentProfileEmail, content: content }]);
+            const { error } = await supabaseApp.from('messages').insert([{ sender_email: currentUser.email, sender_name: currentUser.name, sender_avatar: currentUser.avatar, receiver_email: currentProfileEmail, content: content }]);
             if (error) { showToast('Error enviando mensaje.', 'error'); } else { closeModal('send-msg'); showToast('Mensaje enviado'); }
         }
 
         async function loadMessages() {
             const list = document.getElementById('messages-list');
             list.innerHTML = '<p>Cargando...</p>';
-            const { data, error } = await supabase.from('messages').select('*').eq('receiver_email', currentUser.email).order('created_at', {ascending: false});
+            const { data, error } = await supabaseApp.from('messages').select('*').eq('receiver_email', currentUser.email).order('created_at', {ascending: false});
             if (error) { list.innerHTML = '<p>Error.</p>'; return; }
             if (!data || data.length === 0) { list.innerHTML = '<div class="empty-state"><i class="ph ph-tray" style="font-size:2rem; margin-bottom:1rem;"></i><p>No tienes mensajes nuevos.</p></div>'; return; }
             list.innerHTML = data.map(m => `
@@ -615,7 +618,7 @@
 
         async function deleteMessage(id) {
             if(!confirm('¿Borrar mensaje?')) return;
-            const { error } = await supabase.from('messages').delete().eq('id', id);
+            const { error } = await supabaseApp.from('messages').delete().eq('id', id);
             if(error) showToast('Error al borrar', 'error');
             else { showToast('Mensaje eliminado'); loadMessages(); }
         }
@@ -631,8 +634,8 @@
         async function deleteAccount() {
             if(!confirm('¿Estás seguro? Se borrarán TODOS tus proyectos.')) return;
             const email = currentUser.email.trim().toLowerCase();
-            await supabase.from('projects').delete().eq('author_email', email);
-            await supabase.from('app_users').delete().eq('email', email);
+            await supabaseApp.from('projects').delete().eq('author_email', email);
+            await supabaseApp.from('app_users').delete().eq('email', email);
             handleLogout(); closeModal('profile'); showToast('Cuenta eliminada permanentemente');
         }
         function handleAuthSubmit(e) {
@@ -643,14 +646,14 @@
             setTimeout(async () => {
                 try {
                     if (isLoginMode) {
-                        const { data: users } = await supabase.from('app_users').select('*').eq('email', email).eq('password', pass);
+                        const { data: users } = await supabaseApp.from('app_users').select('*').eq('email', email).eq('password', pass);
                         if(users && users.length > 0) completeLogin(users[0]); else throw new Error('Credenciales incorrectas');
                     } else {
                         const name = document.getElementById('reg-name').value;
                         const avatar = document.getElementById('reg-avatar-url').value;
-                        const { data: exist } = await supabase.from('app_users').select('*').eq('email', email);
+                        const { data: exist } = await supabaseApp.from('app_users').select('*').eq('email', email);
                         if(exist && exist.length > 0) throw new Error('Email ya registrado');
-                        await supabase.from('app_users').insert([{email, password: pass, name, avatar}]);
+                        await supabaseApp.from('app_users').insert([{email, password: pass, name, avatar}]);
                         completeLogin({email, name, avatar});
                     }
                     closeModal('auth');
@@ -664,7 +667,7 @@
             const safeEmail = (email || '').trim().toLowerCase();
             if (currentUser && currentUser.email.trim().toLowerCase() === safeEmail) { goToPage('dashboard'); return; }
             currentProfileEmail = safeEmail;
-            const { data: user } = await supabase.from('app_users').select('*').eq('email', safeEmail).single();
+            const { data: user } = await supabaseApp.from('app_users').select('*').eq('email', safeEmail).single();
             const userProjects = projects.filter(p => (p.author_email || '').trim().toLowerCase() === safeEmail);
             if(userProjects.length === 0 && !user) return;
             const authName = user ? user.name : userProjects[0].author_name;
@@ -691,8 +694,8 @@
             const newName = document.getElementById('edit-name').value; 
             const newAvatar = document.getElementById('edit-avatar').value; 
             const newDesc = document.getElementById('edit-desc').value;
-            await supabase.from('app_users').update({ name: newName, avatar: newAvatar, description: newDesc }).eq('email', currentUser.email); 
-            await supabase.from('projects').update({ author_name: newName, author_avatar: newAvatar }).eq('author_email', currentUser.email); 
+            await supabaseApp.from('app_users').update({ name: newName, avatar: newAvatar, description: newDesc }).eq('email', currentUser.email); 
+            await supabaseApp.from('projects').update({ author_name: newName, author_avatar: newAvatar }).eq('author_email', currentUser.email); 
             currentUser.name = newName; currentUser.avatar = newAvatar; currentUser.description = newDesc;
             localStorage.setItem('alex_session', JSON.stringify(currentUser)); 
             closeModal('profile'); loadDashboard(); showToast('Perfil actualizado'); await fetchProjects(); 
@@ -713,7 +716,7 @@
                 author_email: currentUser.email.trim().toLowerCase(),
                 author_avatar: currentUser.avatar
             };
-            if (id) await supabase.from('projects').update(pData).eq('id', id); else await supabase.from('projects').insert([pData]);
+            if (id) await supabaseApp.from('projects').update(pData).eq('id', id); else await supabaseApp.from('projects').insert([pData]);
             await fetchProjects(); goToPage('dashboard'); showToast('Proyecto guardado');
         });
 
@@ -761,17 +764,17 @@
         function handleImagePreview(input, previewId, urlId) { const file = input.files[0]; if(file) { const reader = new FileReader(); reader.onload = (e) => { if(previewId) document.getElementById(previewId).innerHTML = `<img src="${e.target.result}" style="width:100%">`; if(urlId) document.getElementById(urlId).value = e.target.result; const urlInput = document.getElementById(urlId.replace('Url', 'InputUrl')); if(urlInput) urlInput.value = ''; }; reader.readAsDataURL(file); } }
         function handleUrlPreview(url, previewId, urlId) { if(url) { document.getElementById(urlId).value = url; document.getElementById(previewId).innerHTML = `<img src="${url}" style="width:100%">`; const fileInput = document.getElementById('pImgFile'); if(fileInput) fileInput.value = ''; } }
         function editProject(id) { const p = projects.find(x => x.id === id); document.getElementById('pId').value = p.id; document.getElementById('pTitle').value = p.title; document.getElementById('pCat').value = p.category; document.getElementById('pDesc').value = p.description; document.getElementById('pPrice').value = p.price; document.getElementById('pImgUrl').value = p.image_url || ''; document.getElementById('pImgInputUrl').value = p.image_url && p.image_url.startsWith('http') ? p.image_url : ''; document.getElementById('pUrl').value = p.business_url || ''; document.getElementById('form-title').textContent = 'Editar Proyecto'; if(p.image_url) document.getElementById('pImgPreview').innerHTML = `<img src="${p.image_url}" style="width:100%">`; goToPage('form'); }
-        async function deleteProject(id) { if(confirm('¿Eliminar?')) { await supabase.from('projects').delete().eq('id', id); await fetchProjects(); loadDashboard(); showToast('Eliminado'); } }
+        async function deleteProject(id) { if(confirm('¿Eliminar?')) { await supabaseApp.from('projects').delete().eq('id', id); await fetchProjects(); loadDashboard(); showToast('Eliminado'); } }
         function openPremiumModal(id) { selectedProjectId = id; openModal('premium'); }
         function closePremiumModal() { closeModal('premium'); }
-        async function handlePremiumPurchase() { await supabase.from('projects').update({ is_premium: true }).eq('id', selectedProjectId); await fetchProjects(); closePremiumModal(); loadDashboard(); showToast('¡Destacado!'); }
-        async function cancelPremium(id) { await supabase.from('projects').update({ is_premium: false }).eq('id', id); await fetchProjects(); loadDashboard(); showToast('Cancelado'); }
+        async function handlePremiumPurchase() { await supabaseApp.from('projects').update({ is_premium: true }).eq('id', selectedProjectId); await fetchProjects(); closePremiumModal(); loadDashboard(); showToast('¡Destacado!'); }
+        async function cancelPremium(id) { await supabaseApp.from('projects').update({ is_premium: false }).eq('id', id); await fetchProjects(); loadDashboard(); showToast('Cancelado'); }
         function filterProjects(val, gridId) { const term = val.toLowerCase(); const filtered = projects.filter(p => p.title.toLowerCase().includes(term) || p.author_name.toLowerCase().includes(term)); renderProjects(filtered, gridId); }
         function setRating(n) { currentRating = n; const stars = document.querySelectorAll('#star-input span'); stars.forEach((s, i) => { s.classList.toggle('active', i < n); }); }
-        async function toggleLike(btn, id) { if(!currentUser) { openModal('auth','login'); return; } const icon = btn.querySelector('i'); const span = btn.querySelector('span'); const isLiked = btn.classList.contains('liked'); let count = parseInt(span.textContent); btn.classList.toggle('liked'); if (!isLiked) { icon.classList.remove('ph'); icon.classList.add('ph-fill'); span.textContent = count + 1; } else { icon.classList.remove('ph-fill'); icon.classList.add('ph'); span.textContent = count > 0 ? count - 1 : 0; } if(!isLiked) { await supabase.from('project_likes').insert([{ project_id: id, user_email: currentUser.email }]); const { data } = await supabase.from('projects').select('likes_count').eq('id', id).single(); const newCount = (data?.likes_count || 0) + 1; await supabase.from('projects').update({ likes_count: newCount }).eq('id', id); } else { await supabase.from('project_likes').delete().match({ project_id: id, user_email: currentUser.email }); const { data } = await supabase.from('projects').select('likes_count').eq('id', id).single(); const newCount = (data?.likes_count || 0) - 1; await supabase.from('projects').update({ likes_count: newCount < 0 ? 0 : newCount }).eq('id', id); } }
-        async function loadReviews(projectId) { const list = document.getElementById('reviews-list'); list.innerHTML = '<p>Cargando...</p>'; const { data, error } = await supabase.from('reviews').select('*').eq('project_id', projectId).order('created_at', {ascending: false}); if (error) { list.innerHTML = '<p>Error.</p>'; return; } if (!data || data.length === 0) { list.innerHTML = '<p>Sé el primero.</p>'; return; } list.innerHTML = data.map(r => { const isMyReview = currentUser && (r.user_email === currentUser.email); const deleteBtn = isMyReview ? `<button onclick="deleteReview(${r.id})" class="btn-delete-review">✕</button>` : ''; return `<div class="review-card">${deleteBtn}<div style="display:flex; justify-content:space-between; margin-bottom:0.5rem;"><strong style="font-size:0.9rem;">${r.user_name || 'Anónimo'}</strong><span style="color:#FCD34D;">${'★'.repeat(r.rating)}</span></div><p style="color:var(--text-muted); font-size:0.95rem;">${r.comment}</p></div>`}).join(''); }
-        async function deleteReview(id) { if(!confirm('¿Borrar?')) return; const { error } = await supabase.from('reviews').delete().eq('id', id); if(error) showToast('Error', 'error'); else { showToast('Eliminada'); loadReviews(selectedProjectId); } }
-        async function submitReview() { if(!currentUser) { openModal('auth', 'login'); return; } if(currentRating === 0) { showToast('Elige estrellas', 'error'); return; } const comment = document.getElementById('review-comment').value; const newReview = { project_id: selectedProjectId, user_name: currentUser.name, user_email: currentUser.email, rating: currentRating, comment: comment }; const { error } = await supabase.from('reviews').insert([newReview]); if(error) showToast('Error', 'error'); else { showToast('Enviada'); document.getElementById('review-comment').value = ''; setRating(0); loadReviews(selectedProjectId); } }
+        async function toggleLike(btn, id) { if(!currentUser) { openModal('auth','login'); return; } const icon = btn.querySelector('i'); const span = btn.querySelector('span'); const isLiked = btn.classList.contains('liked'); let count = parseInt(span.textContent); btn.classList.toggle('liked'); if (!isLiked) { icon.classList.remove('ph'); icon.classList.add('ph-fill'); span.textContent = count + 1; } else { icon.classList.remove('ph-fill'); icon.classList.add('ph'); span.textContent = count > 0 ? count - 1 : 0; } if(!isLiked) { await supabaseApp.from('project_likes').insert([{ project_id: id, user_email: currentUser.email }]); const { data } = await supabaseApp.from('projects').select('likes_count').eq('id', id).single(); const newCount = (data?.likes_count || 0) + 1; await supabaseApp.from('projects').update({ likes_count: newCount }).eq('id', id); } else { await supabaseApp.from('project_likes').delete().match({ project_id: id, user_email: currentUser.email }); const { data } = await supabaseApp.from('projects').select('likes_count').eq('id', id).single(); const newCount = (data?.likes_count || 0) - 1; await supabaseApp.from('projects').update({ likes_count: newCount < 0 ? 0 : newCount }).eq('id', id); } }
+        async function loadReviews(projectId) { const list = document.getElementById('reviews-list'); list.innerHTML = '<p>Cargando...</p>'; const { data, error } = await supabaseApp.from('reviews').select('*').eq('project_id', projectId).order('created_at', {ascending: false}); if (error) { list.innerHTML = '<p>Error.</p>'; return; } if (!data || data.length === 0) { list.innerHTML = '<p>Sé el primero.</p>'; return; } list.innerHTML = data.map(r => { const isMyReview = currentUser && (r.user_email === currentUser.email); const deleteBtn = isMyReview ? `<button onclick="deleteReview(${r.id})" class="btn-delete-review">✕</button>` : ''; return `<div class="review-card">${deleteBtn}<div style="display:flex; justify-content:space-between; margin-bottom:0.5rem;"><strong style="font-size:0.9rem;">${r.user_name || 'Anónimo'}</strong><span style="color:#FCD34D;">${'★'.repeat(r.rating)}</span></div><p style="color:var(--text-muted); font-size:0.95rem;">${r.comment}</p></div>`}).join(''); }
+        async function deleteReview(id) { if(!confirm('¿Borrar?')) return; const { error } = await supabaseApp.from('reviews').delete().eq('id', id); if(error) showToast('Error', 'error'); else { showToast('Eliminada'); loadReviews(selectedProjectId); } }
+        async function submitReview() { if(!currentUser) { openModal('auth', 'login'); return; } if(currentRating === 0) { showToast('Elige estrellas', 'error'); return; } const comment = document.getElementById('review-comment').value; const newReview = { project_id: selectedProjectId, user_name: currentUser.name, user_email: currentUser.email, rating: currentRating, comment: comment }; const { error } = await supabaseApp.from('reviews').insert([newReview]); if(error) showToast('Error', 'error'); else { showToast('Enviada'); document.getElementById('review-comment').value = ''; setRating(0); loadReviews(selectedProjectId); } }
     </script>
 </body>
 </html>
